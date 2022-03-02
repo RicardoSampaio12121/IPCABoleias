@@ -3,7 +3,7 @@ package com.example.ipcaboleias
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
+import android.widget.TextView
 
 class LoginActivity : AppCompatActivity() {
 
@@ -12,9 +12,9 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        val tvRecoverPassword = findViewById<Button>(R.id.buttonEntrar)
+        val tvRegisterUser = findViewById<TextView>(R.id.textViewRegistar)
 
-         tvRecoverPassword.setOnClickListener{
+         tvRegisterUser.setOnClickListener{
             var intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }

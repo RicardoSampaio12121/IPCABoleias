@@ -62,6 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
                 android:hint="ex: Ricardo"
+                android:inputType="text"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewName" />
 
@@ -88,6 +89,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
                 android:hint="ex: Sampaio"
+                android:inputType="text"
                 app:layout_constraintStart_toStartOf="parent"/>
         </LinearLayout>
     </LinearLayout>
@@ -148,6 +150,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
         android:hint="Confirme a sua password"
+        android:inputType="textPassword"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewConfirmPassword" />
 
