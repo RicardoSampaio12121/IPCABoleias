@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.IPCABoleias">
         <activity
+            android:name=".RidesActivity"
+            android:exported="false" />
+        <activity
             android:name=".RegisterActivity"
             android:exported="false" />
         <activity

@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import java.util.regex.Pattern
 
 
 class RegisterActivity : AppCompatActivity() {
@@ -58,7 +59,14 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         if(email.isEmpty()){
-            etEmail.error = "Camo Email tem que estar preenchido."
+            etEmail.error = "Campo Email tem que estar preenchido."
+            etEmail.requestFocus()
+            return
+        }
+
+        // TODO: Verificar se funciona
+        if(!Pattern.matches("(a[0-9]+)@alunos.ipca.pt", email) && !Pattern.matches("([a-z]+)@ipca.pt", email)){
+            etEmail.error = "Email tem que pertencer ao domínio do IPCA."
             etEmail.requestFocus()
             return
         }
@@ -81,7 +89,7 @@ class RegisterActivity : AppCompatActivity() {
             return
         }
 
-
+        // TODO: Adicionar uma roda de progresso
         mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener { task ->
             if(task.isSuccessful){
                 var user = NewUser(name, surname, email)

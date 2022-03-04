@@ -33,11 +33,9 @@ class LoginActivity : AppCompatActivity() {
         btSignIn.setOnClickListener{
             login(etEmail, etPassword)
         }
-
-
-
     }
 
+    // TODO: Adicionar uma rodinha enquanto carrega
     private fun login(etEmail:EditText, etPassword:EditText){
 
         val email = etEmail.text.toString().trim()
@@ -46,8 +44,10 @@ class LoginActivity : AppCompatActivity() {
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener{ task ->
             if(task.isSuccessful){
                 // Redirecionar para a página principal
+                var intent = Intent(this, RidesActivity::class.java)
+                startActivity(intent)
 
-                Toast.makeText(applicationContext, "Funcionou", Toast.LENGTH_LONG).show()
+                Toast.makeText(applicationContext, "Sucesso!", Toast.LENGTH_LONG).show()
             }
         }.addOnFailureListener{ exception ->
             Toast.makeText(applicationContext, exception.localizedMessage, Toast.LENGTH_LONG).show()
