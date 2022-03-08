@@ -5,27 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ipcaboleias.databinding.ItemPublicationBinding
+import com.example.ipcaboleias.databinding.ItemPublicationV2Binding
 
-//class RVPublicationsAadapter(
-//    var publications: List<RVPublication>
-//) : RecyclerView.Adapter<RVPublicationsAadapter.RVPublicationViewHolder>() {
-//
-//    inner class RVPublicationViewHolder(val binding: itemPublicationBinding) : RecyclerView.ViewHolder(binding.root)
-//
-//    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RVPublicationViewHolder {
-//        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_publication, parent, false)
-//        return RVPublicationViewHolder(view)
-//    }
-//
-//    override fun onBindViewHolder(holder: RVPublicationViewHolder, position: Int) {
-//        holder.itemView.
-//
-//    }
-//
-//    override fun getItemCount(): Int {
-//        return publications.size
-//    }
-//}
 
 class RVPublicationsAadapter(var publications: List<RVPublication>): RecyclerView.Adapter<RVPublicationsAadapter.ToDoViewHolder>() {
 
@@ -40,7 +21,7 @@ class RVPublicationsAadapter(var publications: List<RVPublication>): RecyclerVie
     }
 
 
-    inner class ToDoViewHolder(val binding: ItemPublicationBinding, listener: onItemClickListener) : RecyclerView.ViewHolder(binding.root){
+    inner class ToDoViewHolder(val binding: ItemPublicationV2Binding, listener: onItemClickListener) : RecyclerView.ViewHolder(binding.root){
         init {
 
             itemView.setOnClickListener{
@@ -55,7 +36,7 @@ class RVPublicationsAadapter(var publications: List<RVPublication>): RecyclerVie
 
         val layoutInflater = LayoutInflater.from(parent.context)
 
-        val binding = ItemPublicationBinding.inflate(layoutInflater, parent, false)
+        val binding = ItemPublicationV2Binding.inflate(layoutInflater, parent, false)
 
         return ToDoViewHolder(binding, mListener)
 
@@ -68,9 +49,10 @@ class RVPublicationsAadapter(var publications: List<RVPublication>): RecyclerVie
     override fun onBindViewHolder(holder: ToDoViewHolder, position: Int) {
 
         holder.binding.apply {
-            tvName.text = publications[position].name
-            tvPartida.text = publications[position].from
-            tvChegada.text = publications[position].to
+            txtName.text = publications[position].name
+            textMoney.text = publications[position].amount.toString() + " EUR"
+            textFrom.text = publications[position].from
+            textTo.text = publications[position].to
         }
     }
 
