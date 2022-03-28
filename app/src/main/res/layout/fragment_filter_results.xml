@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/top_corners_rounded"
+    android:clickable="true"
+    tools:context=".FilterResults">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <FrameLayout
+            android:id="@+id/frameReturnButton"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="10dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_return_svgrepo_com"/>
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tvPDTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="20dp"
+            android:text="Partida e Destino"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/frameReturnButton" />
+
+
+        <LinearLayout
+            android:id="@+id/llh1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="10dp"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvPDTitle">
+
+            <LinearLayout
+                android:id="@+id/llvFrom1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".2"
+                android:orientation="vertical"
+                android:weightSum="1">
+
+                <FrameLayout
+                    android:id="@+id/flFomIcon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginVertical="10dp"
+                    app:layout_constraintStart_toStartOf="@id/llvFrom1"
+                    app:layout_constraintTop_toTopOf="@id/llvFrom1">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_baseline_place" />
+                </FrameLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llvFrom2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.8"
+                android:orientation="vertical"
+                android:weightSum="1">
+
+                <AutoCompleteTextView
+                    android:id="@+id/FromAutoCompleteTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="De"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="@id/llvFrom2"
+                    app:layout_constraintTop_toTopOf="@id/llvFrom2" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llh2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="10dp"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/llh1">
+
+            <LinearLayout
+                android:id="@+id/llvTo1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".2"
+                android:orientation="vertical"
+                android:weightSum="1">
+
+                <FrameLayout
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    app:layout_constraintStart_toStartOf="@id/llvTo1"
+                    app:layout_constraintTop_toTopOf="@id/llvTo1">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_baseline_flag" />
+                </FrameLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llvTo2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.8"
+                android:orientation="vertical"
+                android:weightSum="1">
+
+                <AutoCompleteTextView
+                    android:id="@+id/ToAutoCompleteTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Para"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="@id/llvTo2"
+                    app:layout_constraintTop_toTopOf="@id/llvTo2" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/viewCalendar"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginVertical="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/llh2"/>
+
+        <FrameLayout
+            android:id="@+id/frameCalendar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginHorizontal="10dp"
+            app:layout_constraintStart_toStartOf="@id/viewCalendar"
+            app:layout_constraintTop_toTopOf="@id/viewCalendar">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_calendar_svgrepo_com"/>
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:text="24/07/2022"
+            android:inputType="date"
+            android:textSize="16sp"
+            android:clickable="false"
+            app:layout_constraintStart_toEndOf="@id/frameCalendar"
+            app:layout_constraintTop_toTopOf="@id/viewCalendar"
+            app:layout_constraintBottom_toBottomOf="@id/viewCalendar"/>
+
+
+
+        <View
+            android:id="@+id/supporterView2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="10dp"
+            android:background="@color/teal_700"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/frameCalendar" />
+
+        <TextView
+            android:id="@+id/tvTitle2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="10dp"
+            android:text="Procurar por"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/supporterView2" />
+
+
+        <View
+            android:id="@+id/viewEstudanteSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginVertical="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle2" />
+
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:text="Estudantes"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@id/viewEstudanteSwitch"
+            app:layout_constraintStart_toStartOf="@id/viewEstudanteSwitch"
+            app:layout_constraintTop_toTopOf="@id/viewEstudanteSwitch" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/estudanteSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            app:layout_constraintEnd_toEndOf="@id/viewEstudanteSwitch"
+            app:layout_constraintTop_toTopOf="@id/viewEstudanteSwitch" />
+
+        <View
+            android:id="@+id/supporterView3"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="10dp"
+            android:background="@color/teal_200"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/viewEstudanteSwitch" />
+
+        <View
+            android:id="@+id/viewDocenteSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/supporterView3" />
+
+        <TextView
+            android:id="@+id/tvDocentes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:text="Docentes"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@id/viewDocenteSwitch"
+            app:layout_constraintStart_toStartOf="@id/viewDocenteSwitch"
+            app:layout_constraintTop_toTopOf="@id/viewDocenteSwitch" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/docenteSwithc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            app:layout_constraintEnd_toEndOf="@id/viewDocenteSwitch"
+            app:layout_constraintTop_toTopOf="@id/viewDocenteSwitch" />
+
+        <View
+            android:id="@+id/supporterView4"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="10dp"
+            android:background="@color/teal_700"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/viewDocenteSwitch" />
+
+        <TextView
+            android:id="@+id/tvTitle3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="10dp"
+            android:text="Filtrar por"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/supporterView4" />
+
+        <View
+            android:id="@+id/viewCondutoresSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle3" />
+
+        <TextView
+            android:id="@+id/tvCondutores"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:text="Condutores"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@id/viewCondutoresSwitch"
+            app:layout_constraintStart_toStartOf="@id/viewCondutoresSwitch"
+            app:layout_constraintTop_toTopOf="@id/viewCondutoresSwitch" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/CondutoresSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            app:layout_constraintEnd_toEndOf="@id/viewCondutoresSwitch"
+            app:layout_constraintTop_toTopOf="@id/viewCondutoresSwitch" />
+
+        <View
+            android:id="@+id/supporterView5"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="10dp"
+            android:background="@color/teal_200"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/viewCondutoresSwitch" />
+
+        <View
+            android:id="@+id/viewPassageirosSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginVertical="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/supporterView5" />
+
+        <TextView
+            android:id="@+id/tvPassageiros"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:text="Passageiros"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@id/viewPassageirosSwitch"
+            app:layout_constraintStart_toStartOf="@id/viewPassageirosSwitch"
+            app:layout_constraintTop_toTopOf="@id/viewPassageirosSwitch" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/PassageirosSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            app:layout_constraintEnd_toEndOf="@id/viewPassageirosSwitch"
+            app:layout_constraintTop_toTopOf="@id/viewPassageirosSwitch" />
+
+        <Button
+            android:id="@+id/SubmitButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="20dp"
+            android:layout_marginHorizontal="10dp"
+            android:backgroundTint="@color/IpcaColor"
+            android:text="Aplicar filtro"
+            app:layout_constraintTop_toBottomOf="@id/viewPassageirosSwitch"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</ScrollView>

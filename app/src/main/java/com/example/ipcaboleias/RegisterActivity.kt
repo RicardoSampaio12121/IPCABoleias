@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -23,12 +24,33 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
-        mAuth = FirebaseAuth.getInstance()
-        val buttonRegister = findViewById<Button>(R.id.buttonRegister)
+        var REGISTER1_FRAG_TAG = "register1_frag_tag"
+        var REGISTER2_FRAG_TAG = "register2_frag_tag"
 
-        buttonRegister.setOnClickListener{
-            register(buttonRegister)
+        mAuth = FirebaseAuth.getInstance()
+
+        //TODO: Set custom animations
+        supportFragmentManager.beginTransaction().add(R.id.fragmentContainer, Register1FragmentFragment.newInstance(), REGISTER1_FRAG_TAG).commit()
+
+
+
+        var btnReturn = findViewById<ImageButton>(R.id.btnReturn)
+
+        btnReturn.setOnClickListener{
+            var frag1 = supportFragmentManager.findFragmentByTag(REGISTER1_FRAG_TAG)
+            var frag2 = supportFragmentManager.findFragmentByTag(REGISTER2_FRAG_TAG)
+
+            if(frag1 != null && frag1.isVisible){
+                finish()
+            }
+            else if(frag2 != null && frag2.isVisible) {
+                supportFragmentManager.beginTransaction().show(frag1!!).commit()
+                supportFragmentManager.beginTransaction().hide(frag2).commit()
+            }
         }
+
+
+
     }
 
 

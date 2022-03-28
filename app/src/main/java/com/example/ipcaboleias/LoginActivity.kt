@@ -46,6 +46,7 @@ class LoginActivity : AppCompatActivity() {
                 // Redirecionar para a página principal
                 var intent = Intent(this, RidesActivity::class.java)
                 startActivity(intent)
+                finish()
 
                 Toast.makeText(applicationContext, "Sucesso!", Toast.LENGTH_LONG).show()
             }

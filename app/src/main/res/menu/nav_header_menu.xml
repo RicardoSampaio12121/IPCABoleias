@@ -1,14 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/miBoleias"
-        android:title="Boleias"
-        android:icon="@drawable/ic_outline_directions_car_24"/>
-    <item
-        android:id="@+id/miMinhasBoleias"
-        android:title="Minhas boleias ativas"
-        />
-    <item
-        android:id="@+id/miItem3"
-        android:title="Item 3"/>
+    <group android:checkableBehavior="single">
+
+        <item android:title="Geral">
+            <menu>
+                <group android:checkableBehavior="single">
+                    <item
+                        android:id="@+id/miBoleias"
+                        android:title="Boleias"
+                        android:icon="@drawable/ic_outline_directions_car_24"/>
+                </group>
+
+            </menu>
+
+
+        </item>
+
+        <item android:title="Minhas Boleias">
+            <menu>
+                <group android:checkableBehavior="single">
+                    <item
+                        android:id="@+id/miPedidosAtivos"
+                        android:title="Os meus pedidos ativos"
+                        android:icon="@drawable/ic_folder_svgrepo_com"
+                        />
+
+                    <item
+                        android:id="@+id/miBoleiasAgendadas"
+                        android:title="Boleias agendadas"
+                        android:icon="@drawable/ic_calendar_svgrepo_com"
+                        />
+
+                    <item
+                        android:id="@+id/miHistorico"
+                        android:title="Historico de boleias"
+                        android:icon="@drawable/ic_history_svgrepo_com"
+                        />
+                </group>
+            </menu>
+        </item>
+
+        <item android:title="Chat">
+            <menu>
+                <group android:checkableBehavior="single">
+                    <item
+                        android:id="@+id/miItem3"
+                        android:title="Chat"
+                        android:icon="@drawable/ic_chat_svgrepo_com"/>
+                </group>
+            </menu>
+        </item>
+    </group>
 </menu>

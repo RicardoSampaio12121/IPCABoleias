@@ -104,6 +104,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20px"
         android:text="Entrar"
+        android:backgroundTint="@color/IpcaColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

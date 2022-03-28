@@ -3,6 +3,7 @@ package com.example.ipcaboleias
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ipcaboleias.databinding.ItemPublicationBinding
 import com.example.ipcaboleias.databinding.ItemPublicationV2Binding
@@ -42,10 +43,6 @@ class RVPublicationsAadapter(var publications: List<RVPublication>): RecyclerVie
 
     }
 
-
-
-
-
     override fun onBindViewHolder(holder: ToDoViewHolder, position: Int) {
 
         holder.binding.apply {
@@ -56,12 +53,9 @@ class RVPublicationsAadapter(var publications: List<RVPublication>): RecyclerVie
         }
     }
 
-
-
     override fun getItemCount(): Int {
 
         return  publications.size
-
     }
 
 

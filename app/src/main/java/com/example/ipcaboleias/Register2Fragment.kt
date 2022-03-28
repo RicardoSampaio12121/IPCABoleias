@@ -1,0 +1,80 @@
+package com.example.ipcaboleias
+
+import android.os.Build
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.Toast
+import androidx.annotation.RequiresApi
+import com.example.ipcaboleias.databinding.FragmentRegister2Binding
+
+
+class Register2Fragment : Fragment(R.layout.fragment_register2) {
+
+    var REGISTER1_FRAG_TAG = "register1_frag_tag"
+    var REGISTER2_FRAG_TAG = "register2_frag_tag"
+
+    private var _binding: FragmentRegister2Binding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+
+        }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_register2, container, false)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.P)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+//        var btnReturn = activity?.requireViewById<ImageButton>(R.id.btnReturn)
+//
+//        btnReturn?.setOnClickListener{
+//            val supportFragmentManager = activity?.supportFragmentManager
+//            val fragToHide = (supportFragmentManager?.findFragmentByTag(REGISTER2_FRAG_TAG))!!
+//            val fragToPop = supportFragmentManager.findFragmentByTag(REGISTER1_FRAG_TAG)!!
+//
+//            supportFragmentManager.beginTransaction().hide(fragToHide).commit()
+//            supportFragmentManager.beginTransaction().show(fragToPop).commit()
+//
+//        }
+
+
+        _binding = FragmentRegister2Binding.bind(view)
+
+
+
+        binding.apply {
+            btnRegister.setOnClickListener{
+                //TODO: Register user with car
+
+                //Finish activity after register is complete
+                activity?.finish()
+            }
+        }
+
+
+    }
+
+    companion object {
+
+        @JvmStatic
+        fun newInstance() =
+            Register2Fragment().apply {
+                arguments = Bundle().apply {
+
+                }
+            }
+    }
+}

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "812068768342",
+    "firebase_url": "https://ipcaboleias-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "ipcaboleias",
+    "storage_bucket": "ipcaboleias.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:812068768342:android:3791c0754ee6b2223089f7",
+        "android_client_info": {
+          "package_name": "com.example.ipcaboleias"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "812068768342-366jkiljvn4kn1364sfrp4d48j3geb60.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7K-U-BljEEsb1tQpVDkxcGDd2MDdvwwo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "812068768342-366jkiljvn4kn1364sfrp4d48j3geb60.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
