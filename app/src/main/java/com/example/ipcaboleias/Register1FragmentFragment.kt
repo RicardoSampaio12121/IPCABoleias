@@ -8,12 +8,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import com.example.ipcaboleias.databinding.FragmentRegister1FragmentBinding
 
 class Register1FragmentFragment : Fragment(R.layout.fragment_register1_fragment) {
 
-    var REGISTER1_FRAG_TAG = "register1_frag_tag"
-    var REGISTER2_FRAG_TAG = "register2_frag_tag"
+    private val model: NewUserViewModel by activityViewModels()
+
+    val REGISTER1_FRAG_TAG = "register1_frag_tag"
+    val REGISTER2_FRAG_TAG = "register2_frag_tag"
+    val REGISTER3_FRAG_TAG = "register3_frag_tag"
+
 
     private var _binding: FragmentRegister1FragmentBinding? = null
     private val binding get() = _binding!!
@@ -45,20 +51,33 @@ class Register1FragmentFragment : Fragment(R.layout.fragment_register1_fragment)
 //        }
 
         binding.apply{
-            cbHasCar.setOnClickListener{
-                if(cbHasCar.isChecked){
-                    btnNext.visibility = View.VISIBLE
-                    btnRegister.visibility = View.GONE
-                }
-                else{
-                    btnNext.visibility = View.GONE
-                    btnRegister.visibility = View.VISIBLE
+
+
+            //TODO: Remover fragmento do carro se carregar
+            cbHasCar.setOnClickListener {
+                var supportFragmentManager = requireActivity().supportFragmentManager
+
+                if(!cbHasCar.isChecked){
+                    var fragToRemove = supportFragmentManager.findFragmentByTag(REGISTER2_FRAG_TAG)
+
+                    if(fragToRemove != null){
+                        supportFragmentManager.beginTransaction().remove(fragToRemove).commit()
+                    }
                 }
             }
 
+
             btnNext.setOnClickListener{
+                //TODO: Verificar se campos são válidos/estão vazios
+
+
                 val supportFragmentManager = requireActivity().supportFragmentManager
                 val currentFrag = supportFragmentManager.findFragmentByTag(REGISTER1_FRAG_TAG)
+
+                model.setName(editTextName.text.toString())
+                model.setSurname(editTextSurname.text.toString())
+                model.setEmail(editTextEmail.text.toString())
+                model.setPassword(editTextPassword.text.toString())
 
                 // hide current fragment
                 supportFragmentManager.beginTransaction().hide(currentFrag!!).commit()
@@ -66,27 +85,26 @@ class Register1FragmentFragment : Fragment(R.layout.fragment_register1_fragment)
                 // call next fragment
                 //TODO: setCustomAnimations
 
-                var fragToCall = supportFragmentManager.findFragmentByTag(REGISTER2_FRAG_TAG)
+                if(cbHasCar.isChecked){
+                    var fragToCall = supportFragmentManager.findFragmentByTag(REGISTER2_FRAG_TAG)
 
-                if(fragToCall != null){
-                    supportFragmentManager.beginTransaction().show(fragToCall).commit()
+                    if(fragToCall != null){
+                        supportFragmentManager.beginTransaction().show(fragToCall).commit()
+                    }
+                    else{
+                        supportFragmentManager.beginTransaction().add(R.id.fragmentContainer, Register2Fragment.newInstance(), REGISTER2_FRAG_TAG).commit()
+                    }
+                }else{
+                    var fragToCall = supportFragmentManager.findFragmentByTag(REGISTER3_FRAG_TAG)
+
+                    if(fragToCall != null){
+                        supportFragmentManager.beginTransaction().show(fragToCall).commit()
+                    }else{
+                        supportFragmentManager.beginTransaction().add(R.id.fragmentContainer, register3Fragment.newInstance(), REGISTER3_FRAG_TAG).commit()
+                    }
                 }
-                else{
-                    supportFragmentManager.beginTransaction().add(R.id.fragmentContainer, Register2Fragment.newInstance(), REGISTER2_FRAG_TAG).commit()
-                }
-            }
-
-            btnRegister.setOnClickListener{
-                //Call function to register the new user
-
-                //Finish activity after user is registered
-                //TODO: perguntar ao professor se os fragmentos são removidos quando a atividade termina
-                activity?.finish()
             }
         }
-
-
-
     }
 
     companion object {
@@ -100,3 +118,6 @@ class Register1FragmentFragment : Fragment(R.layout.fragment_register1_fragment)
 
     }
 }
+
+
+

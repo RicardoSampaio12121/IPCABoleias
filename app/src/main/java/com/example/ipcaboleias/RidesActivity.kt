@@ -1,28 +1,40 @@
 package com.example.ipcaboleias
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.media.Image
 import android.opengl.Visibility
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils.replace
 import android.view.Gravity
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.graphics.toColor
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.database.FirebaseDatabase
+import de.hdodenhof.circleimageview.CircleImageView
+import java.util.*
 
 
 class RidesActivity : AppCompatActivity() {
 
+    private lateinit var menu : Menu
     lateinit var toggle: ActionBarDrawerToggle
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_rides)
@@ -41,6 +53,25 @@ class RidesActivity : AppCompatActivity() {
 
         //Call rides fragment
         supportFragmentManager.beginTransaction().add(R.id.frameFragment, RidesFragment.newInstance(), RIDES_FRAG_TAG).commit()
+
+        // Preencher campos do navigation header com os dados da base de dados
+
+        val header = navView.getHeaderView(0)
+        val titleView = header.findViewById<TextView>(R.id.tvNameSurnameNVHeader)
+        val profilePic = header.findViewById<CircleImageView>(R.id.profilePicNVHeader)
+
+        val uid = intent.getStringExtra("uid")
+        val database = FirebaseDatabase.getInstance().getReference("users")
+
+        database.child(uid!!).get().addOnSuccessListener {
+            val name = "${it.child("name").value.toString()} ${it.child("surname").value.toString()}"
+            val profilePicAsString = it.child("profilePicture").value.toString()
+            val byteArray : ByteArray = Base64.getDecoder().decode(profilePicAsString)
+            val bitMapPic = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+
+            titleView.text = name
+            profilePic.setImageBitmap(bitMapPic)
+        }
 
         menu.setOnClickListener{
 
@@ -93,9 +124,16 @@ class RidesActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun changeFragments(){
+//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+//        return super.onCreateOptionsMenu(menu)
+//
+//        menu?.apply {
+//
+//            menu.findItem(R.)
+//        }
+//    }
 
-    }
+
 
 
 

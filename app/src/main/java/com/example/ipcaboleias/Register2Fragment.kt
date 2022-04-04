@@ -9,13 +9,17 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.activityViewModels
 import com.example.ipcaboleias.databinding.FragmentRegister2Binding
 
 
 class Register2Fragment : Fragment(R.layout.fragment_register2) {
 
+    private val model: NewUserViewModel by activityViewModels()
+
     var REGISTER1_FRAG_TAG = "register1_frag_tag"
     var REGISTER2_FRAG_TAG = "register2_frag_tag"
+    val REGISTER3_FRAG_TAG = "register3_frag_tag"
 
     private var _binding: FragmentRegister2Binding? = null
     private val binding get() = _binding!!
@@ -49,18 +53,34 @@ class Register2Fragment : Fragment(R.layout.fragment_register2) {
 //            supportFragmentManager.beginTransaction().show(fragToPop).commit()
 //
 //        }
-
-
         _binding = FragmentRegister2Binding.bind(view)
-
-
 
         binding.apply {
             btnRegister.setOnClickListener{
-                //TODO: Register user with car
 
                 //Finish activity after register is complete
                 activity?.finish()
+            }
+
+            btnNext.setOnClickListener{
+                val supportFragmentManager = requireActivity().supportFragmentManager
+
+                model.setCarBrand(etBrand.text.toString())
+                model.setCarModel(etModel.text.toString())
+                model.setCarColor(etColor.text.toString())
+
+                //hide current fragment
+                val currentFrag = supportFragmentManager.findFragmentByTag(REGISTER2_FRAG_TAG)
+                supportFragmentManager.beginTransaction().hide(currentFrag!!).commit()
+
+                //call next fragment
+                val fragToCall = supportFragmentManager.findFragmentByTag(REGISTER3_FRAG_TAG)
+
+                if(fragToCall == null){
+                    supportFragmentManager.beginTransaction().add(R.id.fragmentContainer, register3Fragment.newInstance(), REGISTER3_FRAG_TAG).commit()
+                }else{
+                    supportFragmentManager.beginTransaction().show(fragToCall).commit()
+                }
             }
         }
 

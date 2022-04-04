@@ -43,12 +43,25 @@ class LoginActivity : AppCompatActivity() {
 
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener{ task ->
             if(task.isSuccessful){
-                // Redirecionar para a página principal
-                var intent = Intent(this, RidesActivity::class.java)
-                startActivity(intent)
-                finish()
+                // Verificar se já verificou o email
 
-                Toast.makeText(applicationContext, "Sucesso!", Toast.LENGTH_LONG).show()
+                val user = task.result?.user!!
+
+                if(user.isEmailVerified) {
+                    // Redirecionar para a página principal
+                    var uid : String = user.uid
+                    var intent = Intent(this, RidesActivity::class.java)
+
+                    intent.putExtra("uid", uid)
+                    startActivity(intent)
+                    finish()
+
+                    Toast.makeText(applicationContext, "Sucesso!", Toast.LENGTH_LONG).show()
+                }
+                else{
+                    Toast.makeText(applicationContext, "Por favor, verifique o email de confirmação antes de continuar.", Toast.LENGTH_LONG).show()
+                }
+
             }
         }.addOnFailureListener{ exception ->
             Toast.makeText(applicationContext, exception.localizedMessage, Toast.LENGTH_LONG).show()
