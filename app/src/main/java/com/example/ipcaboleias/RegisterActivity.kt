@@ -1,24 +1,15 @@
 package com.example.ipcaboleias
 
-import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.Button
-import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentContainer
 import androidx.fragment.app.FragmentContainerView
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
+import com.example.ipcaboleias.ViewModels.NewUserViewModel
+import com.example.ipcaboleias.registration.NewUser
+import com.example.ipcaboleias.registration.Register1FragmentFragment
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
-import java.util.regex.Pattern
 
 
 class RegisterActivity : AppCompatActivity() {

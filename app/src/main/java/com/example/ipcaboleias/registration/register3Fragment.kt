@@ -1,29 +1,26 @@
-package com.example.ipcaboleias
+package com.example.ipcaboleias.registration
 
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Base64.DEFAULT
-import android.util.Base64.encodeToString
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
+import com.example.ipcaboleias.R
+import com.example.ipcaboleias.ViewModels.NewUserViewModel
 import com.example.ipcaboleias.databinding.FragmentRegister3Binding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.CoroutineStart
 import java.io.ByteArrayOutputStream
 import java.util.*
-import java.util.regex.Pattern
 
 class register3Fragment : Fragment(R.layout.fragment_register3) {
 

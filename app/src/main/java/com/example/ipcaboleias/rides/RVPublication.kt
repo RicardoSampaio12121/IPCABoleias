@@ -1,4 +1,4 @@
-package com.example.ipcaboleias
+package com.example.ipcaboleias.rides
 
 import java.util.*
 

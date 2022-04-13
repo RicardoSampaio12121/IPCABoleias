@@ -1,17 +1,24 @@
-package com.example.ipcaboleias
+package com.example.ipcaboleias.rides
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ipcaboleias.R
+import com.example.ipcaboleias.createPublication.CreatePublicationSearchStartLocationFragment
+import com.example.ipcaboleias.databinding.FragmentRidesBinding
 
-class RidesFragment : Fragment() {
+class RidesFragment : Fragment(R.layout.fragment_rides) {
 
-    val CREATE_PUB_FRAG_TAG = "createPubFragTag"
+    private val CREATE_PUB_SEARCH1_FRAG_TAG = "createPubSearch1FragTag"
+
+    private var _binding : FragmentRidesBinding? = null
+    private val binding get() = _binding!!
+
+    val CREATE_PUB1_FRAG_TAG = "createPub1FragTag"
     val FILTER_FRAG_TAG = "filterFragTag"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +36,16 @@ class RidesFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        _binding = FragmentRidesBinding.bind(view)
+
+        binding.apply {
+
+            btnAdd.setOnClickListener {
+                val supportFragmentManager = requireActivity().supportFragmentManager
+                supportFragmentManager.beginTransaction().add(R.id.frameLayoutFilter, CreatePublicationSearchStartLocationFragment.newInstance(), CREATE_PUB_SEARCH1_FRAG_TAG).commit()
+           }
+        }
+
         val rv = requireView().findViewById<RecyclerView>(R.id.rvPublications)
 
         var publicationList = mutableListOf(
@@ -52,7 +69,7 @@ class RidesFragment : Fragment() {
         val adapter = RVPublicationsAadapter(publicationList)
         rv.adapter = adapter
         rv.layoutManager = LinearLayoutManager(activity)
-        adapter.setOnItemClickListener(object : RVPublicationsAadapter.onItemClickListener{
+        adapter.setOnItemClickListener(object : RVPublicationsAadapter.onItemClickListener {
             override fun onItemClick(position: Int){
                 val transaction = activity?.supportFragmentManager?.beginTransaction()
                 transaction?.add(R.id.frameFragment, RideDetailsFragment.newInstance(), "detailsFragTag")?.commit()
@@ -61,16 +78,7 @@ class RidesFragment : Fragment() {
             }
         })
 
-        val createPubBtn = requireView().findViewById<ImageButton>(R.id.btnAdd)
-        createPubBtn.setOnClickListener{
-            val supportFragmentManager = requireActivity().supportFragmentManager
-            val filterFrag = supportFragmentManager.findFragmentByTag(FILTER_FRAG_TAG)
 
-            if(filterFrag != null && filterFrag.isVisible){
-                supportFragmentManager.beginTransaction().hide(filterFrag)
-            }
-            supportFragmentManager.beginTransaction().add(R.id.frameLayoutFilter, CreatePublicationFragment.newInstance(), CREATE_PUB_FRAG_TAG).commit()
-        }
     }
 
     companion object {

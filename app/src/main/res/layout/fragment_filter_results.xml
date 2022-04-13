@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/top_corners_rounded"
     android:clickable="true"
-    tools:context=".FilterResults">
+    tools:context=".rides.FilterResults">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -7,7 +7,9 @@
 
     <string-array name="Cities">
         <item>Braga</item>
-        <item>Lisboa</item>
         <item>Aveiro</item>
+        <item>Lisboa</item>
+
+
     </string-array>
 </resources>

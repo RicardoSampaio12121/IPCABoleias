@@ -1,15 +1,14 @@
-package com.example.ipcaboleias
+package com.example.ipcaboleias.rides
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import android.widget.Toast
+import com.example.ipcaboleias.R
 import com.example.ipcaboleias.databinding.FragmentFilterResultsBinding
-import com.google.android.material.datepicker.MaterialDatePicker
+import com.example.ipcaboleias.dateTimePickers.DatePickerFragment
 
 class FilterResults : Fragment(R.layout.fragment_filter_results) {
 
@@ -42,7 +41,10 @@ class FilterResults : Fragment(R.layout.fragment_filter_results) {
                 val supportFragmentManager = requireActivity().supportFragmentManager
                 val fragment = supportFragmentManager.findFragmentByTag(FILTER_FRAG_TAG)
 
-                supportFragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in, R.anim.slide_out).hide(fragment!!).commit()
+                supportFragmentManager.beginTransaction().setCustomAnimations(
+                    R.anim.slide_in,
+                    R.anim.slide_out
+                ).hide(fragment!!).commit()
             }
 
 
@@ -65,11 +67,13 @@ class FilterResults : Fragment(R.layout.fragment_filter_results) {
         }
 
         val FromAutoTextView = requireView().findViewById<AutoCompleteTextView>(R.id.FromAutoCompleteTV)
-        val cities = resources.getStringArray(R.array.Cities)
 
-        val adapter = ArrayAdapter<String>(requireActivity(), android.R.layout.simple_list_item_1, cities)
 
-        FromAutoTextView.setAdapter(adapter)
+        //val cities = resources.getStringArray(R.array.Cities)
+
+        //val adapter = ArrayAdapter<String>(requireActivity(), android.R.layout.simple_list_item_1, cities)
+
+        //FromAutoTextView.setAdapter(adapter)
     }
 
     companion object {

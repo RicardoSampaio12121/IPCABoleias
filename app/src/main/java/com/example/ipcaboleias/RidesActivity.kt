@@ -1,13 +1,9 @@
 package com.example.ipcaboleias
 
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.media.Image
-import android.opengl.Visibility
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.TextUtils.replace
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
@@ -15,14 +11,11 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.widget.AppCompatImageView
-import androidx.core.graphics.toColor
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.example.ipcaboleias.rides.FilterResults
+import com.example.ipcaboleias.rides.RidesFragment
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.database.FirebaseDatabase
 import de.hdodenhof.circleimageview.CircleImageView

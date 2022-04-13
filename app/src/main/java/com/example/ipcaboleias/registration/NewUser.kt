@@ -1,4 +1,4 @@
-package com.example.ipcaboleias
+package com.example.ipcaboleias.registration
 
 import android.graphics.Bitmap
 

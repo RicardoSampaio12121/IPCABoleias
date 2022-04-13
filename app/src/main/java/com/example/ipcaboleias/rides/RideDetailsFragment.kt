@@ -1,6 +1,5 @@
-package com.example.ipcaboleias
+package com.example.ipcaboleias.rides
 
-import android.media.Image
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,8 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
-import android.widget.TextView
 import androidx.annotation.RequiresApi
+import com.example.ipcaboleias.R
 import com.example.ipcaboleias.databinding.FragmentRideDetailsBinding
 
 

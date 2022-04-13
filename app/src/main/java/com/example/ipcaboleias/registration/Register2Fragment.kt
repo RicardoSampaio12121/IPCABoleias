@@ -1,4 +1,4 @@
-package com.example.ipcaboleias
+package com.example.ipcaboleias.registration
 
 import android.os.Build
 import android.os.Bundle
@@ -6,10 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
+import com.example.ipcaboleias.R
+import com.example.ipcaboleias.ViewModels.NewUserViewModel
 import com.example.ipcaboleias.databinding.FragmentRegister2Binding
 
 
@@ -77,7 +77,9 @@ class Register2Fragment : Fragment(R.layout.fragment_register2) {
                 val fragToCall = supportFragmentManager.findFragmentByTag(REGISTER3_FRAG_TAG)
 
                 if(fragToCall == null){
-                    supportFragmentManager.beginTransaction().add(R.id.fragmentContainer, register3Fragment.newInstance(), REGISTER3_FRAG_TAG).commit()
+                    supportFragmentManager.beginTransaction().add(
+                        R.id.fragmentContainer,
+                        register3Fragment.newInstance(), REGISTER3_FRAG_TAG).commit()
                 }else{
                     supportFragmentManager.beginTransaction().show(fragToCall).commit()
                 }
