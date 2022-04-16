@@ -9,6 +9,8 @@ import com.example.ipcaboleias.NewPublicationAsPassenger
 import com.example.ipcaboleias.R
 import com.example.ipcaboleias.ViewModels.NewPubViewModel
 import com.example.ipcaboleias.databinding.FragmentCreatePublicationPickPlacesBinding
+import com.example.ipcaboleias.firebaseRepository.Callbacks.NewPublicationCallback
+import com.example.ipcaboleias.firebaseRepository.PublicationsRepository
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
@@ -47,7 +49,18 @@ class CreatePublicationPickPlacesFragment : Fragment(R.layout.fragment_create_pu
 
             passageiro.setOnClickListener {
                 model.setType(NewPubViewModel.PubType.Passenger)
-                createPublicationAsPassenger()
+
+                var newPub = NewPublicationAsPassenger()
+                newPub.uid = requireActivity().intent.getStringExtra("uid")!!
+                newPub.startLatitute = model.getStartLatitude()
+                newPub.startLongitude = model.getStartLongitude()
+                newPub.endLatitute = model.getEndLatitude()
+                newPub.endLongitude = model.getEndLongitude()
+                newPub.date = model.getDate()
+                newPub.time = model.getTime()
+                newPub.type = model.getType().toString()
+
+                createPublicationAsPassenger(newPub)
                 closeAllFragments()
             }
 
@@ -101,32 +114,20 @@ class CreatePublicationPickPlacesFragment : Fragment(R.layout.fragment_create_pu
 
     }
 
-    private fun createPublicationAsPassenger() {
-        var newPub = NewPublicationAsPassenger()
-        newPub.startLatitute = model.getStartLatitude()
-        newPub.startLongitude = model.getStartLongitude()
-        newPub.endLatitute = model.getEndLatitude()
-        newPub.endLongitude = model.getEndLongitude()
-        newPub.date = model.getDate()
-        newPub.time = model.getTime()
-        newPub.type = model.getType().toString()
+    private fun createPublicationAsPassenger(pub : NewPublicationAsPassenger) {
 
+        val repo = PublicationsRepository(requireContext())
 
-        val uid = requireActivity().intent.getStringExtra("uid")
-
-        val database =
-            Firebase.database("https://ipcaboleias-default-rtdb.europe-west1.firebasedatabase.app/")
-        val myRef =
-            database.getReference("publications/$uid${model.getType()}${model.getDate()}${model.getTime()}")
-
-        myRef.setValue(newPub).addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                Toast.makeText(activity, "Publicação criada com sucesso!", Toast.LENGTH_LONG).show()
+        repo.createPublicationAsPassenger(pub, object:NewPublicationCallback {
+            override fun onCallback(success: Boolean) {
+                if(success){
+                    Toast.makeText(activity, "ola valete", Toast.LENGTH_SHORT).show()
+                }else{
+                    Toast.makeText(activity, "oi menu nome é vanessa", Toast.LENGTH_SHORT).show()
+                }
             }
+        })
 
-        }.addOnFailureListener { exception ->
-            Toast.makeText(activity, exception.localizedMessage, Toast.LENGTH_LONG).show()
-        }
     }
 
 }

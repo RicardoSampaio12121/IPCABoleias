@@ -12,6 +12,7 @@ class NewUserViewModel : ViewModel() {
    val carBrand = MutableLiveData<String?>()
    val carModel = MutableLiveData<String?>()
    val carColor = MutableLiveData<String?>()
+   val carPlate = MutableLiveData<String?>()
    val picture = MutableLiveData<Bitmap>()
 
 
@@ -62,6 +63,14 @@ class NewUserViewModel : ViewModel() {
    }
    fun getCarColor() : String{
       return carColor.value.toString()
+   }
+
+   fun setCarPlate(newPlate: String?){
+      carPlate.value = newPlate!!
+   }
+
+   fun getCarPlate() : String{
+      return carPlate.value.toString()
    }
 
    fun setPicture(newPic: Bitmap?){

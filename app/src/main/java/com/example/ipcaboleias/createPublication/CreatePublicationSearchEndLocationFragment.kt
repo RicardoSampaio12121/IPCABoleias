@@ -91,6 +91,11 @@ class CreatePublicationSearchEndLocationFragment : Fragment(R.layout.fragment_cr
     override fun onMapReady(p0: GoogleMap) {
         map = p0
 
+        val latLng : LatLng = LatLng(41.536587, -8.627911)
+
+        map!!.addMarker(MarkerOptions().position(latLng))
+        map!!.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16.0f))
+
         map!!.setOnMapClickListener {
             latitude = it.latitude
             longitude = it.longitude

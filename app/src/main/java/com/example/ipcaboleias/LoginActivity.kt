@@ -6,7 +6,8 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
+import com.example.ipcaboleias.firebaseRepository.Callbacks.userLoginCallback
+import com.example.ipcaboleias.firebaseRepository.UsersRepository
 import com.google.firebase.auth.FirebaseAuth
 
 class LoginActivity : AppCompatActivity() {
@@ -21,7 +22,7 @@ class LoginActivity : AppCompatActivity() {
 
         val tvRegisterUser = findViewById<TextView>(R.id.textViewRegistar)
 
-         tvRegisterUser.setOnClickListener{
+        tvRegisterUser.setOnClickListener {
             var intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
@@ -30,46 +31,28 @@ class LoginActivity : AppCompatActivity() {
         val etEmail = findViewById<EditText>(R.id.editTextEmail)
         val etPassword = findViewById<EditText>(R.id.editTextPassword)
 
-        btSignIn.setOnClickListener{
+        btSignIn.setOnClickListener {
             login(etEmail, etPassword)
         }
     }
 
     // TODO: Adicionar uma rodinha enquanto carrega
-    private fun login(etEmail:EditText, etPassword:EditText){
+    private fun login(etEmail: EditText, etPassword: EditText) {
+
+        val intent = Intent(this, RidesActivity::class.java)
 
         val email = etEmail.text.toString().trim()
         val password = etPassword.text.toString().trim()
 
-        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener{ task ->
-            if(task.isSuccessful){
-                // Verificar se já verificou o email
+        val userRepo = UsersRepository(this)
 
-                val user = task.result?.user!!
-
-                if(user.isEmailVerified) {
-                    // Redirecionar para a página principal
-                    var uid : String = user.uid
-                    var intent = Intent(this, RidesActivity::class.java)
-
-                    intent.putExtra("uid", uid)
-                    startActivity(intent)
-                    finish()
-
-                    Toast.makeText(applicationContext, "Sucesso!", Toast.LENGTH_LONG).show()
-                }
-                else{
-                    Toast.makeText(applicationContext, "Por favor, verifique o email de confirmação antes de continuar.", Toast.LENGTH_LONG).show()
-                }
-
+        userRepo.userLogin(email, password, object : userLoginCallback {
+            override fun onCallback(uid: String?) {
+                intent.putExtra("uid", uid)
+                startActivity(intent)
+                finish()
             }
-        }.addOnFailureListener{ exception ->
-            Toast.makeText(applicationContext, exception.localizedMessage, Toast.LENGTH_LONG).show()
-        }
+        })
+
     }
-
-
-
-
-
 }

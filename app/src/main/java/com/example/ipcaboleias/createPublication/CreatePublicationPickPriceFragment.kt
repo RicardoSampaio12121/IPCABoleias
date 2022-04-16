@@ -1,5 +1,6 @@
 package com.example.ipcaboleias.createPublication
 
+import android.content.Intent
 import android.location.Location
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,11 +11,14 @@ import com.example.ipcaboleias.NewPublicationAsDriver
 import com.example.ipcaboleias.R
 import com.example.ipcaboleias.ViewModels.NewPubViewModel
 import com.example.ipcaboleias.databinding.FragmentCreatePublicationPickPriceBinding
+import com.example.ipcaboleias.firebaseRepository.Callbacks.NewPublicationCallback
+import com.example.ipcaboleias.firebaseRepository.PublicationsRepository
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 
-class CreatePublicationPickPriceFragment : Fragment(R.layout.fragment_create_publication_pick_price) {
+class CreatePublicationPickPriceFragment :
+    Fragment(R.layout.fragment_create_publication_pick_price) {
     private var _binding: FragmentCreatePublicationPickPriceBinding? = null
     private val binding get() = _binding!!
 
@@ -38,9 +42,24 @@ class CreatePublicationPickPriceFragment : Fragment(R.layout.fragment_create_pub
             tvPrice.setText("${price}€")
 
             viewConcordo.setOnClickListener {
+                val intent = requireActivity().intent
                 model.setPrice(price)
-                createPublicationAsDriver()
-                //Toast.makeText(requireContext(), "Publicação criada com sucesso.", Toast.LENGTH_LONG).show()
+
+                val newPub = NewPublicationAsDriver()
+                newPub.uid = intent.getStringExtra("uid")!!
+                newPub.startLatitute = model.getStartLatitude()
+                newPub.startLongitude = model.getStartLongitude()
+                newPub.endLatitute = model.getEndLatitude()
+                newPub.endLongitude = model.getEndLongitude()
+                newPub.date = model.getDate()
+                newPub.time = model.getTime()
+                newPub.type = model.getType().toString()
+                newPub.places = model.getNPassengers()
+                newPub.price = model.getPrice()
+
+
+                createPublicationAsDriver(newPub)
+
                 closeFragments()
             }
 
@@ -50,55 +69,51 @@ class CreatePublicationPickPriceFragment : Fragment(R.layout.fragment_create_pub
         }
     }
 
-    private fun calculatePrice() : Float{
+    private fun calculatePrice(): Float {
         var results = FloatArray(1)
-        Location.distanceBetween(model.getStartLatitude(), model.getStartLongitude(), model.getEndLatitude(), model.getEndLongitude(), results)
+        Location.distanceBetween(
+            model.getStartLatitude(),
+            model.getStartLongitude(),
+            model.getEndLatitude(),
+            model.getEndLongitude(),
+            results
+        )
 
-        var distanceInKm : Float = results[0] / 1000
-        // TODO: Perguntar a opinião de quanto cobrar por km
-        // Vou utilizar 10 centimos por km só para testar
+        var distanceInKm: Float = results[0] / 1000
 
         return distanceInKm * 0.10f
     }
 
-    private fun createPublicationAsDriver() {
-        var newPub = NewPublicationAsDriver()
-        newPub.startLatitute = model.getStartLatitude()
-        newPub.startLongitude = model.getStartLongitude()
-        newPub.endLatitute = model.getEndLatitude()
-        newPub.endLongitude = model.getEndLongitude()
-        newPub.date = model.getDate()
-        newPub.time = model.getTime()
-        newPub.type = model.getType().toString()
-        newPub.price = model.getPrice()
+    private fun createPublicationAsDriver(pub : NewPublicationAsDriver) {
 
-
-        val uid = requireActivity().intent.getStringExtra("uid")
-
-        val database =
-            Firebase.database("https://ipcaboleias-default-rtdb.europe-west1.firebasedatabase.app/")
-        val myRef =
-            database.getReference("publications/$uid${model.getType()}${model.getDate()}${model.getTime()}")
-
-        myRef.setValue(newPub).addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                //Toast.makeText(activity, "Publicação criada com sucesso!", Toast.LENGTH_LONG).show()
+        val repo = PublicationsRepository(requireContext())
+        repo.createPublicationAsDriver(pub, object: NewPublicationCallback {
+            override fun onCallback(success: Boolean) {
+                if(success){
+                    Toast.makeText(activity, "ola valete", Toast.LENGTH_SHORT).show()
+                }else{
+                    Toast.makeText(activity, "oi menu nome é vanessa", Toast.LENGTH_SHORT).show()
+                }
             }
+        })
 
-        }.addOnFailureListener { exception ->
-            Toast.makeText(activity, exception.localizedMessage, Toast.LENGTH_LONG).show()
-        }
     }
 
-    private fun closeFragments(){
+    private fun closeFragments() {
         val supportFragmentManager = requireActivity().supportFragmentManager
 
-        val fragCreatePubSearchStartPos = supportFragmentManager.findFragmentByTag(CREATE_PUB_SEARCH1_FRAG_TAG)
-        val fragCreatePubSearchEndPos = supportFragmentManager.findFragmentByTag(CREATE_PUB_SEARCH2_FRAG_TAG)
-        val fragCreatePubPickDate = supportFragmentManager.findFragmentByTag(CREATE_PUB_PICK_DATE_FRAG_TAG)
-        val fragCreatePubPickTime = supportFragmentManager.findFragmentByTag(CREATE_PUB_PICK_TIME_FRAG_TAG)
-        val fragCreatePubPickPlaces = supportFragmentManager.findFragmentByTag(CREATE_PUB_PICK_PLACES_FRAG_TAG)
-        val fragCreatePubPickPrice = supportFragmentManager.findFragmentByTag(CREATE_PUB_PICK_PRICE_FRAG_TAG)
+        val fragCreatePubSearchStartPos =
+            supportFragmentManager.findFragmentByTag(CREATE_PUB_SEARCH1_FRAG_TAG)
+        val fragCreatePubSearchEndPos =
+            supportFragmentManager.findFragmentByTag(CREATE_PUB_SEARCH2_FRAG_TAG)
+        val fragCreatePubPickDate =
+            supportFragmentManager.findFragmentByTag(CREATE_PUB_PICK_DATE_FRAG_TAG)
+        val fragCreatePubPickTime =
+            supportFragmentManager.findFragmentByTag(CREATE_PUB_PICK_TIME_FRAG_TAG)
+        val fragCreatePubPickPlaces =
+            supportFragmentManager.findFragmentByTag(CREATE_PUB_PICK_PLACES_FRAG_TAG)
+        val fragCreatePubPickPrice =
+            supportFragmentManager.findFragmentByTag(CREATE_PUB_PICK_PRICE_FRAG_TAG)
 
         supportFragmentManager.beginTransaction().remove(fragCreatePubSearchStartPos!!).commit()
         supportFragmentManager.beginTransaction().remove(fragCreatePubSearchEndPos!!).commit()

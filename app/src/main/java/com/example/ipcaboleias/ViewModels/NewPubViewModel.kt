@@ -74,6 +74,9 @@ class NewPubViewModel : ViewModel() {
     fun setNPassengers(newNPassengers : Int?){
         nPassengers.value = newNPassengers
     }
+    fun getNPassengers() : Int{
+        return nPassengers.value!!
+    }
 
     fun setPrice(newPrice : Float){
         price.value = newPrice

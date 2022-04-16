@@ -27,30 +27,10 @@ class Register1FragmentFragment : Fragment(R.layout.fragment_register1_fragment)
     private val binding get() = _binding!!
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-        }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_register1_fragment, container, false)
-    }
-
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         _binding = FragmentRegister1FragmentBinding.bind(view)
-
-//        var btnReturn = activity?.requireViewById<ImageButton>(R.id.btnReturn)
-//
-//        btnReturn?.setOnClickListener{
-//            activity?.finish()
-//        }
 
         binding.apply {
 
@@ -87,7 +67,10 @@ class Register1FragmentFragment : Fragment(R.layout.fragment_register1_fragment)
                 } else if(!Pattern.matches(regex1, editTextEmail.text.toString())){
                     Toast.makeText(activity, "Email inválido.", Toast.LENGTH_SHORT).show()
                     editTextEmail.requestFocus()
-                } else {
+                } else if (editTextPassword.text.toString() != editTextConfirmPassword.text.toString()){
+                    Toast.makeText(activity, "Passwords não coindidem.", Toast.LENGTH_SHORT).show()
+                    editTextPassword.requestFocus()
+                }else {
 
 
                     val supportFragmentManager = requireActivity().supportFragmentManager
