@@ -1,12 +1,17 @@
 package com.example.ipcaboleias.rides
 
+import android.graphics.BitmapFactory
+import android.opengl.Visibility
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ipcaboleias.databinding.ItemPublicationV2Binding
+import java.util.*
 
 
-class RVPublicationsAadapter(var publications: List<RVPublication>): RecyclerView.Adapter<RVPublicationsAadapter.ToDoViewHolder>() {
+class RVPublicationsAadapter(var publications: MutableList<Ride>): RecyclerView.Adapter<RVPublicationsAadapter.ToDoViewHolder>() {
 
     private lateinit var mListener : onItemClickListener
 
@@ -40,13 +45,39 @@ class RVPublicationsAadapter(var publications: List<RVPublication>): RecyclerVie
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: ToDoViewHolder, position: Int) {
 
         holder.binding.apply {
             txtName.text = publications[position].name
-            textMoney.text = publications[position].amount.toString() + " EUR"
-            textFrom.text = publications[position].from
-            textTo.text = publications[position].to
+            textView2.text = publications[position].car
+
+            if(publications[position].price == 0.0){
+                textMoney.text = ""
+            }
+            else{
+                textMoney.text = "${publications[position].price} €"
+            }
+
+            if(publications[position].places == 0){
+                textView4.text = ""
+            }
+            else{
+                textView4.text = "${publications[position].places} lugares"
+            }
+
+            textFrom.text = publications[position].startLatitude.toString()
+            textTo.text = publications[position].endLatitude.toString()
+
+            tvDateFrom.text = publications[position].time
+
+            tvDateFrom.text = publications[position].date
+
+            val byteArray : ByteArray = Base64.getDecoder().decode(publications[position].profilePicture)
+            val bitMapPic = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+
+            profilePic.setImageBitmap(bitMapPic)
+
         }
     }
 

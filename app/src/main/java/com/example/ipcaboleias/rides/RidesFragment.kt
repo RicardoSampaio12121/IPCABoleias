@@ -42,50 +42,48 @@ class RidesFragment : Fragment(R.layout.fragment_rides) {
 
         val pubRepo = PublicationsRepository(requireContext())
 
+        var adapter : RVPublicationsAadapter?
+
         pubRepo.getPublications(object : GetPublicationsCallback {
             override fun onCallback(rides: MutableList<Ride>) {
-                for ( ride in rides){
-                    println("--------------------------")
-                    println(ride.uid)
-                    println(ride.time)
-                    println("--------------------------")
+                adapter = RVPublicationsAadapter(rides)
+                rv.adapter = adapter
+                rv.layoutManager = LinearLayoutManager(activity)
 
-                }
+                adapter!!.setOnItemClickListener(object : RVPublicationsAadapter.onItemClickListener {
+                    override fun onItemClick(position: Int){
+                        val transaction = activity?.supportFragmentManager?.beginTransaction()
+                        transaction?.add(R.id.frameFragment, RideDetailsFragment.newInstance(), "detailsFragTag")?.commit()
+                        transaction?.hide(activity?.supportFragmentManager?.findFragmentByTag("ridesFragTag")!!)
+                        //transaction?.disallowAddToBackStack()
+                    }
+                })
             }
         })
 
 
         //var publicationList : MutableList<RVPublication>
 
-        var publicationList = mutableListOf(
-            RVPublication("Ricardo", "Braga", "Barcelos", "24/08/2022", 4.0F),
-            RVPublication("José", "Porto", "Braga", "27/08/2022", 9.0F),
-            RVPublication("Sampaio", "Esposende", "Guimaraes", "29/08/2022", 12.4F),
-            RVPublication("Ricardo", "Braga", "Barcelos", "24/08/2022", 4.0F),
-            RVPublication("José", "Porto", "Braga", "27/08/2022", 9.0F),
-            RVPublication("Sampaio", "Esposende", "Guimaraes", "29/08/2022", 12.4F),
-            RVPublication("Ricardo", "Braga", "Barcelos", "24/08/2022", 4.0F),
-            RVPublication("José", "Porto", "Braga", "27/08/2022", 9.0F),
-            RVPublication("Sampaio", "Esposende", "Guimaraes", "29/08/2022", 12.4F),
-            RVPublication("Ricardo", "Braga", "Barcelos", "24/08/2022", 4.0F),
-            RVPublication("José", "Porto", "Braga", "27/08/2022", 9.0F),
-            RVPublication("Sampaio", "Esposende", "Guimaraes", "29/08/2022", 12.4F),
-            RVPublication("Ricardo", "Braga", "Barcelos", "24/08/2022", 4.0F),
-            RVPublication("José", "Porto", "Braga", "27/08/2022", 9.0F),
-            RVPublication("Sampaio", "Esposende", "Guimaraes", "29/08/2022", 12.4F)
-        )
+//        var publicationList = mutableListOf(
+//            RVPublication("Ricardo", "Braga", "Barcelos", "24/08/2022", 4.0F),
+//            RVPublication("José", "Porto", "Braga", "27/08/2022", 9.0F),
+//            RVPublication("Sampaio", "Esposende", "Guimaraes", "29/08/2022", 12.4F),
+//            RVPublication("Ricardo", "Braga", "Barcelos", "24/08/2022", 4.0F),
+//            RVPublication("José", "Porto", "Braga", "27/08/2022", 9.0F),
+//            RVPublication("Sampaio", "Esposende", "Guimaraes", "29/08/2022", 12.4F),
+//            RVPublication("Ricardo", "Braga", "Barcelos", "24/08/2022", 4.0F),
+//            RVPublication("José", "Porto", "Braga", "27/08/2022", 9.0F),
+//            RVPublication("Sampaio", "Esposende", "Guimaraes", "29/08/2022", 12.4F),
+//            RVPublication("Ricardo", "Braga", "Barcelos", "24/08/2022", 4.0F),
+//            RVPublication("José", "Porto", "Braga", "27/08/2022", 9.0F),
+//            RVPublication("Sampaio", "Esposende", "Guimaraes", "29/08/2022", 12.4F),
+//            RVPublication("Ricardo", "Braga", "Barcelos", "24/08/2022", 4.0F),
+//            RVPublication("José", "Porto", "Braga", "27/08/2022", 9.0F),
+//            RVPublication("Sampaio", "Esposende", "Guimaraes", "29/08/2022", 12.4F)
+//        )
 
-        val adapter = RVPublicationsAadapter(publicationList)
-        rv.adapter = adapter
-        rv.layoutManager = LinearLayoutManager(activity)
-        adapter.setOnItemClickListener(object : RVPublicationsAadapter.onItemClickListener {
-            override fun onItemClick(position: Int){
-                val transaction = activity?.supportFragmentManager?.beginTransaction()
-                transaction?.add(R.id.frameFragment, RideDetailsFragment.newInstance(), "detailsFragTag")?.commit()
-                transaction?.hide(activity?.supportFragmentManager?.findFragmentByTag("ridesFragTag")!!)
-                //transaction?.disallowAddToBackStack()
-            }
-        })
+
+
 
 
     }

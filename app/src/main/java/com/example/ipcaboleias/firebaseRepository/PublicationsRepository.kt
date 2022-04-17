@@ -5,6 +5,7 @@ import com.example.ipcaboleias.NewPublicationAsDriver
 import com.example.ipcaboleias.NewPublicationAsPassenger
 import com.example.ipcaboleias.firebaseRepository.Callbacks.GetPublicationsCallback
 import com.example.ipcaboleias.firebaseRepository.Callbacks.NewPublicationCallback
+import com.example.ipcaboleias.registration.NewUser
 import com.example.ipcaboleias.rides.Ride
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -66,12 +67,9 @@ class PublicationsRepository(private val context: Context) {
     fun getPublications(myCallback : GetPublicationsCallback){
 
         val db = Firebase.firestore
-        var list : MutableList<Ride> = ArrayList<Ride>()
+        val list : MutableList<Ride> = ArrayList<Ride>()
         var single : Ride
-
-        val gson = GsonBuilder()
-            .setLenient()
-            .create()
+        var user : NewUser
 
         db.collection("publications")
             .get()
@@ -79,9 +77,20 @@ class PublicationsRepository(private val context: Context) {
                 for (document in result) {
 
                     single = document.toObject<Ride>()
-                    list!!.add(single)
+
+                    db.collection("users").document(single.uid).get().addOnSuccessListener { userResult ->
+
+                        user = userResult.toObject<NewUser>()!!
+
+                        single.name = "${user.name} ${user.surname}"
+                        single.car = "${user.carBrand} ${user.carModel}"
+                        single.profilePicture = user.profilePicture!!
+
+                        list.add(single)
+
+                        myCallback.onCallback(list)
+                    }
                 }
-                myCallback.onCallback(list!!)
             }
             .addOnFailureListener { exception ->
                 //Log.w(TAG, "Error getting documents.", exception)

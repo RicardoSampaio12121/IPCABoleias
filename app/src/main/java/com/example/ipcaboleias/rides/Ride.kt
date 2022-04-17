@@ -2,6 +2,9 @@ package com.example.ipcaboleias.rides
 
 data class Ride(
     val uid : String = "",
+    var name : String = "",
+    var car : String = "Ola valete",
+    var profilePicture : String = "",
     val date: String = "",
     val time: String = "",
     val startLatitude : Double = 0.0,
