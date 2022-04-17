@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.ipcaboleias.R
 import com.example.ipcaboleias.createPublication.CreatePublicationSearchStartLocationFragment
 import com.example.ipcaboleias.databinding.FragmentRidesBinding
+import com.example.ipcaboleias.firebaseRepository.Callbacks.GetPublicationsCallback
+import com.example.ipcaboleias.firebaseRepository.PublicationsRepository
 
 class RidesFragment : Fragment(R.layout.fragment_rides) {
 
@@ -21,19 +23,6 @@ class RidesFragment : Fragment(R.layout.fragment_rides) {
     val CREATE_PUB1_FRAG_TAG = "createPub1FragTag"
     val FILTER_FRAG_TAG = "filterFragTag"
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-        }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_rides, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         _binding = FragmentRidesBinding.bind(view)
@@ -47,6 +36,26 @@ class RidesFragment : Fragment(R.layout.fragment_rides) {
         }
 
         val rv = requireView().findViewById<RecyclerView>(R.id.rvPublications)
+
+
+        // Get rides from firestore
+
+        val pubRepo = PublicationsRepository(requireContext())
+
+        pubRepo.getPublications(object : GetPublicationsCallback {
+            override fun onCallback(rides: MutableList<Ride>) {
+                for ( ride in rides){
+                    println("--------------------------")
+                    println(ride.uid)
+                    println(ride.time)
+                    println("--------------------------")
+
+                }
+            }
+        })
+
+
+        //var publicationList : MutableList<RVPublication>
 
         var publicationList = mutableListOf(
             RVPublication("Ricardo", "Braga", "Barcelos", "24/08/2022", 4.0F),

@@ -1,12 +1,16 @@
 package com.example.ipcaboleias.firebaseRepository
 
 import android.content.Context
-import android.widget.Toast
 import com.example.ipcaboleias.NewPublicationAsDriver
 import com.example.ipcaboleias.NewPublicationAsPassenger
+import com.example.ipcaboleias.firebaseRepository.Callbacks.GetPublicationsCallback
 import com.example.ipcaboleias.firebaseRepository.Callbacks.NewPublicationCallback
+import com.example.ipcaboleias.rides.Ride
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import com.google.gson.GsonBuilder
+
 
 class PublicationsRepository(private val context: Context) {
 
@@ -55,6 +59,32 @@ class PublicationsRepository(private val context: Context) {
             }
             .addOnFailureListener {
                 myCallback.onCallback(false)
+            }
+    }
+
+
+    fun getPublications(myCallback : GetPublicationsCallback){
+
+        val db = Firebase.firestore
+        var list : MutableList<Ride> = ArrayList<Ride>()
+        var single : Ride
+
+        val gson = GsonBuilder()
+            .setLenient()
+            .create()
+
+        db.collection("publications")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+
+                    single = document.toObject<Ride>()
+                    list!!.add(single)
+                }
+                myCallback.onCallback(list!!)
+            }
+            .addOnFailureListener { exception ->
+                //Log.w(TAG, "Error getting documents.", exception)
             }
     }
 }
