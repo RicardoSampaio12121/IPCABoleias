@@ -9,7 +9,12 @@
         <item>Braga</item>
         <item>Aveiro</item>
         <item>Lisboa</item>
+    </string-array>
 
-
+    <string-array name="IPCAPolos">
+        <item>Polo de Barcelos</item>
+        <item>Polo de Braga</item>
+        <item>Polo de Guimarães</item>
+        <item>Polo de Famalicão</item>
     </string-array>
 </resources>
