@@ -49,6 +49,9 @@ class RVPublicationsAadapter(var publications: MutableList<Ride>): RecyclerView.
     override fun onBindViewHolder(holder: ToDoViewHolder, position: Int) {
 
         holder.binding.apply {
+
+
+
             txtName.text = publications[position].name
             textView2.text = publications[position].car
 

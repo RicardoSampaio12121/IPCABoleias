@@ -55,6 +55,7 @@ class CreatePublicationPickPriceFragment :
                 newPub.time = model.getTime()
                 newPub.type = model.getType().toString()
                 newPub.places = model.getNPassengers()
+                newPub.description = model.getDescription()
                 newPub.price = model.getPrice()
 
 
@@ -90,9 +91,9 @@ class CreatePublicationPickPriceFragment :
         repo.createPublicationAsDriver(pub, object: NewPublicationCallback {
             override fun onCallback(success: Boolean) {
                 if(success){
-                    Toast.makeText(activity, "ola valete", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(activity, "ola valete", Toast.LENGTH_SHORT).show()
                 }else{
-                    Toast.makeText(activity, "oi menu nome é vanessa", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(activity, "oi menu nome é vanessa", Toast.LENGTH_SHORT).show()
                 }
             }
         })

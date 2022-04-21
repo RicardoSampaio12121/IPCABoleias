@@ -12,7 +12,7 @@ data class Ride(
     val endLatitude : Double = 0.0,
     val endLongitude : Double = 0.0,
     val type : String = "",
-    val places : Int? = 0,
+    val places : Int = 0,
     val price : Double? = 0.0
 )
 

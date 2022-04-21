@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import com.example.ipcaboleias.CreatePublicationAddDescriptionFragment
 import com.example.ipcaboleias.NewPublicationAsPassenger
 import com.example.ipcaboleias.R
 import com.example.ipcaboleias.ViewModels.NewPubViewModel
@@ -26,6 +27,7 @@ class CreatePublicationPickPlacesFragment : Fragment(R.layout.fragment_create_pu
     private val CREATE_PUB_PICK_TIME_FRAG_TAG = "createPubPickTimeFragTag"
     private val CREATE_PUB_PICK_PLACES_FRAG_TAG = "createPubPickPlacesFragTag"
     private val CREATE_PUB_PICK_PRICE_FRAG_TAG = "createPubPickPriceFragTag"
+    private val CREATE_PUB_ADD_DESCRIPTION_FRAG_TAG = "createPubAddDescriptionFragTag"
 
     private val model: NewPubViewModel by activityViewModels()
 
@@ -71,7 +73,7 @@ class CreatePublicationPickPlacesFragment : Fragment(R.layout.fragment_create_pu
                 val supportFragmentManager = requireActivity().supportFragmentManager
 
                 val fragToHide = supportFragmentManager.findFragmentByTag(CREATE_PUB_PICK_PLACES_FRAG_TAG)
-                val fragToCall = supportFragmentManager.findFragmentByTag(CREATE_PUB_PICK_PRICE_FRAG_TAG)
+                val fragToCall = supportFragmentManager.findFragmentByTag(CREATE_PUB_ADD_DESCRIPTION_FRAG_TAG)
 
                 if(fragToCall != null){
                     supportFragmentManager.beginTransaction().show(fragToCall).commit()
@@ -79,7 +81,7 @@ class CreatePublicationPickPlacesFragment : Fragment(R.layout.fragment_create_pu
                 else{
                     supportFragmentManager.beginTransaction().add(
                         R.id.frameLayoutFilter,
-                        CreatePublicationPickPriceFragment.newInstance(), CREATE_PUB_PICK_PRICE_FRAG_TAG).commit()
+                        CreatePublicationAddDescriptionFragment.newInstance(), CREATE_PUB_ADD_DESCRIPTION_FRAG_TAG).commit()
                 }
 
                 supportFragmentManager.beginTransaction().hide(fragToHide!!).commit()

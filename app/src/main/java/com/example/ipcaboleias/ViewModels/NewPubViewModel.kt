@@ -12,6 +12,7 @@ class NewPubViewModel : ViewModel() {
     val date = MutableLiveData<String>()
     val time = MutableLiveData<String>()
     val type = MutableLiveData<PubType>()
+    val description = MutableLiveData<String>()
     val nPassengers = MutableLiveData<Int?>()
     val price = MutableLiveData<Float>()
 
@@ -85,6 +86,15 @@ class NewPubViewModel : ViewModel() {
     fun getPrice() : Float{
         return price.value!!
     }
+
+    fun setDescription(newDesc : String){
+        description.value = newDesc
+    }
+
+    fun getDescription() : String{
+        return description.value!!
+    }
+
 
     enum class PubType{
         Driver, Passenger

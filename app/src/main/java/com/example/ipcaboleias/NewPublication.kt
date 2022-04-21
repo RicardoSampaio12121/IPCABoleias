@@ -11,6 +11,7 @@ class NewPublicationAsPassenger {
     var date : String = ""
     var time : String = ""
     var type : String = ""
+    var description : String = ""
 }
 
 class NewPublicationAsDriver {
@@ -23,5 +24,6 @@ class NewPublicationAsDriver {
     var time : String = ""
     var type : String = ""
     var places : Int = 1
+    var description : String = ""
     var price : Float = 0.0f
 }
