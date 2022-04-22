@@ -131,6 +131,9 @@ class CreatePublicationSearchEndLocationFragment :
     private fun changeMapLocationLatLng(latLng: LatLng) {
         map!!.clear()
 
+        latitude = latLng.latitude
+        longitude = latLng.longitude
+
         map!!.addMarker(MarkerOptions().position(latLng))
         map!!.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16.0f))
     }

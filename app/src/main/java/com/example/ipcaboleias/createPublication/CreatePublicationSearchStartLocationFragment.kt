@@ -140,6 +140,7 @@ class CreatePublicationSearchStartLocationFragment :
             val coordinates = LatLng(it.latitude, it.longitude)
 
             map?.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinates, 16.0f))
+            map!!.addMarker(MarkerOptions().position(coordinates))
             //et.setText("${it.latitude} ${it.longitude}")
             reverseGeocoding(it.latitude, it.longitude)
         }

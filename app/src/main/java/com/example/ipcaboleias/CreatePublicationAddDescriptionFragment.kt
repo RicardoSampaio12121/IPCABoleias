@@ -19,6 +19,7 @@ class CreatePublicationAddDescriptionFragment : Fragment(R.layout.fragment_creat
 
     private val CREATE_PUB_ADD_DESCRIPTION_FRAG_TAG = "createPubAddDescriptionFragTag"
     private val CREATE_PUB_PICK_PRICE_FRAG_TAG = "createPubPickPriceFragTag"
+    private val CREATE_PUB_SET_DEFINITIONS_FRAG_TAG = "createPubSetDefFragTag"
 
 
     private val model: NewPubViewModel by activityViewModels()
@@ -40,7 +41,7 @@ class CreatePublicationAddDescriptionFragment : Fragment(R.layout.fragment_creat
                 model.setDescription(etDescription.text.toString())
 
                 val fragToHide = supportFragmentManager.findFragmentByTag(CREATE_PUB_ADD_DESCRIPTION_FRAG_TAG)
-                val fragToCall = supportFragmentManager.findFragmentByTag(CREATE_PUB_PICK_PRICE_FRAG_TAG)
+                val fragToCall = supportFragmentManager.findFragmentByTag(CREATE_PUB_SET_DEFINITIONS_FRAG_TAG)
 
                 supportFragmentManager.beginTransaction().hide(fragToHide!!).commit()
 
@@ -48,7 +49,7 @@ class CreatePublicationAddDescriptionFragment : Fragment(R.layout.fragment_creat
                     supportFragmentManager.beginTransaction().show(fragToCall).commit()
                 }
                 else{
-                    supportFragmentManager.beginTransaction().add(R.id.frameLayoutFilter, CreatePublicationPickPriceFragment.newInstance(), CREATE_PUB_PICK_PRICE_FRAG_TAG).commit()
+                    supportFragmentManager.beginTransaction().add(R.id.frameLayoutFilter, CreatePublicationSetDefinitionsFragment.newInstance(), CREATE_PUB_SET_DEFINITIONS_FRAG_TAG).commit()
 
                 }
             }

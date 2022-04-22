@@ -56,6 +56,9 @@ class CreatePublicationPickPriceFragment :
                 newPub.type = model.getType().toString()
                 newPub.places = model.getNPassengers()
                 newPub.description = model.getDescription()
+                newPub.uniqueDrive = model.getUniqueDrive()
+                newPub.acceptDoc = model.getAcceptDoc()
+                newPub.acceptAlunos = model.getAcceptAlunos()
                 newPub.price = model.getPrice()
 
 

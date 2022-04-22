@@ -14,6 +14,9 @@ class NewPubViewModel : ViewModel() {
     val type = MutableLiveData<PubType>()
     val description = MutableLiveData<String>()
     val nPassengers = MutableLiveData<Int?>()
+    val uniqueRide = MutableLiveData<Boolean>()
+    val acceptDoc = MutableLiveData<Boolean>()
+    val acceptAlunos = MutableLiveData<Boolean>()
     val price = MutableLiveData<Float>()
 
     fun setName(newName : String){
@@ -94,6 +97,30 @@ class NewPubViewModel : ViewModel() {
     fun getDescription() : String{
         return description.value!!
     }
+
+    fun setUniqueDrive(value : Boolean){
+        uniqueRide.value = value
+    }
+    fun getUniqueDrive() : Boolean{
+        return uniqueRide.value!!
+    }
+
+    fun setAcceptDoc(value : Boolean){
+        acceptDoc.value = value
+    }
+
+    fun getAcceptDoc() : Boolean{
+        return acceptDoc.value!!
+    }
+    fun setAcceptAlunos(value : Boolean){
+        acceptAlunos.value = value
+    }
+
+    fun getAcceptAlunos() : Boolean{
+        return acceptAlunos.value!!
+    }
+
+
 
 
     enum class PubType{

@@ -32,6 +32,9 @@ class PublicationsRepository(private val context: Context) {
             "type" to publication.type,
             "places" to publication.places,
             "description" to publication.description,
+            "uniqueRide" to publication.uniqueDrive,
+            "acceptDoc" to publication.acceptDoc,
+            "acceptAlunos" to publication.acceptAlunos,
             "price" to publication.price
         )
 
