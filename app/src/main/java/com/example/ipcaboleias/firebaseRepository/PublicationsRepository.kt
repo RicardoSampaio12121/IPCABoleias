@@ -74,7 +74,7 @@ class PublicationsRepository(private val context: Context) {
     }
 
 
-    fun getPublications(myCallback: GetPublicationsCallback) {
+    suspend fun getPublications(myCallback: GetPublicationsCallback) {
         val db = Firebase.firestore
         var list: MutableList<Ride> = ArrayList()
 

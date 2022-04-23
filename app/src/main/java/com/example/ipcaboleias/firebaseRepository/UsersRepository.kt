@@ -2,6 +2,7 @@ package com.example.ipcaboleias.firebaseRepository
 
 import android.content.Context
 import android.widget.Toast
+import com.example.ipcaboleias.firebaseRepository.Callbacks.UserCallback
 import com.example.ipcaboleias.firebaseRepository.Callbacks.userLoginCallback
 import com.example.ipcaboleias.registration.NewUser
 import com.google.firebase.auth.FirebaseAuth
@@ -102,7 +103,19 @@ class UsersRepository(private val context: Context) {
         }
     }
 
-    fun getUser(uid: String) {
+    fun getUser(uid: String, myCallBack: UserCallback) {
+        val db = Firebase.firestore
+        var user : NewUser
 
+        db.collection("users")
+            .document(uid)
+            .get()
+            .addOnCompleteListener {
+                if(it.isSuccessful){
+                    user = it.result.toObject(NewUser::class.java)!!
+
+                    myCallBack.onCallback(user)
+                }
+            }
     }
 }
