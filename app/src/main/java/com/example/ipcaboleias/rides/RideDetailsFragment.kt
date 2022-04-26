@@ -17,6 +17,7 @@ import com.example.ipcaboleias.ViewModels.PublicationDetailsViewModel
 import com.example.ipcaboleias.databinding.FragmentRideDetailsBinding
 import java.io.Serializable
 import java.util.*
+import java.util.regex.Pattern
 
 class RideDetailsFragment : Fragment(R.layout.fragment_ride_details) {
 
@@ -24,7 +25,7 @@ class RideDetailsFragment : Fragment(R.layout.fragment_ride_details) {
     private val binding get() = _binding!!
 
     private val model: PublicationDetailsViewModel by activityViewModels()
-    private lateinit var ride : Ride
+    private lateinit var ride: Ride
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,16 +52,28 @@ class RideDetailsFragment : Fragment(R.layout.fragment_ride_details) {
             tvPrice.text = "${ride.price}€"
             tvPlaces.text = ride.places.toString()
 
-            val byteArray : ByteArray = Base64.getDecoder().decode(ride.profilePicture)
+            val byteArray: ByteArray = Base64.getDecoder().decode(ride.profilePicture)
             val bitMapPic = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
 
             profilePicture.setImageBitmap(bitMapPic)
 
             txtNamePerson.text = ride.name
-            //TODO: VER SE É DOCENTE OU ALUNO DO IPCA
+
+            if (ride.acceptAlunos && ride.acceptDoc) tvDispCh.text = "Todos"
+            else if (ride.acceptAlunos && !ride.acceptDoc) tvDispCh.text = "Alunos"
+            else tvDispCh.text = "Docentes"
+
+
+            if (Pattern.matches("a[0-9]+@alunos.ipca.pt", ride.email)) {
+                tvDocOrStu.text = "Aluno do IPCA"
+            } else {
+                tvDocOrStu.text = "Docente do IPCA"
+            }
+
             buttonContact.text = "CONTACTAR ${ride.name}"
-            //TODO: SÓ TENHO A MARCA DO CARRO, FALTA O RESTO
+
             carBrand.text = ride.car
+            tvColor.text = ride.carColor
 
             txtDesc.text = ride.description
         }

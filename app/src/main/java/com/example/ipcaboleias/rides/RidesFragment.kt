@@ -69,8 +69,10 @@ class RidesFragment : Fragment(R.layout.fragment_rides) {
                                     usersRepo.getUser(ride.uid, object : UserCallback {
                                         override fun onCallback(user: NewUser) {
                                             ride.name = user.name
+                                            ride.email = user.email
                                             ride.profilePicture = user.profilePicture!!
                                             ride.car = "${user.carBrand} ${user.carModel}"
+                                            ride.carColor = user.carColor!!
                                         }
                                     })
                                 }

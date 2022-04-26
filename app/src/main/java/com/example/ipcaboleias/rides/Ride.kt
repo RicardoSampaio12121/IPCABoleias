@@ -3,7 +3,9 @@ package com.example.ipcaboleias.rides
 data class Ride(
     val uid : String = "",
     var name : String = "",
+    var email : String = "",
     var car : String = "",
+    var carColor : String = "",
     var profilePicture : String = "",
     val date: String = "",
     val time: String = "",

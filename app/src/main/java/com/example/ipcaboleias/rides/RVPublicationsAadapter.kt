@@ -50,8 +50,6 @@ class RVPublicationsAadapter(var publications: MutableList<Ride>): RecyclerView.
 
         holder.binding.apply {
 
-
-
             txtName.text = publications[position].name
             textView2.text = publications[position].car
 

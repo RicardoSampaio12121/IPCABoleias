@@ -180,7 +180,7 @@
         <View
             android:id="@+id/viewPrice"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="200dp"
             android:layout_marginVertical="10dp"
             android:background="@color/white"
             app:layout_constraintStart_toStartOf="parent"
@@ -198,14 +198,25 @@
             app:layout_constraintTop_toTopOf="@id/viewPrice" />
 
         <TextView
+            android:id="@+id/textView5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingHorizontal="10dp"
             android:text="Número de \nlugares disponiveis"
             android:textSize="17sp"
-            app:layout_constraintBottom_toBottomOf="@+id/viewPrice"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tvDisponibilidade"
             app:layout_constraintTop_toBottomOf="@+id/priceTitle" />
+
+        <TextView
+            android:id="@+id/tvDisponibilidade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="10dp"
+            android:text="Viagem disponivel \npara"
+            android:textSize="17sp"
+            app:layout_constraintBottom_toBottomOf="@+id/viewPrice"
+            app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
         <TextView
             android:id="@+id/tvPrice"
@@ -215,10 +226,11 @@
             android:paddingHorizontal="10dp"
             android:text="10,00€"
             android:textColor="@color/black"
-            android:textSize="25sp"
+            android:textSize="20sp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/priceTitle"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/viewPrice" />
+            app:layout_constraintTop_toTopOf="@+id/priceTitle" />
 
         <TextView
             android:id="@+id/tvPlaces"
@@ -227,11 +239,24 @@
             android:paddingHorizontal="10dp"
             android:text="2"
             android:textColor="@color/black"
-            android:textSize="25sp"
+            android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/viewPrice"
+            app:layout_constraintBottom_toBottomOf="@+id/textView5"
             app:layout_constraintEnd_toEndOf="@+id/viewPrice"
-            app:layout_constraintTop_toBottomOf="@+id/tvPrice" />
+            app:layout_constraintTop_toTopOf="@+id/textView5" />
+
+        <TextView
+            android:id="@+id/tvDispCh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="10dp"
+            android:text="Todos"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/tvDisponibilidade"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvDisponibilidade" />
 
         <View
             android:id="@+id/viewDescription"
@@ -299,7 +324,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtInfoPerson">
 
-            <androidx.appcompat.widget.AppCompatImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profilePicture"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
@@ -318,7 +343,7 @@
             app:layout_constraintTop_toBottomOf="@+id/txtInfoPerson" />
 
         <TextView
-            android:id="@+id/textView11"
+            android:id="@+id/tvDocOrStu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Docente do IPCA"
@@ -330,7 +355,7 @@
             android:layout_height="wrap_content"
             android:text="Este utilizador já marcou 17 viagens."
             app:layout_constraintStart_toEndOf="@+id/framePerson"
-            app:layout_constraintTop_toBottomOf="@+id/textView11" />
+            app:layout_constraintTop_toBottomOf="@+id/tvDocOrStu" />
 
         <View
             android:id="@+id/view"
@@ -392,6 +417,7 @@
             app:layout_constraintStart_toStartOf="@id/viewCarInfo"/>
 
         <TextView
+            android:id="@+id/tvColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
