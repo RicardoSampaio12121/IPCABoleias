@@ -2,6 +2,8 @@ package com.example.ipcaboleias.firebaseRepository
 
 import android.content.Context
 import android.widget.Toast
+import com.example.ipcaboleias.chat.ChatChannel
+import com.example.ipcaboleias.firebaseRepository.Callbacks.ChatChannelIdCallBack
 import com.example.ipcaboleias.firebaseRepository.Callbacks.UserCallback
 import com.example.ipcaboleias.firebaseRepository.Callbacks.userLoginCallback
 import com.example.ipcaboleias.registration.NewUser
@@ -105,17 +107,55 @@ class UsersRepository(private val context: Context) {
 
     fun getUser(uid: String, myCallBack: UserCallback) {
         val db = Firebase.firestore
-        var user : NewUser
+        var user: NewUser
 
         db.collection("users")
             .document(uid)
             .get()
             .addOnCompleteListener {
-                if(it.isSuccessful){
+                if (it.isSuccessful) {
                     user = it.result.toObject(NewUser::class.java)!!
 
                     myCallBack.onCallback(user)
                 }
+            }
+    }
+
+    fun getOrCreateChatChannel(
+        otherUserUid: String,
+        onComplete : (channelId: String) -> Unit
+    ) {
+        val db = Firebase.firestore
+        val userUid = FirebaseAuth.getInstance().currentUser!!.uid
+
+        db.collection("users")
+            .document(userUid)
+            .collection("engagedChatChannels")
+            .document(otherUserUid)
+            .get()
+            .addOnSuccessListener {
+
+                if (it.exists()) {
+                    onComplete(it["channelId"] as String)
+                    return@addOnSuccessListener
+                }
+
+                val newChannel = db.collection("chatChannels").document()
+                newChannel.set(ChatChannel(mutableListOf(userUid, otherUserUid)))
+
+                db.collection("users")
+                    .document(userUid)
+                    .collection("engagedChatChannels")
+                    .document(otherUserUid)
+                    .set(mapOf("channelId" to newChannel.id))
+
+                db.collection("users")
+                    .document(otherUserUid)
+                    .collection("engagedChatChannels")
+                    .document(userUid)
+                    .set(mapOf("channelId" to newChannel.id))
+
+                onComplete(newChannel.id)
             }
     }
 }

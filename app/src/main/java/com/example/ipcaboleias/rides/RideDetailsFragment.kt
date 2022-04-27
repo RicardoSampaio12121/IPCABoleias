@@ -1,5 +1,6 @@
 package com.example.ipcaboleias.rides
 
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
@@ -11,10 +12,12 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
+import com.example.ipcaboleias.ChatActivity
 import com.example.ipcaboleias.R
 import com.example.ipcaboleias.ViewModels.NewPubViewModel
 import com.example.ipcaboleias.ViewModels.PublicationDetailsViewModel
 import com.example.ipcaboleias.databinding.FragmentRideDetailsBinding
+import com.example.ipcaboleias.firebaseRepository.UsersRepository
 import java.io.Serializable
 import java.util.*
 import java.util.regex.Pattern
@@ -24,13 +27,14 @@ class RideDetailsFragment : Fragment(R.layout.fragment_ride_details) {
     private var _binding: FragmentRideDetailsBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var usersRepo : UsersRepository
+
     private val model: PublicationDetailsViewModel by activityViewModels()
     private lateinit var ride: Ride
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ride = model.getRide()
-
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
@@ -45,6 +49,8 @@ class RideDetailsFragment : Fragment(R.layout.fragment_ride_details) {
         btnReturn?.visibility = View.VISIBLE
 
         binding.apply {
+
+            // TODO: ARRUMAR ISTO NUMA FUNÇÃO
             tvFrom.text = ride.startLatitude.toString()
             tvTo.text = ride.endLatitude.toString()
             timeFrom.text = ride.time
@@ -76,6 +82,21 @@ class RideDetailsFragment : Fragment(R.layout.fragment_ride_details) {
             tvColor.text = ride.carColor
 
             txtDesc.text = ride.description
+
+            //--------------------------------------------------------------
+
+            buttonContact.setOnClickListener {
+                // Criar canal de contacto entre os dois utilizadores
+                usersRepo = UsersRepository(requireContext())
+                usersRepo.getOrCreateChatChannel(ride.uid) { channelId ->
+
+                    // Mostrar ui de chat
+                    val intent = Intent(requireActivity(), ChatActivity::class.java)
+                    intent.putExtra("convoId", channelId)
+                    requireActivity().startActivity(intent)
+                }
+
+            }
         }
 
     }
