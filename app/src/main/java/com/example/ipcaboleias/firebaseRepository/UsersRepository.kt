@@ -121,12 +121,15 @@ class UsersRepository(private val context: Context) {
             }
     }
 
-    fun getOrCreateChatChannel(
+    fun getOrCreateChatChannel( //otherUserUid -> Ricardo
         otherUserUid: String,
         onComplete : (channelId: String) -> Unit
     ) {
         val db = Firebase.firestore
         val userUid = FirebaseAuth.getInstance().currentUser!!.uid
+
+        println("UserId: $userUid")
+        println("otherUserUid: $otherUserUid")
 
         db.collection("users")
             .document(userUid)

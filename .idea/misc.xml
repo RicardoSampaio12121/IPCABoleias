@@ -55,6 +55,11 @@
         <entry key="..\:/Users/ricar/Documents/dev/IPCABoleias/app/src/main/res/menu/nav_header_menu.xml" value="0.19166666666666668" />
         <entry key="..\:/Users/ricar/Documents/dev/IPCABoleias/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2015" />
         <entry key="..\:/Users/ricar/Documents/dev/IPCABoleias/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.2015" />
+        <entry key="..\:/Users/ricar/StudioProjects/IPCABoleias/app/src/main/res/drawable/corners_rounded.xml" value="0.332" />
+        <entry key="..\:/Users/ricar/StudioProjects/IPCABoleias/app/src/main/res/drawable/corners_rounded_white.xml" value="0.332" />
+        <entry key="..\:/Users/ricar/StudioProjects/IPCABoleias/app/src/main/res/drawable/rect_round_ipca_color.xml" value="0.332" />
+        <entry key="..\:/Users/ricar/StudioProjects/IPCABoleias/app/src/main/res/layout/activity_chat.xml" value="0.3625" />
+        <entry key="..\:/Users/ricar/StudioProjects/IPCABoleias/app/src/main/res/layout/item_text_message.xml" value="0.3625" />
         <entry key="app/src/main/res/drawable/background_ride_item.xml" value="0.354" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.354" />
         <entry key="app/src/main/res/drawable/ic_outline_filter.xml" value="0.354" />

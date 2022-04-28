@@ -44,9 +44,6 @@ class RidesActivity : AppCompatActivity() {
         val filter = findViewById<FrameLayout>(R.id.frameLayout4)
         val frameLayoutFilter = findViewById<FrameLayout>(R.id.frameLayoutFilter)
 
-
-
-
         //Call rides fragment
         supportFragmentManager.beginTransaction().add(R.id.frameFragment, RidesFragment.newInstance(), RIDES_FRAG_TAG).commit()
 

@@ -27,7 +27,7 @@ class RideDetailsFragment : Fragment(R.layout.fragment_ride_details) {
     private var _binding: FragmentRideDetailsBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var usersRepo : UsersRepository
+    private lateinit var usersRepo: UsersRepository
 
     private val model: PublicationDetailsViewModel by activityViewModels()
     private lateinit var ride: Ride
@@ -92,7 +92,7 @@ class RideDetailsFragment : Fragment(R.layout.fragment_ride_details) {
 
                     // Mostrar ui de chat
                     val intent = Intent(requireActivity(), ChatActivity::class.java)
-                    intent.putExtra("convoId", channelId)
+                    intent.putExtra("channelId", channelId)
                     requireActivity().startActivity(intent)
                 }
 
