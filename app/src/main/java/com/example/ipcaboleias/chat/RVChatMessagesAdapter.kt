@@ -11,12 +11,12 @@ import com.google.firebase.auth.FirebaseAuth
 
 class RVChatMessagesAdapter(var messages : MutableList<TextMessage>) : RecyclerView.Adapter<RVChatMessagesAdapter.ToDoViewHolder>() {
 
-    private lateinit var mListener : RVPublicationsAadapter.onItemClickListener
+    //private lateinit var mListener : RVPublicationsAadapter.onItemClickListener
 
-    inner class ToDoViewHolder(val binding: ItemTextMessageBinding, listener: RVPublicationsAadapter.onItemClickListener) : RecyclerView.ViewHolder(binding.root){
+    inner class ToDoViewHolder(val binding: ItemTextMessageBinding) : RecyclerView.ViewHolder(binding.root){
         init {
             itemView.setOnClickListener{
-                listener.onItemClick(adapterPosition)
+                //listener.onItemClick(adapterPosition)
             }
         }
     }
@@ -26,7 +26,7 @@ class RVChatMessagesAdapter(var messages : MutableList<TextMessage>) : RecyclerV
 
         val binding = ItemTextMessageBinding.inflate(layoutInflater, parent, false)
 
-        return ToDoViewHolder(binding, mListener)
+        return ToDoViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
