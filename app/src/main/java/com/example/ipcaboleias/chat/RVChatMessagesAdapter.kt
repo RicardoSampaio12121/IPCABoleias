@@ -11,8 +11,6 @@ import com.google.firebase.auth.FirebaseAuth
 
 class RVChatMessagesAdapter(var messages : MutableList<TextMessage>) : RecyclerView.Adapter<RVChatMessagesAdapter.ToDoViewHolder>() {
 
-    //private lateinit var mListener : RVPublicationsAadapter.onItemClickListener
-
     inner class ToDoViewHolder(val binding: ItemTextMessageBinding) : RecyclerView.ViewHolder(binding.root){
         init {
             itemView.setOnClickListener{

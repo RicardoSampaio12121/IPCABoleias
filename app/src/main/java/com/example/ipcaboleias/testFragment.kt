@@ -1,31 +1,30 @@
 package com.example.ipcaboleias
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.ipcaboleias.chat.Channel
+import com.example.ipcaboleias.chat.RVChatChannelsAdapter
+import com.example.ipcaboleias.firebaseRepository.Callbacks.ChatChannelsIdsCallBack
+import com.example.ipcaboleias.firebaseRepository.ChatRepository
+import com.google.firebase.firestore.ListenerRegistration
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [testFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class testFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private lateinit var chatChannelsListenerRegistration: ListenerRegistration
+    private lateinit var adapter: RVChatChannelsAdapter
+    private val chatRepo = ChatRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+
         }
     }
 
@@ -34,26 +33,80 @@ class testFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        chatChannelsListenerRegistration =
+            chatRepo.addChatChannelsListener(requireContext(), this::updateRecyclerView)
+
         return inflater.inflate(R.layout.fragment_test, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+//        adapter.setOnItemClickListener(object : RVChatChannelsAdapter.onItemClickListener {
+//            override fun onItemClick(position: Int) {
+//                val intent = Intent(requireActivity(), ChatActivity::class.java)
+//                intent.putExtra("channelId", "EhqYQ8OCeGLd9p3aguZI")
+//                requireActivity().startActivity(intent)
+//            }
+//        })
+
+
+//        chatRepo.GetChatChannels(requireContext(), object : ChatChannelsIdsCallBack {
+//            override fun onCallback(channels: MutableList<String>) {
+//                var list: MutableList<Channel> = ArrayList()
+//
+//                for (channel in channels) {
+//                    list.add(Channel(channel))
+//                }
+//
+//                val recyclerViewChannels =
+//                    requireActivity().findViewById<RecyclerView>(R.id.recyclerViewChannels)
+//
+//                recyclerViewChannels.layoutManager = LinearLayoutManager(requireContext())
+//                adapter = RVChatChannelsAdapter(list)
+//                recyclerViewChannels.adapter = adapter
+//
+//                adapter.setOnItemClickListener(object : RVChatChannelsAdapter.onItemClickListener {
+//                    override fun onItemClick(position: Int) {
+//                        val intent = Intent(requireActivity(), ChatActivity::class.java)
+//                        intent.putExtra("channelId", list[position].channelId)
+//                        requireActivity().startActivity(intent)
+//                    }
+//                })
+//
+//            }
+//        })
+
+    }
+
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment testFragment.
-         */
+
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance() =
             testFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+
                 }
             }
+    }
+
+    private fun updateRecyclerView(channels: MutableList<Channel>) {
+        val recyclerViewChannels =
+            requireActivity().findViewById<RecyclerView>(R.id.recyclerViewChannels)
+
+        fun init() {
+            recyclerViewChannels.layoutManager = LinearLayoutManager(requireContext())
+            adapter = RVChatChannelsAdapter(channels)
+            recyclerViewChannels.adapter = adapter
+
+            adapter.setOnItemClickListener(object : RVChatChannelsAdapter.onItemClickListener {
+                override fun onItemClick(position: Int) {
+                    val intent = Intent(requireActivity(), ChatActivity::class.java)
+                    intent.putExtra("channelId", channels[position].channelId)
+                    requireActivity().startActivity(intent)
+                }
+            })
+        }
+        init()
     }
 }

@@ -11,28 +11,31 @@ import com.example.ipcaboleias.databinding.ItemPublicationV2Binding
 import java.util.*
 
 
-class RVPublicationsAadapter(var publications: MutableList<Ride>): RecyclerView.Adapter<RVPublicationsAadapter.ToDoViewHolder>() {
+class RVPublicationsAadapter(var publications: MutableList<Ride>) :
+    RecyclerView.Adapter<RVPublicationsAadapter.ToDoViewHolder>() {
 
-    private lateinit var mListener : onItemClickListener
+    private lateinit var mListener: onItemClickListener
 
-    interface onItemClickListener{
-        fun onItemClick(position : Int)
+    interface onItemClickListener {
+        fun onItemClick(position: Int)
     }
 
-    fun setOnItemClickListener(listener: onItemClickListener){
+    fun setOnItemClickListener(listener: onItemClickListener) {
         mListener = listener
     }
 
 
-    inner class ToDoViewHolder(val binding: ItemPublicationV2Binding, listener: onItemClickListener) : RecyclerView.ViewHolder(binding.root){
+    inner class ToDoViewHolder(
+        val binding: ItemPublicationV2Binding,
+        listener: onItemClickListener
+    ) : RecyclerView.ViewHolder(binding.root) {
         init {
 
-            itemView.setOnClickListener{
+            itemView.setOnClickListener {
                 listener.onItemClick(adapterPosition)
             }
         }
     }
-
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ToDoViewHolder {
@@ -53,17 +56,15 @@ class RVPublicationsAadapter(var publications: MutableList<Ride>): RecyclerView.
             txtName.text = publications[position].name
             textView2.text = publications[position].car
 
-            if(publications[position].price == 0.0){
+            if (publications[position].price == 0.0) {
                 textMoney.text = ""
-            }
-            else{
+            } else {
                 textMoney.text = "${publications[position].price} €"
             }
 
-            if(publications[position].places == 0){
+            if (publications[position].places == 0) {
                 textView4.text = ""
-            }
-            else{
+            } else {
                 textView4.text = "${publications[position].places} lugares"
             }
 
@@ -74,7 +75,8 @@ class RVPublicationsAadapter(var publications: MutableList<Ride>): RecyclerView.
 
             tvDateFrom.text = publications[position].date
 
-            val byteArray : ByteArray = Base64.getDecoder().decode(publications[position].profilePicture)
+            val byteArray: ByteArray =
+                Base64.getDecoder().decode(publications[position].profilePicture)
             val bitMapPic = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
 
             profilePic.setImageBitmap(bitMapPic)
@@ -84,9 +86,8 @@ class RVPublicationsAadapter(var publications: MutableList<Ride>): RecyclerView.
 
     override fun getItemCount(): Int {
 
-        return  publications.size
+        return publications.size
     }
-
 
 
 }

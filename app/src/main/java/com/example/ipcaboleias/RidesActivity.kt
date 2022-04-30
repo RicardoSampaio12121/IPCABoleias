@@ -24,7 +24,7 @@ import java.util.*
 
 class RidesActivity : AppCompatActivity() {
 
-    private lateinit var menu : Menu
+    private lateinit var menu: Menu
     lateinit var toggle: ActionBarDrawerToggle
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -36,6 +36,7 @@ class RidesActivity : AppCompatActivity() {
         val FILTER_FRAG_TAG = "filterFragTag"
         val CREATE_PUB_FRAG_TAG = "createPubFragTag"
         val RIDES_DETAILS_FRAG_TAG = "detailsFragTag"
+        val CHAT_CHANNELS_FRAG_TAG = "chatChannelsFragTag"
 
         val dLayout = findViewById<DrawerLayout>(R.id.drawerLayout)
         val navView = findViewById<NavigationView>(R.id.navView)
@@ -45,7 +46,8 @@ class RidesActivity : AppCompatActivity() {
         val frameLayoutFilter = findViewById<FrameLayout>(R.id.frameLayoutFilter)
 
         //Call rides fragment
-        supportFragmentManager.beginTransaction().add(R.id.frameFragment, RidesFragment.newInstance(), RIDES_FRAG_TAG).commit()
+        supportFragmentManager.beginTransaction()
+            .add(R.id.frameFragment, RidesFragment.newInstance(), RIDES_FRAG_TAG).commit()
 
         // Preencher campos do navigation header com os dados da base de dados
 
@@ -57,45 +59,58 @@ class RidesActivity : AppCompatActivity() {
         val database = FirebaseDatabase.getInstance().getReference("users")
 
         database.child(uid!!).get().addOnSuccessListener {
-            val name = "${it.child("name").value.toString()} ${it.child("surname").value.toString()}"
+            val name =
+                "${it.child("name").value.toString()} ${it.child("surname").value.toString()}"
             val profilePicAsString = it.child("profilePicture").value.toString()
-            val byteArray : ByteArray = Base64.getDecoder().decode(profilePicAsString)
+            val byteArray: ByteArray = Base64.getDecoder().decode(profilePicAsString)
             val bitMapPic = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
 
             titleView.text = name
             profilePic.setImageBitmap(bitMapPic)
         }
 
-        menu.setOnClickListener{
+        menu.setOnClickListener {
 
-            if(!dLayout.isDrawerOpen(Gravity.LEFT)){
+            if (!dLayout.isDrawerOpen(Gravity.LEFT)) {
                 dLayout.openDrawer(Gravity.LEFT)
-            }
-            else{
+            } else {
                 dLayout.closeDrawer(Gravity.LEFT)
             }
         }
 
-        filter.setOnClickListener{
+        filter.setOnClickListener {
             var filterFrag = supportFragmentManager.findFragmentByTag(FILTER_FRAG_TAG)
 
-            if(filterFrag == null)
-                supportFragmentManager.beginTransaction().add(R.id.frameLayoutFilter, FilterResults.newInstance(), FILTER_FRAG_TAG).commit()
-            else{
+            if (filterFrag == null)
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.frameLayoutFilter, FilterResults.newInstance(), FILTER_FRAG_TAG)
+                    .commit()
+            else {
                 supportFragmentManager.beginTransaction().show(filterFrag).commit()
             }
         }
 
         navView.setNavigationItemSelectedListener {
-            if(it.itemId == R.id.miBoleias){
-            }
-            else if(it.itemId == R.id.miBoleiasAgendadas){
+            if (it.itemId == R.id.miBoleias) {
+                supportFragmentManager.beginTransaction().replace(R.id.frameFragment, RidesFragment.newInstance()).commit()
+
+            } else if (it.itemId == R.id.miBoleiasAgendadas) {
+            } else if (it.itemId == R.id.miChatChannels) {
+                // Abrir fragmento dos canais de chat
+//                val fragToRemove = supportFragmentManager.findFragmentByTag(RIDES_FRAG_TAG)
+//                supportFragmentManager.beginTransaction().remove(fragToRemove!!).commit()
+//
+//                supportFragmentManager.beginTransaction().add(R.id.frameFragment,
+//                    testFragment.newInstance(), CHAT_CHANNELS_FRAG_TAG).commit()
+
+                supportFragmentManager.beginTransaction().replace(R.id.frameFragment, testFragment.newInstance()).commit()
+
             }
             dLayout.closeDrawer(Gravity.LEFT)
             true
         }
 
-        returnBtn.setOnClickListener{
+        returnBtn.setOnClickListener {
             val fragToRemove = supportFragmentManager.findFragmentByTag(RIDES_DETAILS_FRAG_TAG)
             val fragToShow = supportFragmentManager.findFragmentByTag(RIDES_FRAG_TAG)
 
@@ -107,8 +122,9 @@ class RidesActivity : AppCompatActivity() {
         }
 
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(toggle.onOptionsItemSelected(item)){
+        if (toggle.onOptionsItemSelected(item)) {
 
 
             return true
@@ -125,10 +141,6 @@ class RidesActivity : AppCompatActivity() {
 //            menu.findItem(R.)
 //        }
 //    }
-
-
-
-
 
 
 }
