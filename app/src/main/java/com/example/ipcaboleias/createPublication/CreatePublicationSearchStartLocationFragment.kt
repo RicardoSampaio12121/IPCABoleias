@@ -114,7 +114,7 @@ class CreatePublicationSearchStartLocationFragment :
             map!!.animateCamera(CameraUpdateFactory.newLatLngZoom(it, 16.0f))
 
             // Change location in editText
-            reverseGeocoding(it.latitude, it.longitude)
+            //reverseGeocoding(it.latitude, it.longitude)
         }
     }
 
@@ -174,6 +174,11 @@ class CreatePublicationSearchStartLocationFragment :
         val geoCoder = Geocoder(activity)
         val address = geoCoder.getFromLocationName(location, 1)
 
+        if(address.isEmpty()){
+            Toast.makeText(requireContext(), "Location not found.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val coordinates = LatLng(address[0].latitude, address[0].longitude)
 
         map!!.clear()
@@ -183,6 +188,6 @@ class CreatePublicationSearchStartLocationFragment :
 
         latitude = coordinates.latitude
         longitude = coordinates.longitude
-        reverseGeocoding(coordinates.latitude, coordinates.longitude)
+        //reverseGeocoding(coordinates.latitude, coordinates.longitude)
     }
 }

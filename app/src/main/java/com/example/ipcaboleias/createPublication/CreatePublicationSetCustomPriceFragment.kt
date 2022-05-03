@@ -1,27 +1,21 @@
 package com.example.ipcaboleias.createPublication
 
-import android.content.Intent
-import android.location.Location
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import com.example.ipcaboleias.NewPublicationAsDriver
 import com.example.ipcaboleias.R
 import com.example.ipcaboleias.ViewModels.NewPubViewModel
-import com.example.ipcaboleias.databinding.FragmentCreatePublicationPickPriceBinding
+import com.example.ipcaboleias.databinding.FragmentCreatePublicationSetCustomPriceBinding
 import com.example.ipcaboleias.firebaseRepository.Callbacks.NewPublicationCallback
 import com.example.ipcaboleias.firebaseRepository.PublicationsRepository
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 
-
-class CreatePublicationPickPriceFragment :
-    Fragment(R.layout.fragment_create_publication_pick_price) {
-    private var _binding: FragmentCreatePublicationPickPriceBinding? = null
-    private val binding get() = _binding!!
+class CreatePublicationSetCustomPriceFragment :
+    Fragment(R.layout.fragment_create_publication_set_custom_price) {
 
     private val CREATE_PUB_SEARCH1_FRAG_TAG = "createPubSearch1FragTag"
     private val CREATE_PUB_SEARCH2_FRAG_TAG = "createPubSearch2FragTag"
@@ -31,21 +25,35 @@ class CreatePublicationPickPriceFragment :
     private val CREATE_PUB_PICK_PRICE_FRAG_TAG = "createPubPickPriceFragTag"
     private val CREATE_PUB_SET_CUSTOM_PRICE_FRAG_TAG = "createPubSetCustomPriceFragTag"
 
+    private var _binding: FragmentCreatePublicationSetCustomPriceBinding? = null
+    private val binding get() = _binding!!
+
     private val model: NewPubViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        _binding = FragmentCreatePublicationPickPriceBinding.bind(view)
-
+        _binding = FragmentCreatePublicationSetCustomPriceBinding.bind(view)
 
         binding.apply {
+            val maxPrice = model.getPrice()!! + 3
+            val minPrice = model.getPrice()!! - 3
 
-            val price = calculatePrice()
+            tvNumber.text = String.format("%.2f", model.getPrice())
 
-            tvPrice.setText("${String.format("%.2f", price)}€")
+            btnMore.setOnClickListener {
+                if (model.getPrice()!! + 1 <= maxPrice) {
+                    model.setPrice(model.getPrice()!! + 1)
+                    tvNumber.text = String.format("%.2f", model.getPrice())
+                }
+            }
+            btnLess.setOnClickListener {
+                if (model.getPrice()!! - 1 >= minPrice) {
+                    model.setPrice(model.getPrice()!! - 1)
+                    tvNumber.text = String.format("%.2f", model.getPrice())
+                }
+            }
 
-            viewConcordo.setOnClickListener {
+            btnNext.setOnClickListener {
                 val intent = requireActivity().intent
-                model.setPrice(price)
 
                 val newPub = NewPublicationAsDriver()
                 newPub.uid = intent.getStringExtra("uid")!!
@@ -63,61 +71,24 @@ class CreatePublicationPickPriceFragment :
                 newPub.acceptAlunos = model.getAcceptAlunos()
                 newPub.price = model.getPrice()!!
 
-
                 createPublicationAsDriver(newPub)
 
                 closeFragments()
-            }
-
-            viewNConcordo.setOnClickListener{
-                model.setPrice(price)
-
-                //Abrir novo fragmento
-
-                val supportFragmentManager = requireActivity().supportFragmentManager
-
-                val fragToHide = supportFragmentManager.findFragmentByTag(CREATE_PUB_PICK_PRICE_FRAG_TAG)
-                val fragToCall = supportFragmentManager.findFragmentByTag(CREATE_PUB_SET_CUSTOM_PRICE_FRAG_TAG)
-
-                supportFragmentManager.beginTransaction().hide(fragToHide!!).commit()
-
-                if(fragToCall != null){
-                    supportFragmentManager.beginTransaction().show(fragToCall).commit()
-                }
-                else{
-                    supportFragmentManager.beginTransaction().add(R.id.frameFragment, CreatePublicationSetCustomPriceFragment.newInstance(), CREATE_PUB_SET_CUSTOM_PRICE_FRAG_TAG).commit()
-                }
-
 
             }
+
         }
+
     }
 
-    private fun calculatePrice(): Float {
-        var results = FloatArray(1)
-        Location.distanceBetween(
-            model.getStartLatitude(),
-            model.getStartLongitude(),
-            model.getEndLatitude(),
-            model.getEndLongitude(),
-            results
-        )
-
-        var distanceInKm: Float = results[0] / 1000
-
-        return distanceInKm * 0.30f
-
-        //return String.format("%.1f", (distanceInKm * 0.30f)).toFloat()
-    }
-
-    private fun createPublicationAsDriver(pub : NewPublicationAsDriver) {
+    private fun createPublicationAsDriver(pub: NewPublicationAsDriver) {
 
         val repo = PublicationsRepository(requireContext())
-        repo.createPublicationAsDriver(pub, object: NewPublicationCallback {
+        repo.createPublicationAsDriver(pub, object : NewPublicationCallback {
             override fun onCallback(success: Boolean) {
-                if(success){
+                if (success) {
                     //Toast.makeText(activity, "ola valete", Toast.LENGTH_SHORT).show()
-                }else{
+                } else {
                     //Toast.makeText(activity, "oi menu nome é vanessa", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -139,6 +110,8 @@ class CreatePublicationPickPriceFragment :
             supportFragmentManager.findFragmentByTag(CREATE_PUB_PICK_PLACES_FRAG_TAG)
         val fragCreatePubPickPrice =
             supportFragmentManager.findFragmentByTag(CREATE_PUB_PICK_PRICE_FRAG_TAG)
+        val fragCreatePubSetCustomPrice =
+            supportFragmentManager.findFragmentByTag(CREATE_PUB_SET_CUSTOM_PRICE_FRAG_TAG)
 
         supportFragmentManager.beginTransaction().remove(fragCreatePubSearchStartPos!!).commit()
         supportFragmentManager.beginTransaction().remove(fragCreatePubSearchEndPos!!).commit()
@@ -146,12 +119,17 @@ class CreatePublicationPickPriceFragment :
         supportFragmentManager.beginTransaction().remove(fragCreatePubPickTime!!).commit()
         supportFragmentManager.beginTransaction().remove(fragCreatePubPickPlaces!!).commit()
         supportFragmentManager.beginTransaction().remove(fragCreatePubPickPrice!!).commit()
+        supportFragmentManager.beginTransaction().remove(fragCreatePubSetCustomPrice!!).commit()
+
     }
 
     companion object {
         @JvmStatic
         fun newInstance() =
-            CreatePublicationPickPriceFragment().apply {
+            CreatePublicationSetCustomPriceFragment().apply {
+                arguments = Bundle().apply {
+
+                }
             }
     }
 }

@@ -8,6 +8,7 @@ import com.example.ipcaboleias.firebaseRepository.Callbacks.NewPublicationCallba
 import com.example.ipcaboleias.registration.NewUser
 import com.example.ipcaboleias.rides.Ride
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -21,30 +22,46 @@ class PublicationsRepository(private val context: Context) {
     ) {
         val database = Firebase.firestore
 
-        val pub = hashMapOf(
-            "uid" to publication.uid,
-            "startLatitude" to publication.startLatitute,
-            "startLongitude" to publication.startLongitude,
-            "endLatitude" to publication.endLatitute,
-            "endLongitude" to publication.endLongitude,
-            "date" to publication.date,
-            "time" to publication.time,
-            "type" to publication.type,
-            "places" to publication.places,
-            "description" to publication.description,
-            "uniqueRide" to publication.uniqueDrive,
-            "acceptDoc" to publication.acceptDoc,
-            "acceptAlunos" to publication.acceptAlunos,
-            "price" to publication.price
-        )
+//        val pub = hashMapOf(
+//            "uid" to publication.uid,
+//            "startLatitude" to publication.startLatitute,
+//            "startLongitude" to publication.startLongitude,
+//            "endLatitude" to publication.endLatitute,
+//            "endLongitude" to publication.endLongitude,
+//            "date" to publication.date,
+//            "time" to publication.time,
+//            "type" to publication.type,
+//            "places" to publication.places,
+//            "description" to publication.description,
+//            "uniqueRide" to publication.uniqueDrive,
+//            "acceptDoc" to publication.acceptDoc,
+//            "acceptAlunos" to publication.acceptAlunos,
+//            "price" to publication.price
+//        )
 
-        database.collection("publications").add(pub)
-            .addOnSuccessListener {
-                myCallback.onCallback(true)
-            }
-            .addOnFailureListener {
-                myCallback.onCallback(false)
-            }
+//        database.collection("publications").add(pub)
+//            .addOnSuccessListener {
+//                myCallback.onCallback(true)
+//            }
+//            .addOnFailureListener {
+//                myCallback.onCallback(false)
+//            }
+
+        var uid = FirebaseAuth.getInstance().currentUser!!.uid
+
+        //Adicionar publicação
+
+        val newPub = database.collection("publications").document()
+        newPub.set(publication)
+
+
+        //Adicionar entrada de publicação no utilizador que a criou
+        database.collection("users")
+            .document(uid)
+            .collection("publications")
+            .document(newPub.id)
+            .set(mapOf("nada" to "nada"))
+
     }
 
     fun createPublicationAsPassenger(

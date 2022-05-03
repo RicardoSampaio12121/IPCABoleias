@@ -86,8 +86,8 @@ class NewPubViewModel : ViewModel() {
         price.value = newPrice
     }
 
-    fun getPrice() : Float{
-        return price.value!!
+    fun getPrice() : Float?{
+        return price.value
     }
 
     fun setDescription(newDesc : String){
