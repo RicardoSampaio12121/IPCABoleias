@@ -29,7 +29,7 @@ class RidesFragment : Fragment(R.layout.fragment_rides) {
 
     private var _binding: FragmentRidesBinding? = null
     private val binding get() = _binding!!
-    private lateinit var publications: MutableList<Ride>
+    private lateinit var publications: MutableList<RidePresentation>
 
     private lateinit var adapter: RVPublicationsAadapter
     private val model: PublicationDetailsViewModel by activityViewModels()
@@ -43,6 +43,9 @@ class RidesFragment : Fragment(R.layout.fragment_rides) {
         val pubRepo = PublicationsRepository(requireContext())
         val usersRepo = UsersRepository(requireContext())
 
+        publications = ArrayList()
+        adapter = RVPublicationsAadapter(publications)
+
         binding.apply {
 
             // Evento click do botão para criar uma nova publicação
@@ -55,54 +58,79 @@ class RidesFragment : Fragment(R.layout.fragment_rides) {
                 ).commit()
             }
 
-            runBlocking {
-                // Vai buscar as publicações ao firestore
+            //Carregar recycler view com as publicações
 
-                lifecycleScope.launch {
-                    withContext(Dispatchers.Default) {
-                        pubRepo.getPublications(object : GetPublicationsCallback {
-                            override fun onCallback(rides: MutableList<Ride>) {
-                                publications = rides
+            pubRepo.getPublications { it ->
+                val size = it.size
 
-                                for (ride in rides) {
-                                    // Buscar o utilizador de cada ride
-                                    usersRepo.getUser(ride.uid, object : UserCallback {
-                                        override fun onCallback(user: NewUser) {
-                                            ride.name = user.name
-                                            ride.email = user.email
-                                            ride.profilePicture = user.profilePicture!!
-                                            ride.car = "${user.carBrand} ${user.carModel}"
-                                            ride.carColor = user.carColor!!
-                                        }
-                                    })
-                                }
-                                publications = rides
-                                adapter = RVPublicationsAadapter(publications)
-                                rvPublications.adapter = adapter
-                                rvPublications.layoutManager = LinearLayoutManager(activity)
+                for (ride in it) {
+                    usersRepo.getUser(ride.uid) { user ->
+//                        ride.name = user.name
+//                        ride.email = user.email
+//                        ride.profilePicture = user.profilePicture!!
+//                        ride.car = "${user.carBrand} ${user.carModel}"
+//                        ride.carColor = user.carColor!!
 
-                                adapter.setOnItemClickListener(object :
-                                RVPublicationsAadapter.onItemClickListener{
-                                    override fun onItemClick(position : Int) {
-                                        model.setRide(publications[position])
+                        publications.add(
+                            newRidePresentationObject(
+                                ride,
+                                user
+                            )
+                        )
+                        adapter.notifyItemInserted(publications.size - 1)
 
-                                        val transaction = activity?.supportFragmentManager?.beginTransaction()
-
-                                        transaction?.add(
-                                            R.id.frameFragment,
-                                            RideDetailsFragment.newInstance(),
-                                            "detailsFragTag"
-                                        )?.commit()
-                                        transaction?.hide(activity?.supportFragmentManager?.findFragmentByTag("ridesFragTag")!!)
-                                    }
-                                })
-                            }
-                        })
+                        updateRecyclerView()
                     }
                 }
-
             }
         }
+    }
+
+    private fun newRidePresentationObject(ride: Ride, user: NewUser): RidePresentation {
+        return RidePresentation(
+            ride.uid,
+            user.name,
+            user.email,
+            "${user.carBrand} ${user.carModel}",
+            user.carColor!!,
+            user.profilePicture!!,
+            ride.date,
+            ride.time,
+            ride.startLatitute,
+            ride.startLongitude,
+            ride.endLatitute,
+            ride.endLongitude,
+            ride.type,
+            ride.places,
+            ride.description,
+            ride.acceptAlunos,
+            ride.acceptDoc,
+            ride.uniqueDrive,
+            ride.price
+        )
+    }
+
+    private fun updateRecyclerView() {
+        val rvPublications = requireActivity().findViewById<RecyclerView>(R.id.rvPublications)
+
+        rvPublications.layoutManager = LinearLayoutManager(activity)
+        adapter = RVPublicationsAadapter(publications)
+        rvPublications.adapter = adapter
+
+        adapter.setOnItemClickListener(object : RVPublicationsAadapter.onItemClickListener {
+            override fun onItemClick(position: Int) {
+                model.setRide(publications[position])
+
+                val transaction = activity?.supportFragmentManager?.beginTransaction()
+
+                transaction?.add(
+                    R.id.frameFragment,
+                    RideDetailsFragment.newInstance(),
+                    "detailsFragTag"
+                )?.commit()
+                transaction?.hide(activity?.supportFragmentManager?.findFragmentByTag("ridesFragTag")!!)
+            }
+        })
     }
 
     companion object {

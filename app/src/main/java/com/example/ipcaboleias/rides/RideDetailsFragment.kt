@@ -30,7 +30,7 @@ class RideDetailsFragment : Fragment(R.layout.fragment_ride_details) {
     private lateinit var usersRepo: UsersRepository
 
     private val model: PublicationDetailsViewModel by activityViewModels()
-    private lateinit var ride: Ride
+    private lateinit var ride: RidePresentation
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -1,5 +1,6 @@
 package com.example.ipcaboleias.rides
 
+import android.annotation.SuppressLint
 import android.graphics.BitmapFactory
 import android.opengl.Visibility
 import android.os.Build
@@ -11,7 +12,7 @@ import com.example.ipcaboleias.databinding.ItemPublicationV2Binding
 import java.util.*
 
 
-class RVPublicationsAadapter(var publications: MutableList<Ride>) :
+class RVPublicationsAadapter(var publications: MutableList<RidePresentation>) :
     RecyclerView.Adapter<RVPublicationsAadapter.ToDoViewHolder>() {
 
     private lateinit var mListener: onItemClickListener
@@ -48,6 +49,7 @@ class RVPublicationsAadapter(var publications: MutableList<Ride>) :
 
     }
 
+    @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: ToDoViewHolder, position: Int) {
 
@@ -56,10 +58,10 @@ class RVPublicationsAadapter(var publications: MutableList<Ride>) :
             txtName.text = publications[position].name
             textView2.text = publications[position].car
 
-            if (publications[position].price == 0.0) {
+            if (publications[position].price == 0.0f) {
                 textMoney.text = ""
             } else {
-                textMoney.text = "${publications[position].price} €"
+                textMoney.text = String.format("%.2f€", publications[position].price)
             }
 
             if (publications[position].places == 0) {
@@ -68,8 +70,22 @@ class RVPublicationsAadapter(var publications: MutableList<Ride>) :
                 textView4.text = "${publications[position].places} lugares"
             }
 
+            when (publications[position].endLatitude) {
+                41.536587 -> {
+                    textTo.text = "IPCA Barcelos"
+                }
+                41.542142 -> {
+                    textTo.text = "IPCA Braga"
+                }
+                41.507823 -> {
+                    textTo.text = "IPCA Guimarães"
+                }
+                41.440063 -> {
+                    textTo.text = "IPCA Famalicão"
+                }
+            }
+
             textFrom.text = publications[position].startLatitude.toString()
-            textTo.text = publications[position].endLatitude.toString()
 
             tvDateFrom.text = publications[position].time
 

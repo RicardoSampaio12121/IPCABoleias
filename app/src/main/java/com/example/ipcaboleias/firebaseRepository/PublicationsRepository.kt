@@ -22,31 +22,6 @@ class PublicationsRepository(private val context: Context) {
     ) {
         val database = Firebase.firestore
 
-//        val pub = hashMapOf(
-//            "uid" to publication.uid,
-//            "startLatitude" to publication.startLatitute,
-//            "startLongitude" to publication.startLongitude,
-//            "endLatitude" to publication.endLatitute,
-//            "endLongitude" to publication.endLongitude,
-//            "date" to publication.date,
-//            "time" to publication.time,
-//            "type" to publication.type,
-//            "places" to publication.places,
-//            "description" to publication.description,
-//            "uniqueRide" to publication.uniqueDrive,
-//            "acceptDoc" to publication.acceptDoc,
-//            "acceptAlunos" to publication.acceptAlunos,
-//            "price" to publication.price
-//        )
-
-//        database.collection("publications").add(pub)
-//            .addOnSuccessListener {
-//                myCallback.onCallback(true)
-//            }
-//            .addOnFailureListener {
-//                myCallback.onCallback(false)
-//            }
-
         var uid = FirebaseAuth.getInstance().currentUser!!.uid
 
         //Adicionar publicação
@@ -91,19 +66,33 @@ class PublicationsRepository(private val context: Context) {
     }
 
 
-    suspend fun getPublications(myCallback: GetPublicationsCallback) {
+//    suspend fun getPublications(myCallback: GetPublicationsCallback) {
+//        val db = Firebase.firestore
+//        var list: MutableList<Ride> = ArrayList()
+//
+//        db.collection("publications")
+//            .get()
+//            .addOnCompleteListener { task ->
+//                if (task.isSuccessful) {
+//                    for (document in task.result) {
+//                        list.add(document.toObject(Ride::class.java))
+//                    }
+//                    myCallback.onCallback(list)
+//                }
+//            }
+//    }
+
+    fun getPublications(onComplete: (rides: List<Ride>) -> Unit) {
         val db = Firebase.firestore
         var list: MutableList<Ride> = ArrayList()
 
         db.collection("publications")
             .get()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    for (document in task.result) {
-                        list.add(document.toObject(Ride::class.java))
-                    }
-                    myCallback.onCallback(list)
+            .addOnSuccessListener {
+                for(document in it){
+                    list.add(document.toObject(Ride::class.java))
                 }
+                onComplete(list)
             }
     }
 

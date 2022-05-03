@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
+import com.example.ipcaboleias.firebaseRepository.UsersRepository
 import com.example.ipcaboleias.rides.FilterResults
 import com.example.ipcaboleias.rides.RidesFragment
 import com.google.android.material.navigation.NavigationView
@@ -27,16 +28,16 @@ class RidesActivity : AppCompatActivity() {
     private lateinit var menu: Menu
     lateinit var toggle: ActionBarDrawerToggle
 
+    private val RIDES_FRAG_TAG = "ridesFragTag"
+    private val FILTER_FRAG_TAG = "filterFragTag"
+    private val CREATE_PUB_FRAG_TAG = "createPubFragTag"
+    private val RIDES_DETAILS_FRAG_TAG = "detailsFragTag"
+    private val CHAT_CHANNELS_FRAG_TAG = "chatChannelsFragTag"
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_rides)
-
-        val RIDES_FRAG_TAG = "ridesFragTag"
-        val FILTER_FRAG_TAG = "filterFragTag"
-        val CREATE_PUB_FRAG_TAG = "createPubFragTag"
-        val RIDES_DETAILS_FRAG_TAG = "detailsFragTag"
-        val CHAT_CHANNELS_FRAG_TAG = "chatChannelsFragTag"
 
         val dLayout = findViewById<DrawerLayout>(R.id.drawerLayout)
         val navView = findViewById<NavigationView>(R.id.navView)
@@ -44,6 +45,8 @@ class RidesActivity : AppCompatActivity() {
         val returnBtn = findViewById<ImageButton>(R.id.imageReturn)
         val filter = findViewById<FrameLayout>(R.id.frameLayout4)
         val frameLayoutFilter = findViewById<FrameLayout>(R.id.frameLayoutFilter)
+
+        val usersRepo = UsersRepository(this)
 
         //Call rides fragment
         supportFragmentManager.beginTransaction()
@@ -55,22 +58,16 @@ class RidesActivity : AppCompatActivity() {
         val titleView = header.findViewById<TextView>(R.id.tvNameSurnameNVHeader)
         val profilePic = header.findViewById<CircleImageView>(R.id.profilePicNVHeader)
 
-        val uid = intent.getStringExtra("uid")
-        val database = FirebaseDatabase.getInstance().getReference("users")
-
-        database.child(uid!!).get().addOnSuccessListener {
-            val name =
-                "${it.child("name").value.toString()} ${it.child("surname").value.toString()}"
-            val profilePicAsString = it.child("profilePicture").value.toString()
+        usersRepo.getCurrentUser {
+            val profilePicAsString = it.profilePicture.toString()
             val byteArray: ByteArray = Base64.getDecoder().decode(profilePicAsString)
             val bitMapPic = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
 
-            titleView.text = name
+            titleView.text = "${it.name} ${it.surname}"
             profilePic.setImageBitmap(bitMapPic)
         }
 
         menu.setOnClickListener {
-
             if (!dLayout.isDrawerOpen(Gravity.LEFT)) {
                 dLayout.openDrawer(Gravity.LEFT)
             } else {
@@ -132,15 +129,4 @@ class RidesActivity : AppCompatActivity() {
 
         return super.onOptionsItemSelected(item)
     }
-
-//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-//        return super.onCreateOptionsMenu(menu)
-//
-//        menu?.apply {
-//
-//            menu.findItem(R.)
-//        }
-//    }
-
-
 }

@@ -105,25 +105,33 @@ class UsersRepository(private val context: Context) {
         }
     }
 
-    fun getUser(uid: String, myCallBack: UserCallback) {
+    fun getUser(uid: String, onComplete: (user: NewUser) -> Unit) {
         val db = Firebase.firestore
-        var user: NewUser
 
         db.collection("users")
             .document(uid)
             .get()
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    user = it.result.toObject(NewUser::class.java)!!
+            .addOnSuccessListener {
+                onComplete(it.toObject(NewUser::class.java)!!)
+            }
+    }
 
-                    myCallBack.onCallback(user)
-                }
+    fun getCurrentUser(onComplete: (user: NewUser) -> Unit) {
+        val db = Firebase.firestore
+
+        val uid = FirebaseAuth.getInstance().currentUser!!.uid
+
+        db.collection("users")
+            .document(uid)
+            .get()
+            .addOnSuccessListener {
+                onComplete(it.toObject(NewUser::class.java)!!)
             }
     }
 
     fun getOrCreateChatChannel( //otherUserUid -> Ricardo
         otherUserUid: String,
-        onComplete : (channelId: String) -> Unit
+        onComplete: (channelId: String) -> Unit
     ) {
         val db = Firebase.firestore
         val userUid = FirebaseAuth.getInstance().currentUser!!.uid

@@ -1,24 +1,19 @@
 package com.example.ipcaboleias.rides
 
-data class Ride(
-    val uid : String = "",
-    var name : String = "",
-    var email : String = "",
-    var car : String = "",
-    var carColor : String = "",
-    var profilePicture : String = "",
-    val date: String = "",
-    val time: String = "",
-    val startLatitude : Double = 0.0,
-    val startLongitude : Double = 0.0,
-    val endLatitude : Double = 0.0,
-    val endLongitude : Double = 0.0,
-    val type : String = "",
-    val places : Int = 0,
-    val description : String = "",
-    val acceptAlunos : Boolean = false,
-    val acceptDoc : Boolean = false,
-    val uniqueRide : Boolean = true,
-    val price : Double? = 0.0
+data class Ride (
+    var uid: String = "",
+    var startLatitute: Double = 0.0,
+    var startLongitude: Double = 0.0,
+    var endLatitute: Double = 0.0,
+    var endLongitude: Double = 0.0,
+    var date: String = "",
+    var time: String = "",
+    var type: String = "",
+    var places: Int = 1,
+    var description: String = "",
+    var uniqueDrive: Boolean = false,
+    var acceptDoc: Boolean = false,
+    var acceptAlunos: Boolean = false,
+    var price: Float = 0.0f
 )
 
