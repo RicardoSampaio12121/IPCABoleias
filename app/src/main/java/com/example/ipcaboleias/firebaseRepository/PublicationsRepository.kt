@@ -96,4 +96,20 @@ class PublicationsRepository(private val context: Context) {
             }
     }
 
+    fun getCurrentUserActivePublications(onComplete: (rides: List<Ride>) -> Unit){
+        val db = Firebase.firestore
+        val uid = FirebaseAuth.getInstance().currentUser!!.uid
+        val output : MutableList<Ride> = ArrayList()
+
+        db.collection("publications")
+            .whereEqualTo("uid", uid)
+            .whereEqualTo("status", true)
+            .get()
+            .addOnSuccessListener {
+                for (document in it){
+                    output.add(document.toObject(Ride::class.java))
+                }
+                onComplete(output)
+            }
+    }
 }

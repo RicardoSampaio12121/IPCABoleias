@@ -92,6 +92,7 @@ class RidesActivity : AppCompatActivity() {
                 supportFragmentManager.beginTransaction().replace(R.id.frameFragment, RidesFragment.newInstance()).commit()
 
             } else if (it.itemId == R.id.miBoleiasAgendadas) {
+                supportFragmentManager.beginTransaction().replace(R.id.frameLayout, MyActiveRidesFragmentFragment.newInstance()).commit()
             } else if (it.itemId == R.id.miChatChannels) {
                 // Abrir fragmento dos canais de chat
 //                val fragToRemove = supportFragmentManager.findFragmentByTag(RIDES_FRAG_TAG)
