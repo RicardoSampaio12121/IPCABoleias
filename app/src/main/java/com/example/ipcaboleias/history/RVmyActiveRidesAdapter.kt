@@ -24,6 +24,23 @@ class RVmyActiveRidesAdapter(var rides: MutableList<Ride>) :
 
     override fun onBindViewHolder(holder: ToDoViewHolder, position: Int) {
         holder.binding.apply {
+            txtDate.text = rides[position].date
+            txtFrom.text = rides[position].startLatitute.toString()
+
+            when (rides[position].endLatitute) {
+                41.536587 -> {
+                    txtTo.text = "IPCA Barcelos"
+                }
+                41.542142 -> {
+                    txtTo.text = "IPCA Braga"
+                }
+                41.507823 -> {
+                    txtTo.text = "IPCA Guimarães"
+                }
+                41.440063 -> {
+                    txtTo.text = "IPCA Famalicão"
+                }
+            }
 
         }
     }
