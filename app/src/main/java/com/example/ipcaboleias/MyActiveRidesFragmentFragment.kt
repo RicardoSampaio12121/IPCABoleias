@@ -28,11 +28,13 @@ class MyActiveRidesFragmentFragment : Fragment(R.layout.fragment_my_active_rides
     private val model: PublicationDetailsViewModel by activityViewModels()
 
     private lateinit var myRides: MutableList<Ride>
-    private lateinit var myRidesIds : MutableList<String>
+    private lateinit var myRidesIds: MutableList<String>
 
     private lateinit var pubRepo: PublicationsRepository
     private lateinit var usersRepo: UsersRepository
     private lateinit var adapter: RVmyActiveRidesAdapter
+
+    private val EDIT_PUB_FRAG_TAG = "editPubFragTag"
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,6 +45,7 @@ class MyActiveRidesFragmentFragment : Fragment(R.layout.fragment_my_active_rides
         myRidesIds = ArrayList()
 
 
+        //TODO: Talvez mudar aqui
         adapter = RVmyActiveRidesAdapter(
             myRides,
             object : RVmyActiveRidesAdapter.OptionsMenuClickListener {
@@ -50,7 +53,6 @@ class MyActiveRidesFragmentFragment : Fragment(R.layout.fragment_my_active_rides
                     menu(position)
                 }
             })
-
 
 
         binding.apply {
@@ -64,22 +66,13 @@ class MyActiveRidesFragmentFragment : Fragment(R.layout.fragment_my_active_rides
                         myRides.add(ride)
                         myRidesIds.add(id)
 
-                        if(iterator + 1 > size){
+                        if (iterator + 1 > size) {
                             updateRecyclerView()
                         }
 
                     }
                 }
-
             }
-
-
-//            pubRepo.getCurrentUserActivePublications {
-//                for (ride in it) {
-//                    myRides.add(ride)
-//                }
-//                updateRecyclerView()
-//            }
         }
 
     }
@@ -153,10 +146,17 @@ class MyActiveRidesFragmentFragment : Fragment(R.layout.fragment_my_active_rides
             override fun onMenuItemClick(item: MenuItem?): Boolean {
                 when (item?.itemId) {
                     R.id.edit -> {
-                        return true
+                        val supportFragmentManager = requireActivity().supportFragmentManager
+
+                        supportFragmentManager.beginTransaction().add(
+                            R.id.frameFragment,
+                            EditPublicationFragment.newInstance(),
+                            EDIT_PUB_FRAG_TAG
+                        ).commit()
+
                     }
                     R.id.deactivate -> {
-                        pubRepo.deactivateRide(myRidesIds[position]){
+                        pubRepo.deactivateRide(myRidesIds[position]) {
                             adapter.removeItem(position)
                             myRidesIds.removeAt(position)
                         }

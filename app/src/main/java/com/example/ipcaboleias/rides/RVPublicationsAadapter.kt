@@ -1,15 +1,23 @@
 package com.example.ipcaboleias.rides
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.BitmapFactory
-import android.opengl.Visibility
+import android.location.Address
+import android.location.Geocoder
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ipcaboleias.databinding.ItemPublicationV2Binding
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.*
+import java.util.regex.Pattern
 
 
 class RVPublicationsAadapter(var publications: MutableList<RidePresentation>) :
@@ -53,6 +61,12 @@ class RVPublicationsAadapter(var publications: MutableList<RidePresentation>) :
 
         holder.binding.apply {
 
+            val location = getLocation(
+                txtName.context,
+                publications[position].startLatitude,
+                publications[position].startLongitude
+            )
+
             txtName.text = publications[position].name
             textView2.text = publications[position].car
 
@@ -83,11 +97,24 @@ class RVPublicationsAadapter(var publications: MutableList<RidePresentation>) :
                 }
             }
 
-            textFrom.text = publications[position].startLatitude.toString()
+            if (Pattern.matches("a[0-9]+@alunos.ipca.pt", publications[position].email)) {
+                docStu.text = "Aluno do IPCA"
+            } else {
+                docStu.text = "Docente do IPCA"
+            }
 
-            tvDateFrom.text = publications[position].time
+            textFrom.text = location.getAddressLine(0)
 
-            tvDateFrom.text = publications[position].date
+            val data = LocalDate.parse(
+                publications[position].date,
+                DateTimeFormatter.ofPattern("dd-MM-yyyy")
+            )
+
+            val d = Date.from(data.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant())
+            val local = Locale("pt", "BR")
+            val formato: DateFormat = SimpleDateFormat("dd 'de' MMMM 'de' yyyy", local)
+
+            date.text = formato.format(d)
 
             val byteArray: ByteArray =
                 Base64.getDecoder().decode(publications[position].profilePicture)
@@ -96,6 +123,15 @@ class RVPublicationsAadapter(var publications: MutableList<RidePresentation>) :
             profilePic.setImageBitmap(bitMapPic)
 
         }
+    }
+
+    fun getLocation(context: Context, latitude: Double, longitude: Double): Address {
+        val addresses: MutableList<Address>
+        val geocoder = Geocoder(context, Locale.ENGLISH)
+
+        addresses = geocoder.getFromLocation(latitude, longitude, 1)
+
+        return addresses[0]
     }
 
     override fun getItemCount(): Int {

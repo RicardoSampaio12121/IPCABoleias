@@ -68,13 +68,14 @@
         <entry key="..\:/Users/ricar/StudioProjects/IPCABoleias/app/src/main/res/layout/fragment_create_publication_pick_price.xml" value="0.3625" />
         <entry key="..\:/Users/ricar/StudioProjects/IPCABoleias/app/src/main/res/layout/fragment_create_publication_set_custom_price.xml" value="0.3625" />
         <entry key="..\:/Users/ricar/StudioProjects/IPCABoleias/app/src/main/res/layout/fragment_create_publication_set_definitions.xml" value="0.3625" />
+        <entry key="..\:/Users/ricar/StudioProjects/IPCABoleias/app/src/main/res/layout/fragment_edit_publication.xml" value="0.3625" />
         <entry key="..\:/Users/ricar/StudioProjects/IPCABoleias/app/src/main/res/layout/fragment_my_active_rides_fragment.xml" value="0.327445652173913" />
-        <entry key="..\:/Users/ricar/StudioProjects/IPCABoleias/app/src/main/res/layout/fragment_ride_details.xml" value="0.2536231884057971" />
+        <entry key="..\:/Users/ricar/StudioProjects/IPCABoleias/app/src/main/res/layout/fragment_ride_details.xml" value="0.3596014492753623" />
         <entry key="..\:/Users/ricar/StudioProjects/IPCABoleias/app/src/main/res/layout/fragment_test.xml" value="0.14361702127659576" />
         <entry key="..\:/Users/ricar/StudioProjects/IPCABoleias/app/src/main/res/layout/item_chat_channel.xml" value="0.2617753623188406" />
         <entry key="..\:/Users/ricar/StudioProjects/IPCABoleias/app/src/main/res/layout/item_my_active_ride.xml" value="0.4233576642335766" />
         <entry key="..\:/Users/ricar/StudioProjects/IPCABoleias/app/src/main/res/layout/item_publication.xml" value="0.2617753623188406" />
-        <entry key="..\:/Users/ricar/StudioProjects/IPCABoleias/app/src/main/res/layout/item_publication_v2.xml" value="0.2617753623188406" />
+        <entry key="..\:/Users/ricar/StudioProjects/IPCABoleias/app/src/main/res/layout/item_publication_v2.xml" value="0.3625" />
         <entry key="..\:/Users/ricar/StudioProjects/IPCABoleias/app/src/main/res/layout/item_text_message.xml" value="0.3625" />
         <entry key="..\:/Users/ricar/StudioProjects/IPCABoleias/app/src/main/res/menu/my_active_rides_menu.xml" value="0.24259259259259258" />
         <entry key="..\:/Users/ricar/StudioProjects/IPCABoleias/app/src/main/res/menu/nav_filter_menu.xml" value="0.3625" />

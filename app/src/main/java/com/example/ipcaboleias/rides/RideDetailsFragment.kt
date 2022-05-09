@@ -2,6 +2,8 @@ package com.example.ipcaboleias.rides
 
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.location.Address
+import android.location.Geocoder
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
@@ -18,6 +20,7 @@ import com.example.ipcaboleias.ViewModels.NewPubViewModel
 import com.example.ipcaboleias.ViewModels.PublicationDetailsViewModel
 import com.example.ipcaboleias.databinding.FragmentRideDetailsBinding
 import com.example.ipcaboleias.firebaseRepository.UsersRepository
+import com.google.android.gms.location.GeofenceStatusCodes
 import java.io.Serializable
 import java.util.*
 import java.util.regex.Pattern
@@ -50,11 +53,11 @@ class RideDetailsFragment : Fragment(R.layout.fragment_ride_details) {
 
         binding.apply {
 
+            val add = getLocation(ride.startLatitude, ride.startLongitude)
+
             // TODO: ARRUMAR ISTO NUMA FUNÇÃO
-            tvFrom.text = ride.startLatitude.toString()
+            tvFrom.text = add.getAddressLine(0)
             tvTo.text = ride.endLatitude.toString()
-            timeFrom.text = ride.time
-            timeTo.text = ride.time
             tvPrice.text = "${ride.price}€"
             tvPlaces.text = ride.places.toString()
 
@@ -99,6 +102,15 @@ class RideDetailsFragment : Fragment(R.layout.fragment_ride_details) {
             }
         }
 
+    }
+
+    fun getLocation(latitude: Double, longitude: Double) : Address{
+        val addresses: MutableList<Address>
+        val geocoder = Geocoder(requireContext(), Locale.ENGLISH)
+
+        addresses =  geocoder.getFromLocation(latitude, longitude, 1)
+
+        return addresses[0]
     }
 
     companion object {
