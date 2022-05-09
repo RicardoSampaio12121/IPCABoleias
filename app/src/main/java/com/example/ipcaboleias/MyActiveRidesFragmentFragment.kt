@@ -28,6 +28,7 @@ class MyActiveRidesFragmentFragment : Fragment(R.layout.fragment_my_active_rides
     private val model: PublicationDetailsViewModel by activityViewModels()
 
     private lateinit var myRides: MutableList<Ride>
+    private lateinit var myRidesIds : MutableList<String>
 
     private lateinit var pubRepo: PublicationsRepository
     private lateinit var usersRepo: UsersRepository
@@ -37,7 +38,10 @@ class MyActiveRidesFragmentFragment : Fragment(R.layout.fragment_my_active_rides
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         _binding = FragmentMyActiveRidesFragmentBinding.bind(view)
         pubRepo = PublicationsRepository(requireContext())
+        usersRepo = UsersRepository(requireContext())
         myRides = ArrayList()
+        myRidesIds = ArrayList()
+
 
         adapter = RVmyActiveRidesAdapter(
             myRides,
@@ -50,12 +54,32 @@ class MyActiveRidesFragmentFragment : Fragment(R.layout.fragment_my_active_rides
 
 
         binding.apply {
-            pubRepo.getCurrentUserActivePublications {
-                for (ride in it) {
-                    myRides.add(ride)
+            usersRepo.getCurrentUserActivePublicationsIds {
+                val size = it.size
+                var iterator = 0
+
+                for (id in it) {
+                    pubRepo.getPublicationById(id) { ride ->
+                        iterator++
+                        myRides.add(ride)
+                        myRidesIds.add(id)
+
+                        if(iterator + 1 > size){
+                            updateRecyclerView()
+                        }
+
+                    }
                 }
-                updateRecyclerView()
+
             }
+
+
+//            pubRepo.getCurrentUserActivePublications {
+//                for (ride in it) {
+//                    myRides.add(ride)
+//                }
+//                updateRecyclerView()
+//            }
         }
 
     }
@@ -130,6 +154,12 @@ class MyActiveRidesFragmentFragment : Fragment(R.layout.fragment_my_active_rides
                 when (item?.itemId) {
                     R.id.edit -> {
                         return true
+                    }
+                    R.id.deactivate -> {
+                        pubRepo.deactivateRide(myRidesIds[position]){
+                            adapter.removeItem(position)
+                            myRidesIds.removeAt(position)
+                        }
                     }
                 }
                 return false

@@ -38,6 +38,11 @@ class RVmyActiveRidesAdapter(
         }
     }
 
+    fun removeItem(position: Int) {
+        rides.removeAt(position)
+        notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ToDoViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
 

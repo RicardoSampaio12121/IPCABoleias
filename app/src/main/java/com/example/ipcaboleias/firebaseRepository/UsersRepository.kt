@@ -129,6 +129,25 @@ class UsersRepository(private val context: Context) {
             }
     }
 
+    fun getCurrentUserActivePublicationsIds(onComplete: (publications: List<String>) -> Unit){
+        val db = Firebase.firestore
+        val uid = FirebaseAuth.getInstance().currentUser!!.uid
+        val publications : MutableList<String> = ArrayList()
+
+        db.collection("users")
+            .document(uid)
+            .collection("publications")
+            .get()
+            .addOnSuccessListener {
+                for(doc in it){
+                    if(doc["status"] == true) {
+                        publications.add(doc.id)
+                    }
+                }
+                onComplete(publications)
+            }
+    }
+
     fun getOrCreateChatChannel( //otherUserUid -> Ricardo
         otherUserUid: String,
         onComplete: (channelId: String) -> Unit

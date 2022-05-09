@@ -35,7 +35,7 @@ class PublicationsRepository(private val context: Context) {
             .document(uid)
             .collection("publications")
             .document(newPub.id)
-            .set(mapOf("nada" to "nada"))
+            .set(mapOf("status" to true))
 
     }
 
@@ -96,20 +96,40 @@ class PublicationsRepository(private val context: Context) {
             }
     }
 
-    fun getCurrentUserActivePublications(onComplete: (rides: List<Ride>) -> Unit){
+    fun getPublicationById(id: String, onComplete: (ride: Ride) -> Unit){
         val db = Firebase.firestore
-        val uid = FirebaseAuth.getInstance().currentUser!!.uid
-        val output : MutableList<Ride> = ArrayList()
 
         db.collection("publications")
-            .whereEqualTo("uid", uid)
-            .whereEqualTo("status", true)
+            .document(id)
             .get()
             .addOnSuccessListener {
-                for (document in it){
-                    output.add(document.toObject(Ride::class.java))
-                }
-                onComplete(output)
+                onComplete(it.toObject(Ride::class.java)!!)
             }
+    }
+
+//    fun getPublicationsByIds(ids: List<String>, onComplete: (rides: List<Ride>) -> Unit){
+//        val db = Firebase.firestore
+//
+//
+//
+//    }
+
+    fun deactivateRide(id: String, onComplete: (checker: Boolean) -> Unit){
+        val db = Firebase.firestore
+        val uid = FirebaseAuth.getInstance().currentUser!!.uid
+
+        db.collection("publications")
+            .document(id)
+            .update(mapOf("status" to false))
+
+
+        db.collection("users")
+            .document(uid)
+            .collection("publications")
+            .document(id)
+            .update(mapOf("status" to false))
+
+        onComplete(true)
+
     }
 }
