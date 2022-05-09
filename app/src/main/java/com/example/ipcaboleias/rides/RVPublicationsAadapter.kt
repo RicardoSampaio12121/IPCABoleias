@@ -31,13 +31,11 @@ class RVPublicationsAadapter(var publications: MutableList<RidePresentation>) :
         listener: onItemClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
         init {
-
             itemView.setOnClickListener {
                 listener.onItemClick(adapterPosition)
             }
         }
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ToDoViewHolder {
 

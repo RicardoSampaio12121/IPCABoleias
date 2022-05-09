@@ -59,4 +59,18 @@
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/appCompatImageView2"
         app:layout_constraintTop_toBottomOf="@+id/txtFrom" />
+
+    <TextView
+        android:id="@+id/textViewOptions"
+        android:layout_width="20dp"
+        android:gravity="center"
+        android:layout_height="30dp"
+        android:layout_alignParentTop="true"
+        android:textStyle="bold"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="20dp"
+        android:text="⋮"
+        android:textAppearance="?android:textAppearanceLarge" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

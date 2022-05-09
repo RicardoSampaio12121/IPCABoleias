@@ -110,10 +110,12 @@ class RidesActivity : AppCompatActivity() {
 
         returnBtn.setOnClickListener {
             val fragToRemove = supportFragmentManager.findFragmentByTag(RIDES_DETAILS_FRAG_TAG)
-            val fragToShow = supportFragmentManager.findFragmentByTag(RIDES_FRAG_TAG)
+//            val fragToShow = supportFragmentManager.findFragmentByTag(RIDES_FRAG_TAG)
+//
+//            supportFragmentManager.beginTransaction().remove(fragToRemove!!).commit()
+//            supportFragmentManager.beginTransaction().show(fragToShow!!).commit()
 
             supportFragmentManager.beginTransaction().remove(fragToRemove!!).commit()
-            supportFragmentManager.beginTransaction().show(fragToShow!!).commit()
 
             returnBtn.visibility = View.GONE
             menu.visibility = View.VISIBLE

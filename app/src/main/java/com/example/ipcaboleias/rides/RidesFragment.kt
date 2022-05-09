@@ -128,7 +128,6 @@ class RidesFragment : Fragment(R.layout.fragment_rides) {
                     RideDetailsFragment.newInstance(),
                     "detailsFragTag"
                 )?.commit()
-                transaction?.hide(activity?.supportFragmentManager?.findFragmentByTag("ridesFragTag")!!)
             }
         })
     }

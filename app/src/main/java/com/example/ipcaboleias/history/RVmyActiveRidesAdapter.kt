@@ -6,12 +6,36 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.ipcaboleias.databinding.ItemMyActiveRideBinding
 import com.example.ipcaboleias.rides.Ride
 
-class RVmyActiveRidesAdapter(var rides: MutableList<Ride>) :
+class RVmyActiveRidesAdapter(
+    var rides: MutableList<Ride>,
+    var optionsMenuClickListener: OptionsMenuClickListener
+) :
     RecyclerView.Adapter<RVmyActiveRidesAdapter.ToDoViewHolder>() {
 
-    inner class ToDoViewHolder(val binding: ItemMyActiveRideBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    private lateinit var mListener: RVmyActiveRidesAdapter.onItemClickListener
 
+    interface onItemClickListener {
+        fun onItemClick(position: Int)
+    }
+
+    fun setOnItemClickListener(listener: onItemClickListener){
+        mListener = listener
+    }
+
+    interface OptionsMenuClickListener {
+        fun onOptionsMenuClicked(position: Int)
+    }
+
+    inner class ToDoViewHolder(
+        val binding: ItemMyActiveRideBinding,
+        listener: onItemClickListener
+    ) :
+        RecyclerView.ViewHolder(binding.root) {
+        init {
+            itemView.setOnClickListener {
+                listener.onItemClick(adapterPosition)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ToDoViewHolder {
@@ -19,7 +43,7 @@ class RVmyActiveRidesAdapter(var rides: MutableList<Ride>) :
 
         val binding = ItemMyActiveRideBinding.inflate(layoutInflater, parent, false)
 
-        return ToDoViewHolder(binding)
+        return ToDoViewHolder(binding, mListener)
     }
 
     override fun onBindViewHolder(holder: ToDoViewHolder, position: Int) {
@@ -40,6 +64,10 @@ class RVmyActiveRidesAdapter(var rides: MutableList<Ride>) :
                 41.440063 -> {
                     txtTo.text = "IPCA Famalicão"
                 }
+            }
+
+            textViewOptions.setOnClickListener {
+                optionsMenuClickListener.onOptionsMenuClicked(position)
             }
 
         }
