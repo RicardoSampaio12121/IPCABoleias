@@ -266,6 +266,7 @@
             android:text="Viagem disponivel \npara"
             android:textSize="17sp"
             app:layout_constraintBottom_toBottomOf="@+id/viewPrice"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
         <TextView
@@ -415,7 +416,7 @@
             android:layout_marginVertical="15dp"
             android:background="@color/black"
             app:layout_constraintTop_toBottomOf="@+id/framePerson"
-            tools:layout_editor_absoluteX="-16dp" />
+            tools:layout_editor_absoluteX="-12dp" />
 
         <Button
             android:id="@+id/buttonContact"

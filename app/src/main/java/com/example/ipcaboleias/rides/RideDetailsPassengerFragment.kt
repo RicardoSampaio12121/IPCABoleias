@@ -1,29 +1,22 @@
 package com.example.ipcaboleias.rides
 
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.location.Address
 import android.location.Geocoder
-import android.opengl.Visibility
 import android.os.Build
 import android.os.Bundle
-import android.os.Parcelable
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
 import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import com.example.ipcaboleias.ChatActivity
 import com.example.ipcaboleias.R
-import com.example.ipcaboleias.ViewModels.NewPubViewModel
 import com.example.ipcaboleias.ViewModels.PublicationDetailsViewModel
-import com.example.ipcaboleias.databinding.FragmentRideDetailsBinding
+import com.example.ipcaboleias.databinding.FragmentRideDetailsPassengerBinding
 import com.example.ipcaboleias.firebaseRepository.UsersRepository
-import com.google.android.gms.location.GeofenceStatusCodes
-import java.io.Serializable
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -32,25 +25,25 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.regex.Pattern
 
-class RideDetailsFragment : Fragment(R.layout.fragment_ride_details) {
-
-    private var _binding: FragmentRideDetailsBinding? = null
+class RideDetailsPassengerFragment : Fragment(R.layout.fragment_ride_details_passenger) {
+    private var _binding: FragmentRideDetailsPassengerBinding? = null
     private val binding get() = _binding!!
-
-    private lateinit var usersRepo: UsersRepository
 
     private val model: PublicationDetailsViewModel by activityViewModels()
     private lateinit var ride: RidePresentation
+    private lateinit var usersRepo: UsersRepository
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ride = model.getRide()
+
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-        _binding = FragmentRideDetailsBinding.bind(view)
+        super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentRideDetailsPassengerBinding.bind(view)
 
         var btnMenu = activity?.requireViewById<ImageButton>(R.id.imageMenu)
         var btnReturn = activity?.requireViewById<ImageButton>(R.id.imageReturn)
@@ -59,6 +52,7 @@ class RideDetailsFragment : Fragment(R.layout.fragment_ride_details) {
         btnReturn?.visibility = View.VISIBLE
 
         binding.apply {
+
             val location = getLocation(ride.startLatitude, ride.startLongitude)
 
             if (location == null) {
@@ -93,21 +87,9 @@ class RideDetailsFragment : Fragment(R.layout.fragment_ride_details) {
 
             txtRideInfoTitle.text = formato.format(d)
 
-
-            tvPrice.text = String.format("%.2f€", ride.price)
-            tvPlaces.text = ride.places.toString()
-
-            val byteArray: ByteArray = Base64.getDecoder().decode(ride.profilePicture)
-            val bitMapPic = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
-
-            profilePicture.setImageBitmap(bitMapPic)
-
-            txtNamePerson.text = ride.name
-
             if (ride.acceptAlunos && ride.acceptDoc) tvDispCh.text = "Todos"
             else if (ride.acceptAlunos && !ride.acceptDoc) tvDispCh.text = "Alunos"
             else tvDispCh.text = "Docentes"
-
 
             if (Pattern.matches("a[0-9]+@alunos.ipca.pt", ride.email)) {
                 tvDocOrStu.text = "Aluno do IPCA"
@@ -116,13 +98,6 @@ class RideDetailsFragment : Fragment(R.layout.fragment_ride_details) {
             }
 
             buttonContact.text = "CONTACTAR ${ride.name}"
-
-            carBrand.text = ride.car
-            tvColor.text = ride.carColor
-
-            txtDesc.text = ride.description
-
-            //--------------------------------------------------------------
 
             buttonContact.setOnClickListener {
                 // Criar canal de contacto entre os dois utilizadores
@@ -136,6 +111,7 @@ class RideDetailsFragment : Fragment(R.layout.fragment_ride_details) {
                 }
 
             }
+
         }
 
     }
@@ -156,8 +132,9 @@ class RideDetailsFragment : Fragment(R.layout.fragment_ride_details) {
     companion object {
         @JvmStatic
         fun newInstance() =
-            RideDetailsFragment().apply {
+            RideDetailsPassengerFragment().apply {
                 arguments = Bundle().apply {
+
                 }
             }
     }

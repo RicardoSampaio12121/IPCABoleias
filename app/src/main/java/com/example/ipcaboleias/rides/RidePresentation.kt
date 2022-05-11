@@ -14,10 +14,10 @@ data class RidePresentation (
     val endLatitude : Double = 0.0,
     val endLongitude : Double = 0.0,
     val type : String = "",
-    val places : Int = 0,
+    var places : Int = 0,
     val description : String = "",
     val acceptAlunos : Boolean = false,
     val acceptDoc : Boolean = false,
     val uniqueRide : Boolean = true,
-    val price : Float? = 0.0f
+    var price : Float? = 0.0f
 )

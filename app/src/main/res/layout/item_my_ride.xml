@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:clickable="true"
-    android:focusable="true"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginVertical="5dp"
     android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true"
     android:layout_width="match_parent"
-    android:layout_height="140dp">
+    android:layout_height="180dp">
+
 
     <TextView
         android:id="@+id/txtDate"
@@ -33,6 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="10dp"
+        android:layout_marginHorizontal="2dp"
         android:text="Póvoa de Lanhoso"
         android:textColor="@color/black"
         android:textSize="18sp"
@@ -46,30 +49,39 @@
         android:layout_marginVertical="10dp"
         android:src="@drawable/ic_baseline_flag"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appCompatImageView" />
+        app:layout_constraintTop_toBottomOf="@+id/txtFrom" />
 
     <TextView
         android:id="@+id/txtTo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="10dp"
+        android:layout_marginHorizontal="2dp"
         android:text="Polo de Barcelos"
         android:textColor="@color/black"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/appCompatImageView2"
         app:layout_constraintTop_toBottomOf="@+id/txtFrom" />
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/appCompatImageView3"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginVertical="10dp"
+        android:src="@drawable/ic_status_alert_svgrepo_com"
+        app:layout_constraintStart_toStartOf="@+id/txtDate"
+        app:layout_constraintTop_toBottomOf="@+id/txtTo" />
+
     <TextView
-        android:id="@+id/textViewOptions"
-        android:layout_width="20dp"
-        android:gravity="center"
-        android:layout_height="30dp"
-        android:layout_alignParentTop="true"
-        android:textStyle="bold"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_margin="20dp"
-        android:text="⋮"
-        android:textAppearance="?android:textAppearanceLarge" />
+        android:id="@+id/tvState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="10dp"
+        android:layout_marginHorizontal="2dp"
+        android:text="Estado"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/appCompatImageView3"
+        app:layout_constraintTop_toBottomOf="@+id/txtTo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

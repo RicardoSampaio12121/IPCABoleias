@@ -26,9 +26,11 @@ class PublicationsRepository(private val context: Context) {
 
         //Adicionar publicação
 
-        val newPub = database.collection("publications").document()
-        newPub.set(publication)
+        val newPub = database
+            .collection("publications")
+            .document()
 
+        newPub.set(publication)
 
         //Adicionar entrada de publicação no utilizador que a criou
         database.collection("users")
@@ -41,28 +43,23 @@ class PublicationsRepository(private val context: Context) {
 
     fun createPublicationAsPassenger(
         publication: NewPublicationAsPassenger,
-        myCallback: NewPublicationCallback
+        onComplete: (checker: Boolean) -> Unit
     ) {
         val database = Firebase.firestore
+        val uid = FirebaseAuth.getInstance().currentUser!!.uid
 
-        val pub = hashMapOf(
-            "uid" to publication.uid,
-            "startLatitude" to publication.startLatitute,
-            "startLongitude" to publication.startLongitude,
-            "endLatitude" to publication.endLatitute,
-            "endLongitude" to publication.endLongitude,
-            "date" to publication.date,
-            "time" to publication.time,
-            "type" to publication.type
-        )
+        val newPub = database.collection("publications")
+            .document()
 
-        database.collection("publications").add(pub)
-            .addOnSuccessListener {
-                myCallback.onCallback(true)
-            }
-            .addOnFailureListener {
-                myCallback.onCallback(false)
-            }
+        newPub.set(publication)
+
+        database.collection("users")
+            .document(uid)
+            .collection("publications")
+            .document(newPub.id)
+            .set(mapOf("status" to true))
+
+        onComplete(true)
     }
 
 
@@ -87,16 +84,17 @@ class PublicationsRepository(private val context: Context) {
         var list: MutableList<Ride> = ArrayList()
 
         db.collection("publications")
+            .whereEqualTo("status", true)
             .get()
             .addOnSuccessListener {
-                for(document in it){
+                for (document in it) {
                     list.add(document.toObject(Ride::class.java))
                 }
                 onComplete(list)
             }
     }
 
-    fun getPublicationById(id: String, onComplete: (ride: Ride) -> Unit){
+    fun getPublicationById(id: String, onComplete: (ride: Ride) -> Unit) {
         val db = Firebase.firestore
 
         db.collection("publications")
@@ -114,7 +112,7 @@ class PublicationsRepository(private val context: Context) {
 //
 //    }
 
-    fun deactivateRide(id: String, onComplete: (checker: Boolean) -> Unit){
+    fun deactivateRide(id: String, onComplete: (checker: Boolean) -> Unit) {
         val db = Firebase.firestore
         val uid = FirebaseAuth.getInstance().currentUser!!.uid
 
@@ -130,6 +128,43 @@ class PublicationsRepository(private val context: Context) {
             .update(mapOf("status" to false))
 
         onComplete(true)
+    }
 
+    fun editDateTime(
+        id: String,
+        date: String,
+        time: String,
+        onComplete: (checker: Boolean) -> Unit
+    ) {
+        val db = Firebase.firestore
+
+        db.collection("publications")
+            .document(id)
+            .update(mapOf("date" to date, "time" to time))
+            .addOnSuccessListener {
+                onComplete(true)
+            }
+    }
+
+    fun editPrice(id: String, price: Float, onComplete: (checker: Boolean) -> Unit) {
+        val db = Firebase.firestore
+
+        db.collection("publications")
+            .document(id)
+            .update(mapOf("price" to price))
+            .addOnSuccessListener {
+                onComplete(true)
+            }
+    }
+
+    fun editPlaces(id: String, places: Int, onComplete: (checker: Boolean) -> Unit) {
+        val db = Firebase.firestore
+
+        db.collection("publications")
+            .document(id)
+            .update(mapOf("places" to places))
+            .addOnSuccessListener {
+                onComplete(true)
+            }
     }
 }

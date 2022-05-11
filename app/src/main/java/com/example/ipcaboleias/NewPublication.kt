@@ -11,7 +11,9 @@ class NewPublicationAsPassenger {
     var date : String = ""
     var time : String = ""
     var type : String = ""
-    var description : String = ""
+    var acceptDoc : Boolean = false
+    var acceptAlunos : Boolean = false
+    var status: Boolean = true
 }
 
 class NewPublicationAsDriver {
@@ -29,4 +31,5 @@ class NewPublicationAsDriver {
     var acceptDoc : Boolean = false
     var acceptAlunos : Boolean = false
     var price : Float = 0.0f
+    var status: Boolean = true
 }

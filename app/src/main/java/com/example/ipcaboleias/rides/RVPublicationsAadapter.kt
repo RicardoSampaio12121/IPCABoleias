@@ -103,8 +103,11 @@ class RVPublicationsAadapter(var publications: MutableList<RidePresentation>) :
                 docStu.text = "Docente do IPCA"
             }
 
-            textFrom.text = location.getAddressLine(0)
-
+            if (location == null) {
+                textFrom.text = "ola mundo"
+            } else {
+                textFrom.text = location.getAddressLine(0)
+            }
             val data = LocalDate.parse(
                 publications[position].date,
                 DateTimeFormatter.ofPattern("dd-MM-yyyy")
@@ -125,11 +128,15 @@ class RVPublicationsAadapter(var publications: MutableList<RidePresentation>) :
         }
     }
 
-    fun getLocation(context: Context, latitude: Double, longitude: Double): Address {
+    fun getLocation(context: Context, latitude: Double, longitude: Double): Address? {
         val addresses: MutableList<Address>
         val geocoder = Geocoder(context, Locale.ENGLISH)
 
         addresses = geocoder.getFromLocation(latitude, longitude, 1)
+
+        if(addresses.size == 0){
+            return null
+        }
 
         return addresses[0]
     }

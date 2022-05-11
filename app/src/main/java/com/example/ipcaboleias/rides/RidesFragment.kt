@@ -123,11 +123,21 @@ class RidesFragment : Fragment(R.layout.fragment_rides) {
 
                 val transaction = activity?.supportFragmentManager?.beginTransaction()
 
-                transaction?.add(
-                    R.id.frameFragment,
-                    RideDetailsFragment.newInstance(),
-                    "detailsFragTag"
-                )?.commit()
+                if (publications[position].type == "Passenger") {
+                    transaction?.add(
+                        R.id.frameFragment,
+                        RideDetailsPassengerFragment.newInstance(),
+                        "detailsPassengerFragTag"
+                    )?.commit()
+                } else {
+                    transaction?.add(
+                        R.id.frameFragment,
+                        RideDetailsFragment.newInstance(),
+                        "detailsFragTag"
+                    )?.commit()
+
+                }
+
             }
         })
     }

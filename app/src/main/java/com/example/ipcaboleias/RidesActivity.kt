@@ -33,6 +33,7 @@ class RidesActivity : AppCompatActivity() {
     private val CREATE_PUB_FRAG_TAG = "createPubFragTag"
     private val RIDES_DETAILS_FRAG_TAG = "detailsFragTag"
     private val CHAT_CHANNELS_FRAG_TAG = "chatChannelsFragTag"
+    private val RIDES_DETAILS_Passenger_FRAG_TAG = "detailsPassengerFragTag"
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,25 +92,25 @@ class RidesActivity : AppCompatActivity() {
             if (it.itemId == R.id.miBoleias) {
                 supportFragmentManager.beginTransaction().replace(R.id.frameFragment, RidesFragment.newInstance()).commit()
 
-            } else if (it.itemId == R.id.miBoleiasAgendadas) {
+            } else if (it.itemId == R.id.miPedidosAtivos) {
                 supportFragmentManager.beginTransaction().replace(R.id.frameFragment, MyActiveRidesFragmentFragment.newInstance()).commit()
-            } else if (it.itemId == R.id.miChatChannels) {
-                // Abrir fragmento dos canais de chat
-//                val fragToRemove = supportFragmentManager.findFragmentByTag(RIDES_FRAG_TAG)
-//                supportFragmentManager.beginTransaction().remove(fragToRemove!!).commit()
-//
-//                supportFragmentManager.beginTransaction().add(R.id.frameFragment,
-//                    testFragment.newInstance(), CHAT_CHANNELS_FRAG_TAG).commit()
+            } else if(it.itemId == R.id.miHistorico){
+                supportFragmentManager.beginTransaction().replace(R.id.frameFragment, MyRidesFragment.newInstance()).commit()
+            }
 
+            else if (it.itemId == R.id.miChatChannels) {
                 supportFragmentManager.beginTransaction().replace(R.id.frameFragment, testFragment.newInstance()).commit()
-
             }
             dLayout.closeDrawer(Gravity.LEFT)
             true
         }
 
         returnBtn.setOnClickListener {
-            val fragToRemove = supportFragmentManager.findFragmentByTag(RIDES_DETAILS_FRAG_TAG)
+            var fragToRemove = supportFragmentManager.findFragmentByTag(RIDES_DETAILS_FRAG_TAG)
+
+            if(fragToRemove == null){
+                fragToRemove = supportFragmentManager.findFragmentByTag(RIDES_DETAILS_Passenger_FRAG_TAG)
+            }
 //            val fragToShow = supportFragmentManager.findFragmentByTag(RIDES_FRAG_TAG)
 //
 //            supportFragmentManager.beginTransaction().remove(fragToRemove!!).commit()

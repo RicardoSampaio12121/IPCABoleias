@@ -16,7 +16,8 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 
-class CreatePublicationPickPlacesFragment : Fragment(R.layout.fragment_create_publication_pick_places) {
+class CreatePublicationPickPlacesFragment :
+    Fragment(R.layout.fragment_create_publication_pick_places) {
 
     var _binding: FragmentCreatePublicationPickPlacesBinding? = null
     val binding get() = _binding!!
@@ -28,11 +29,14 @@ class CreatePublicationPickPlacesFragment : Fragment(R.layout.fragment_create_pu
     private val CREATE_PUB_PICK_PLACES_FRAG_TAG = "createPubPickPlacesFragTag"
     private val CREATE_PUB_PICK_PRICE_FRAG_TAG = "createPubPickPriceFragTag"
     private val CREATE_PUB_ADD_DESCRIPTION_FRAG_TAG = "createPubAddDescriptionFragTag"
+    private val CREATE_PUB_SET_DEFINITIONS_PASSENGER_FRAG_TAG =
+        "createPubSetDefinitionsPassengerFragTag"
 
     private val model: NewPubViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         _binding = FragmentCreatePublicationPickPlacesBinding.bind(view)
+        val supportFragmentManager = requireActivity().supportFragmentManager
 
         binding.apply {
             btnLess.setOnClickListener {
@@ -52,36 +56,36 @@ class CreatePublicationPickPlacesFragment : Fragment(R.layout.fragment_create_pu
             passageiro.setOnClickListener {
                 model.setType(NewPubViewModel.PubType.Passenger)
 
-                var newPub = NewPublicationAsPassenger()
-                newPub.uid = requireActivity().intent.getStringExtra("uid")!!
-                newPub.startLatitute = model.getStartLatitude()
-                newPub.startLongitude = model.getStartLongitude()
-                newPub.endLatitute = model.getEndLatitude()
-                newPub.endLongitude = model.getEndLongitude()
-                newPub.date = model.getDate()
-                newPub.time = model.getTime()
-                newPub.type = model.getType().toString()
+                val fragToHide =
+                    supportFragmentManager.findFragmentByTag(CREATE_PUB_PICK_PLACES_FRAG_TAG)
 
-                createPublicationAsPassenger(newPub)
-                closeAllFragments()
+                supportFragmentManager.beginTransaction().add(
+                    R.id.frameFragment,
+                    CreatePublicationSetDefinitionsPassengerFragment.newInstance(),
+                    CREATE_PUB_SET_DEFINITIONS_PASSENGER_FRAG_TAG
+                ).commit()
+
+                supportFragmentManager.beginTransaction().hide(fragToHide!!).commit()
+
             }
 
             btnNext.setOnClickListener {
                 model.setType(NewPubViewModel.PubType.Driver)
                 model.setNPassengers(tvNumber.text.toString().toInt())
 
-                val supportFragmentManager = requireActivity().supportFragmentManager
+                val fragToHide =
+                    supportFragmentManager.findFragmentByTag(CREATE_PUB_PICK_PLACES_FRAG_TAG)
+                val fragToCall =
+                    supportFragmentManager.findFragmentByTag(CREATE_PUB_ADD_DESCRIPTION_FRAG_TAG)
 
-                val fragToHide = supportFragmentManager.findFragmentByTag(CREATE_PUB_PICK_PLACES_FRAG_TAG)
-                val fragToCall = supportFragmentManager.findFragmentByTag(CREATE_PUB_ADD_DESCRIPTION_FRAG_TAG)
-
-                if(fragToCall != null){
+                if (fragToCall != null) {
                     supportFragmentManager.beginTransaction().show(fragToCall).commit()
-                }
-                else{
+                } else {
                     supportFragmentManager.beginTransaction().add(
                         R.id.frameLayoutFilter,
-                        CreatePublicationAddDescriptionFragment.newInstance(), CREATE_PUB_ADD_DESCRIPTION_FRAG_TAG).commit()
+                        CreatePublicationAddDescriptionFragment.newInstance(),
+                        CREATE_PUB_ADD_DESCRIPTION_FRAG_TAG
+                    ).commit()
                 }
 
                 supportFragmentManager.beginTransaction().hide(fragToHide!!).commit()
@@ -98,40 +102,6 @@ class CreatePublicationPickPlacesFragment : Fragment(R.layout.fragment_create_pu
             CreatePublicationPickPlacesFragment().apply {
             }
     }
-
-    private fun closeAllFragments(){
-        val supportFragmentManager = requireActivity().supportFragmentManager
-
-        val fragCreatePubSearchStartPos = supportFragmentManager.findFragmentByTag(CREATE_PUB_SEARCH1_FRAG_TAG)
-        val fragCreatePubSearchEndPos = supportFragmentManager.findFragmentByTag(CREATE_PUB_SEARCH2_FRAG_TAG)
-        val fragCreatePubPickDate = supportFragmentManager.findFragmentByTag(CREATE_PUB_PICK_DATE_FRAG_TAG)
-        val fragCreatePubPickTime = supportFragmentManager.findFragmentByTag(CREATE_PUB_PICK_TIME_FRAG_TAG)
-        val fragCreatePubPickPlaces = supportFragmentManager.findFragmentByTag(CREATE_PUB_PICK_PLACES_FRAG_TAG)
-
-        supportFragmentManager.beginTransaction().remove(fragCreatePubSearchStartPos!!).commit()
-        supportFragmentManager.beginTransaction().remove(fragCreatePubSearchEndPos!!).commit()
-        supportFragmentManager.beginTransaction().remove(fragCreatePubPickDate!!).commit()
-        supportFragmentManager.beginTransaction().remove(fragCreatePubPickTime!!).commit()
-        supportFragmentManager.beginTransaction().remove(fragCreatePubPickPlaces!!).commit()
-
-    }
-
-    private fun createPublicationAsPassenger(pub : NewPublicationAsPassenger) {
-
-        val repo = PublicationsRepository(requireContext())
-
-        repo.createPublicationAsPassenger(pub, object:NewPublicationCallback {
-            override fun onCallback(success: Boolean) {
-                if(success){
-                    Toast.makeText(activity, "ola valete", Toast.LENGTH_SHORT).show()
-                }else{
-                    Toast.makeText(activity, "oi menu nome é vanessa", Toast.LENGTH_SHORT).show()
-                }
-            }
-        })
-
-    }
-
 }
 
 

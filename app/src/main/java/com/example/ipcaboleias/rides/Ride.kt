@@ -1,5 +1,7 @@
 package com.example.ipcaboleias.rides
 
+import java.sql.ClientInfoStatus
+
 data class Ride (
     var uid: String = "",
     var startLatitute: Double = 0.0,
@@ -14,6 +16,7 @@ data class Ride (
     var uniqueDrive: Boolean = false,
     var acceptDoc: Boolean = false,
     var acceptAlunos: Boolean = false,
-    var price: Float = 0.0f
+    var price: Float = 0.0f,
+    var status: Boolean = false
 )
 

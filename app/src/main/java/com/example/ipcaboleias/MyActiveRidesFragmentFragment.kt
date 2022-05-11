@@ -16,6 +16,7 @@ import com.example.ipcaboleias.history.RVmyActiveRidesAdapter
 import com.example.ipcaboleias.registration.NewUser
 import com.example.ipcaboleias.rides.Ride
 import com.example.ipcaboleias.rides.RideDetailsFragment
+import com.example.ipcaboleias.rides.RideDetailsPassengerFragment
 import com.example.ipcaboleias.rides.RidePresentation
 
 
@@ -24,6 +25,7 @@ class MyActiveRidesFragmentFragment : Fragment(R.layout.fragment_my_active_rides
     private val binding get() = _binding!!
 
     private val RIDES_DETAILS_FRAG_TAG = "detailsFragTag"
+    private val RIDES_DETAILS_PASSENGER_FRAG_TAG = "detailsPassengerFragTag"
 
     private val model: PublicationDetailsViewModel by activityViewModels()
 
@@ -102,11 +104,22 @@ class MyActiveRidesFragmentFragment : Fragment(R.layout.fragment_my_active_rides
                     var ride = newRidePresentationObject(myRides[position], it)
                     model.setRide(ride)
 
-                    supportFragmentManager.beginTransaction().add(
-                        R.id.frameFragment,
-                        RideDetailsFragment.newInstance(),
-                        RIDES_DETAILS_FRAG_TAG
-                    ).commit()
+                    if(ride.type == "Passenger"){
+                        supportFragmentManager.beginTransaction().add(
+                            R.id.frameFragment,
+                            RideDetailsPassengerFragment.newInstance(),
+                            RIDES_DETAILS_PASSENGER_FRAG_TAG
+                        ).commit()
+                    }
+                    else{
+                        supportFragmentManager.beginTransaction().add(
+                            R.id.frameFragment,
+                            RideDetailsFragment.newInstance(),
+                            RIDES_DETAILS_FRAG_TAG
+                        ).commit()
+                    }
+
+
                 }
             }
         })
@@ -148,12 +161,16 @@ class MyActiveRidesFragmentFragment : Fragment(R.layout.fragment_my_active_rides
                     R.id.edit -> {
                         val supportFragmentManager = requireActivity().supportFragmentManager
 
-                        supportFragmentManager.beginTransaction().add(
-                            R.id.frameFragment,
-                            EditPublicationFragment.newInstance(),
-                            EDIT_PUB_FRAG_TAG
-                        ).commit()
+                        usersRepo.getCurrentUser {
+                            val ride = newRidePresentationObject(myRides[position], it)
+                            model.setRide(ride)
 
+                            supportFragmentManager.beginTransaction().add(
+                                R.id.frameFragment,
+                                EditPublicationFragment.newInstance(myRidesIds[position]),
+                                EDIT_PUB_FRAG_TAG
+                            ).commit()
+                        }
                     }
                     R.id.deactivate -> {
                         pubRepo.deactivateRide(myRidesIds[position]) {
