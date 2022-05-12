@@ -10,11 +10,27 @@
     <View
         android:id="@+id/view6"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="50dp"
         android:background="@color/IpcaColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewOptions"
+        android:layout_width="20dp"
+        android:gravity="center"
+        android:layout_height="30dp"
+        android:layout_alignParentTop="true"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="@id/view6"
+        app:layout_constraintTop_toTopOf="@id/view6"
+        app:layout_constraintBottom_toBottomOf="@id/view6"
+        android:layout_margin="20dp"
+        android:text="⋮"
+        android:textAppearance="?android:textAppearanceLarge" />
+
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/returnButton"

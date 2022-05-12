@@ -46,8 +46,6 @@ class MyActiveRidesFragmentFragment : Fragment(R.layout.fragment_my_active_rides
         myRides = ArrayList()
         myRidesIds = ArrayList()
 
-
-        //TODO: Talvez mudar aqui
         adapter = RVmyActiveRidesAdapter(
             myRides,
             object : RVmyActiveRidesAdapter.OptionsMenuClickListener {
@@ -76,7 +74,6 @@ class MyActiveRidesFragmentFragment : Fragment(R.layout.fragment_my_active_rides
                 }
             }
         }
-
     }
 
     private fun updateRecyclerView() {

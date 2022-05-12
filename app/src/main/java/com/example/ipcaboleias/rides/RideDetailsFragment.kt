@@ -14,6 +14,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import com.example.ipcaboleias.ChatActivity
@@ -21,6 +22,7 @@ import com.example.ipcaboleias.R
 import com.example.ipcaboleias.ViewModels.NewPubViewModel
 import com.example.ipcaboleias.ViewModels.PublicationDetailsViewModel
 import com.example.ipcaboleias.databinding.FragmentRideDetailsBinding
+import com.example.ipcaboleias.firebaseRepository.PublicationsRepository
 import com.example.ipcaboleias.firebaseRepository.UsersRepository
 import com.google.android.gms.location.GeofenceStatusCodes
 import java.io.Serializable
@@ -38,6 +40,7 @@ class RideDetailsFragment : Fragment(R.layout.fragment_ride_details) {
     private val binding get() = _binding!!
 
     private lateinit var usersRepo: UsersRepository
+    private lateinit var pubRepo: PublicationsRepository
 
     private val model: PublicationDetailsViewModel by activityViewModels()
     private lateinit var ride: RidePresentation
@@ -135,6 +138,19 @@ class RideDetailsFragment : Fragment(R.layout.fragment_ride_details) {
                     requireActivity().startActivity(intent)
                 }
 
+            }
+
+            buttonReserve.setOnClickListener {
+                pubRepo = PublicationsRepository(requireContext())
+                pubRepo.reserveRide(ride.date, ride.time, ride.uid) {
+                    if (it) {
+                        Toast.makeText(
+                            requireContext(),
+                            "Reserva enviada para revisão.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
             }
         }
 

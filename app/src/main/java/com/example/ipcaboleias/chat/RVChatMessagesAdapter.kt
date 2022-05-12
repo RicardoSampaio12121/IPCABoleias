@@ -4,6 +4,7 @@ import android.text.style.BackgroundColorSpan
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.recyclerview.widget.RecyclerView
@@ -48,9 +49,10 @@ class RVChatMessagesAdapter(var messages : MutableList<TextMessage>) : RecyclerV
 
             }
             else{
-                val params = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                val params = FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                 params.gravity = Gravity.START
 
+                messageRoot.layoutParams = params
 
 
 

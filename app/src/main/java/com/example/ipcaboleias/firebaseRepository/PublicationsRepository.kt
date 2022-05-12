@@ -1,6 +1,7 @@
 package com.example.ipcaboleias.firebaseRepository
 
 import android.content.Context
+import android.util.Log
 import com.example.ipcaboleias.NewPublicationAsDriver
 import com.example.ipcaboleias.NewPublicationAsPassenger
 import com.example.ipcaboleias.firebaseRepository.Callbacks.GetPublicationsCallback
@@ -167,4 +168,75 @@ class PublicationsRepository(private val context: Context) {
                 onComplete(true)
             }
     }
+
+    fun reserveRide(
+        date: String,
+        time: String,
+        uid: String,
+        onComplete: (checker: Boolean) -> Unit
+    ) {
+        val db = Firebase.firestore
+        val currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+
+        if (currentUser == uid)
+            onComplete(false)
+        else {
+
+            var doc = db.collection("publications")
+                .whereEqualTo("uid", uid)
+                .whereEqualTo("date", date)
+                .whereEqualTo("time", time)
+                .get()
+                .addOnSuccessListener {
+                    for (doc in it) {
+                        db.collection("users")
+                            .document(uid)
+                            .collection("reserves")
+                            .document(doc.id)
+                            .set(mapOf("uid" to currentUser, "approved" to false))
+
+                        db.collection("users")
+                            .document(currentUser)
+                            .collection("requests")
+                            .document(doc.id)
+                            .set(mapOf("uid" to currentUser, "approved" to false))
+
+                        onComplete(true)
+                    }
+                }
+        }
+    }
+
+    fun addReservesListener(onListen: (MutableList<String>) -> Unit) {
+        val db = Firebase.firestore
+        val uid = FirebaseAuth.getInstance().currentUser!!.uid
+
+        db.collection("users")
+            .document(uid)
+            .collection("reserves")
+            .whereEqualTo("approved", false)
+            .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                if (firebaseFirestoreException != null) {
+                    Log.e("FIRESTORE", "reserves error.", firebaseFirestoreException)
+                    return@addSnapshotListener
+                }
+
+                val requests = mutableListOf<String>()
+                val rides = mutableListOf<Ride>()
+
+                querySnapshot!!.documents.forEach {
+//                    db.collection("publications")
+//                        .document(it.id)
+//                        .get()
+//                        .addOnSuccessListener { ride ->
+//                            rides.add(ride.toObject(Ride::class.java)!!)
+//                        }
+                    requests.add(it["uid"].toString())
+                }
+                onListen(requests)
+            }
+
+    }
+
+
 }

@@ -65,12 +65,6 @@ class RidesFragment : Fragment(R.layout.fragment_rides) {
 
                 for (ride in it) {
                     usersRepo.getUser(ride.uid) { user ->
-//                        ride.name = user.name
-//                        ride.email = user.email
-//                        ride.profilePicture = user.profilePicture!!
-//                        ride.car = "${user.carBrand} ${user.carModel}"
-//                        ride.carColor = user.carColor!!
-
                         publications.add(
                             newRidePresentationObject(
                                 ride,
