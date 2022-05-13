@@ -94,7 +94,10 @@ class RidesActivity : AppCompatActivity() {
 
             } else if (it.itemId == R.id.miPedidosAtivos) {
                 supportFragmentManager.beginTransaction().replace(R.id.frameFragment, MyActiveRidesFragmentFragment.newInstance()).commit()
-            } else if(it.itemId == R.id.miHistorico){
+            }else if (it.itemId == R.id.miRequests){
+                supportFragmentManager.beginTransaction().replace(R.id.frameFragment, PendingRequestsFragment.newInstance()).commit()
+            }
+            else if(it.itemId == R.id.miHistorico){
                 supportFragmentManager.beginTransaction().replace(R.id.frameFragment, MyRidesFragment.newInstance()).commit()
             }
 

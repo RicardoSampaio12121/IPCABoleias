@@ -2,6 +2,7 @@ package com.example.ipcaboleias.firebaseRepository
 
 import android.content.Context
 import android.widget.Toast
+import com.example.ipcaboleias.Reserve
 import com.example.ipcaboleias.chat.ChatChannel
 import com.example.ipcaboleias.firebaseRepository.Callbacks.ChatChannelIdCallBack
 import com.example.ipcaboleias.firebaseRepository.Callbacks.UserCallback
@@ -204,6 +205,31 @@ class UsersRepository(private val context: Context) {
                     .set(mapOf("channelId" to newChannel.id))
 
                 onComplete(newChannel.id)
+            }
+    }
+
+    fun getReservesToBeApproved(onComplete: (reserves: List<Reserve>) -> Unit) {
+        val db = Firebase.firestore
+        val currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+
+        val output: MutableList<Reserve> = ArrayList()
+
+        db.collection("users")
+            .document(currentUser)
+            .collection("reserves")
+            .whereEqualTo("approved", false)
+            .get()
+            .addOnSuccessListener {
+                for (doc in it) {
+                    output.add(
+                        Reserve(
+                            doc.id,
+                            doc["approved"].toString().toBoolean(),
+                            doc["uid"].toString()
+                        )
+                    )
+                }
+                onComplete(output)
             }
     }
 }

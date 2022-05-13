@@ -22,7 +22,6 @@ class RVmyRidesAdapter(var rides: MutableList<Ride>) : RecyclerView.Adapter<RVmy
     inner class ToDoViewHolder(val binding: ItemMyRideBinding) : RecyclerView.ViewHolder(binding.root){
         init {
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ToDoViewHolder {

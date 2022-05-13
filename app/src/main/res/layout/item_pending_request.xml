@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/circleImageView"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/ic_baseline_face"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nome Sobrenome"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toEndOf="@+id/circleImageView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvRole"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Aluno/Docente do IPCA"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@+id/circleImageView"
+        app:layout_constraintTop_toBottomOf="@+id/tvName" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/appCompatImageView6"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_baseline_place"
+        app:layout_constraintEnd_toEndOf="@+id/circleImageView"
+        app:layout_constraintStart_toStartOf="@+id/circleImageView"
+        app:layout_constraintTop_toBottomOf="@+id/circleImageView" />
+
+    <TextView
+        android:id="@+id/tvFrom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Avenida 25 de Abril, Póvoa de Lanhoso, Braga"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/appCompatImageView6"
+        app:layout_constraintStart_toEndOf="@+id/circleImageView"
+        app:layout_constraintTop_toBottomOf="@+id/circleImageView" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/appCompatImageView7"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_baseline_flag"
+        app:layout_constraintEnd_toEndOf="@+id/circleImageView"
+        app:layout_constraintStart_toStartOf="@+id/circleImageView"
+        app:layout_constraintTop_toBottomOf="@+id/appCompatImageView6" />
+
+    <TextView
+        android:id="@+id/tvTo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Avenida da Liberdade, Braga"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/appCompatImageView7"
+        app:layout_constraintStart_toStartOf="@+id/tvFrom"
+        app:layout_constraintTop_toBottomOf="@+id/appCompatImageView6" />
+
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="20 de Julho de 2022 às 12:30h"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/appCompatImageView7"
+        app:layout_constraintTop_toBottomOf="@+id/appCompatImageView7" />
+
+    <Button
+        android:id="@+id/btnAccept"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_marginEnd="10dp"
+        android:autoSizeTextType="uniform"
+        android:backgroundTint="@color/IpcaColor"
+        android:text="Aceitar"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="@+id/tvDate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvDate" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/btnChat"
+        android:layout_width="45dp"
+        android:layout_height="35dp"
+        android:src="@drawable/ic_chat_svgrepo_com"
+        android:backgroundTint="#00FF00"
+        app:layout_constraintBottom_toBottomOf="@+id/button"
+        app:layout_constraintEnd_toStartOf="@+id/btnAccept"
+        app:layout_constraintTop_toTopOf="@+id/btnAccept" />
+</androidx.constraintlayout.widget.ConstraintLayout>
