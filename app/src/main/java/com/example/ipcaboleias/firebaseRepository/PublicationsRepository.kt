@@ -235,7 +235,16 @@ class PublicationsRepository(private val context: Context) {
                 }
                 onListen(requests)
             }
+    }
 
+    fun addPassenger(docId: String, passengerId: String) {
+        val db = Firebase.firestore
+
+        db.collection("publications")
+            .document(docId)
+            .collection("passengers")
+            .document(passengerId)
+            .set(mapOf("uid" to passengerId))
     }
 
 

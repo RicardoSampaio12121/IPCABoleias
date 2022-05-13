@@ -7,16 +7,28 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ipcaboleias.databinding.ItemPendingRequestBinding
+import com.example.ipcaboleias.firebaseRepository.PublicationsRepository
+import com.example.ipcaboleias.firebaseRepository.UsersRepository
 import java.util.*
 
-class RVPendingRequestsAdapter(val reserves: MutableList<ReservePresentation>) :
+class RVPendingRequestsAdapter(
+    val reserves: MutableList<ReservePresentation>,
+    var acceptButtonClickListener: AcceptButtonClickListener
+) :
     RecyclerView.Adapter<RVPendingRequestsAdapter.ToDoViewHolder>() {
+
+    private lateinit var pubRepo: PublicationsRepository
+    private lateinit var usersRepo: UsersRepository
 
     inner class ToDoViewHolder(
         val binding: ItemPendingRequestBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
         init {
         }
+    }
+
+    interface AcceptButtonClickListener {
+        fun onAcceptButtonClickListener(position: Int)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ToDoViewHolder {
@@ -51,7 +63,7 @@ class RVPendingRequestsAdapter(val reserves: MutableList<ReservePresentation>) :
 
 
             btnAccept.setOnClickListener {
-
+                acceptButtonClickListener.onAcceptButtonClickListener(position)
             }
 
             btnChat.setOnClickListener {

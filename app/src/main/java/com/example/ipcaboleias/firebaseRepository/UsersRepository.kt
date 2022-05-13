@@ -232,4 +232,21 @@ class UsersRepository(private val context: Context) {
                 onComplete(output)
             }
     }
+
+    fun acceptPassenger(docId: String, passengerId: String) {
+        val db = Firebase.firestore
+        val currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+
+        db.collection("users")
+            .document(currentUser)
+            .collection("reserves")
+            .document(docId)
+            .delete()
+
+        db.collection("users")
+            .document(passengerId)
+            .collection("requests")
+            .document(docId)
+            .delete()
+    }
 }

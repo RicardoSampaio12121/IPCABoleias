@@ -1,6 +1,8 @@
 package com.example.ipcaboleias
 
 data class ReservePresentation(
+    var docId: String = "",
+    var passengerId: String = "",
     var name: String = "",
     var doc: Boolean = false,
     var startLat: Double = 0.0,

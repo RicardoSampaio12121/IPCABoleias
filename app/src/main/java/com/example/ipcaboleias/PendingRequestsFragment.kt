@@ -29,8 +29,6 @@ class PendingRequestsFragment : Fragment(R.layout.fragment_pending_requests) {
         usersRepo = UsersRepository(requireContext())
         pubRepo = PublicationsRepository(requireContext())
 
-        adapter = RVPendingRequestsAdapter(reservePresentations)
-
         binding.apply {
             usersRepo.getReservesToBeApproved {
                 var iterator = 0
@@ -40,7 +38,14 @@ class PendingRequestsFragment : Fragment(R.layout.fragment_pending_requests) {
                     iterator++
                     pubRepo.getPublicationById(doc.id) { ride ->
                         usersRepo.getUser(doc.uid) { user ->
-                            reservePresentations.add(newReservePresentation(user, ride))
+                            reservePresentations.add(
+                                newReservePresentation(
+                                    user,
+                                    ride,
+                                    doc.id,
+                                    doc.uid
+                                )
+                            )
 
                             if (iterator + 1 > it.size) {
                                 startRecyclerView()
@@ -52,8 +57,15 @@ class PendingRequestsFragment : Fragment(R.layout.fragment_pending_requests) {
         }
     }
 
-    private fun newReservePresentation(user: NewUser, ride: Ride): ReservePresentation {
+    private fun newReservePresentation(
+        user: NewUser,
+        ride: Ride,
+        docId: String,
+        passengerId: String
+    ): ReservePresentation {
         return ReservePresentation(
+            docId,
+            passengerId,
             "${user.name} ${user.surname}",
             ride.acceptDoc,
             ride.startLatitute,
@@ -70,8 +82,31 @@ class PendingRequestsFragment : Fragment(R.layout.fragment_pending_requests) {
         val rvPendingReserve = requireActivity().findViewById<RecyclerView>(R.id.rvPendingRequests)
 
         rvPendingReserve.layoutManager = LinearLayoutManager(activity)
-        adapter = RVPendingRequestsAdapter(reservePresentations)
+        adapter = RVPendingRequestsAdapter(
+            reservePresentations,
+            object : RVPendingRequestsAdapter.AcceptButtonClickListener {
+                override fun onAcceptButtonClickListener(position: Int) {
+                    pubRepo = PublicationsRepository(requireContext())
+                    usersRepo = UsersRepository(requireContext())
+
+                    println("Entra no button")
+
+                    pubRepo.addPassenger(
+                        reservePresentations[position].docId,
+                        reservePresentations[position].passengerId
+                    )
+                    usersRepo.acceptPassenger(
+                        reservePresentations[position].docId,
+                        reservePresentations[position].passengerId
+                    )
+
+                }
+            })
+
+
         rvPendingReserve.adapter = adapter
+
+
     }
 
 
