@@ -21,7 +21,6 @@ class PendingRequestsFragment : Fragment(R.layout.fragment_pending_requests) {
 
     private lateinit var pubRepo: PublicationsRepository
     private lateinit var usersRepo: UsersRepository
-    private lateinit var chatRepo: ChatRepository
     private lateinit var adapter: RVPendingRequestsAdapter
 
     private var reservePresentations: MutableList<ReservePresentation> = ArrayList()
@@ -31,7 +30,6 @@ class PendingRequestsFragment : Fragment(R.layout.fragment_pending_requests) {
         _binding = FragmentPendingRequestsBinding.bind(view)
         usersRepo = UsersRepository(requireContext())
         pubRepo = PublicationsRepository(requireContext())
-        chatRepo = ChatRepository()
 
         binding.apply {
             usersRepo.getReservesToBeApproved {

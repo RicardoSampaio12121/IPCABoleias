@@ -245,9 +245,15 @@ class PublicationsRepository(private val context: Context) {
             .collection("passengers")
             .document(passengerId)
             .set(mapOf("uid" to passengerId))
+
+        db.collection("users")
+            .document(passengerId)
+            .collection("scheduledRides")
+            .document(docId)
+            .set(mapOf("rideId" to docId))
     }
 
-    fun removeSeat(docId: String){
+    fun removeSeat(docId: String) {
         val db = Firebase.firestore
 
         db.collection("publications")
@@ -262,6 +268,33 @@ class PublicationsRepository(private val context: Context) {
             }
     }
 
+    fun getCurrentUserActiveRidesAsPassenger(onComplete: (output: MutableList<Ride>) -> Unit) {
+        val db = Firebase.firestore
+        val uid = FirebaseAuth.getInstance().currentUser!!.uid
 
+        val rides: MutableList<Ride> = ArrayList()
 
+        db.collection("users")
+            .document(uid)
+            .collection("scheduledRides")
+            .get()
+            .addOnSuccessListener {
+                val size = it.size()
+                var iterator = 0
+                println("Entra no onSuccessListener")
+                println("SizeF: $size")
+
+                for (doc in it) {
+                    iterator++
+                    println("Entra no for")
+                    getPublicationById(doc.id) { ride ->
+                        rides.add(ride)
+                        if (iterator + 1 > size) {
+                            println("Entra no if")
+                            onComplete(rides)
+                        }
+                    }
+                }
+            }
+    }
 }

@@ -90,19 +90,25 @@ class RidesActivity : AppCompatActivity() {
 
         navView.setNavigationItemSelectedListener {
             if (it.itemId == R.id.miBoleias) {
-                supportFragmentManager.beginTransaction().replace(R.id.frameFragment, RidesFragment.newInstance()).commit()
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.frameFragment, RidesFragment.newInstance()).commit()
 
             } else if (it.itemId == R.id.miPedidosAtivos) {
-                supportFragmentManager.beginTransaction().replace(R.id.frameFragment, MyActiveRidesFragmentFragment.newInstance()).commit()
-            }else if (it.itemId == R.id.miRequests){
-                supportFragmentManager.beginTransaction().replace(R.id.frameFragment, PendingRequestsFragment.newInstance()).commit()
-            }
-            else if(it.itemId == R.id.miHistorico){
-                supportFragmentManager.beginTransaction().replace(R.id.frameFragment, MyRidesFragment.newInstance()).commit()
-            }
-
-            else if (it.itemId == R.id.miChatChannels) {
-                supportFragmentManager.beginTransaction().replace(R.id.frameFragment, testFragment.newInstance()).commit()
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.frameFragment, MyActiveRidesFragmentFragment.newInstance())
+                    .commit()
+            } else if (it.itemId == R.id.miRequests) {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.frameFragment, PendingRequestsFragment.newInstance()).commit()
+            } else if (it.itemId == R.id.miBoleiasAgendadas) {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.frameFragment, ScheduledRidesFragment.newInstance()).commit()
+            } else if (it.itemId == R.id.miHistorico) {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.frameFragment, MyRidesFragment.newInstance()).commit()
+            } else if (it.itemId == R.id.miChatChannels) {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.frameFragment, testFragment.newInstance()).commit()
             }
             dLayout.closeDrawer(Gravity.LEFT)
             true
@@ -111,8 +117,9 @@ class RidesActivity : AppCompatActivity() {
         returnBtn.setOnClickListener {
             var fragToRemove = supportFragmentManager.findFragmentByTag(RIDES_DETAILS_FRAG_TAG)
 
-            if(fragToRemove == null){
-                fragToRemove = supportFragmentManager.findFragmentByTag(RIDES_DETAILS_Passenger_FRAG_TAG)
+            if (fragToRemove == null) {
+                fragToRemove =
+                    supportFragmentManager.findFragmentByTag(RIDES_DETAILS_Passenger_FRAG_TAG)
             }
 //            val fragToShow = supportFragmentManager.findFragmentByTag(RIDES_FRAG_TAG)
 //

@@ -80,26 +80,42 @@
         app:layout_constraintStart_toStartOf="@+id/appCompatImageView7"
         app:layout_constraintTop_toBottomOf="@+id/appCompatImageView7" />
 
-    <Button
-        android:id="@+id/btnAccept"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:layout_marginEnd="10dp"
-        android:autoSizeTextType="uniform"
-        android:backgroundTint="@color/IpcaColor"
-        android:text="Aceitar"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="@+id/tvDate"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvDate" />
+    <View
+        android:id="@+id/view7"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDate" />
 
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/btnChat"
-        android:layout_width="45dp"
-        android:layout_height="35dp"
-        android:src="@drawable/ic_chat_svgrepo_com"
-        android:backgroundTint="#00FF00"
-        app:layout_constraintBottom_toBottomOf="@+id/btnAccept"
-        app:layout_constraintEnd_toStartOf="@+id/btnAccept"
-        app:layout_constraintTop_toTopOf="@+id/btnAccept" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view7" />
+
+    <TextView
+        android:id="@+id/textView27"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="Ver passageiros"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tvDate"
+        app:layout_constraintTop_toBottomOf="@+id/view7" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginEnd="20dp"
+        android:src="@drawable/ic_outline_navigate_next_24"
+        app:layout_constraintBottom_toBottomOf="@+id/textView27"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView27" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
