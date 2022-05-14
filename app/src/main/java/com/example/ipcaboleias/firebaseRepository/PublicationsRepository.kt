@@ -247,6 +247,21 @@ class PublicationsRepository(private val context: Context) {
             .set(mapOf("uid" to passengerId))
     }
 
+    fun removeSeat(docId: String){
+        val db = Firebase.firestore
+
+        db.collection("publications")
+            .document(docId)
+            .get()
+            .addOnSuccessListener {
+                var newPlaces = it["places"].toString().toInt() - 1
+
+                db.collection("publications")
+                    .document(docId)
+                    .update(mapOf("places" to newPlaces))
+            }
+    }
+
 
 
 }

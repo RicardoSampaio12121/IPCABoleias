@@ -13,7 +13,8 @@ import java.util.*
 
 class RVPendingRequestsAdapter(
     val reserves: MutableList<ReservePresentation>,
-    var acceptButtonClickListener: AcceptButtonClickListener
+    var acceptButtonClickListener: AcceptButtonClickListener,
+    var chatButtonClickListener: ChatButtonClickListener
 ) :
     RecyclerView.Adapter<RVPendingRequestsAdapter.ToDoViewHolder>() {
 
@@ -29,6 +30,10 @@ class RVPendingRequestsAdapter(
 
     interface AcceptButtonClickListener {
         fun onAcceptButtonClickListener(position: Int)
+    }
+
+    interface ChatButtonClickListener {
+        fun onChatButtonClickListener(position: Int)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ToDoViewHolder {
@@ -67,7 +72,7 @@ class RVPendingRequestsAdapter(
             }
 
             btnChat.setOnClickListener {
-
+                chatButtonClickListener.onChatButtonClickListener(position)
             }
         }
     }

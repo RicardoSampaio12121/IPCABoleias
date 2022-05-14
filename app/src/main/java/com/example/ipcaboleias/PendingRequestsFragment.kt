@@ -1,5 +1,6 @@
 package com.example.ipcaboleias
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ipcaboleias.databinding.FragmentPendingRequestsBinding
+import com.example.ipcaboleias.firebaseRepository.ChatRepository
 import com.example.ipcaboleias.firebaseRepository.PublicationsRepository
 import com.example.ipcaboleias.firebaseRepository.UsersRepository
 import com.example.ipcaboleias.registration.NewUser
@@ -19,6 +21,7 @@ class PendingRequestsFragment : Fragment(R.layout.fragment_pending_requests) {
 
     private lateinit var pubRepo: PublicationsRepository
     private lateinit var usersRepo: UsersRepository
+    private lateinit var chatRepo: ChatRepository
     private lateinit var adapter: RVPendingRequestsAdapter
 
     private var reservePresentations: MutableList<ReservePresentation> = ArrayList()
@@ -28,6 +31,7 @@ class PendingRequestsFragment : Fragment(R.layout.fragment_pending_requests) {
         _binding = FragmentPendingRequestsBinding.bind(view)
         usersRepo = UsersRepository(requireContext())
         pubRepo = PublicationsRepository(requireContext())
+        chatRepo = ChatRepository()
 
         binding.apply {
             usersRepo.getReservesToBeApproved {
@@ -80,6 +84,7 @@ class PendingRequestsFragment : Fragment(R.layout.fragment_pending_requests) {
 
     private fun startRecyclerView() {
         val rvPendingReserve = requireActivity().findViewById<RecyclerView>(R.id.rvPendingRequests)
+        val supportFragmentManager = requireActivity().supportFragmentManager
 
         rvPendingReserve.layoutManager = LinearLayoutManager(activity)
         adapter = RVPendingRequestsAdapter(
@@ -89,17 +94,25 @@ class PendingRequestsFragment : Fragment(R.layout.fragment_pending_requests) {
                     pubRepo = PublicationsRepository(requireContext())
                     usersRepo = UsersRepository(requireContext())
 
-                    println("Entra no button")
-
                     pubRepo.addPassenger(
                         reservePresentations[position].docId,
                         reservePresentations[position].passengerId
                     )
+
+                    pubRepo.removeSeat(reservePresentations[position].docId)
+
                     usersRepo.acceptPassenger(
                         reservePresentations[position].docId,
                         reservePresentations[position].passengerId
                     )
-
+                }
+            }, object : RVPendingRequestsAdapter.ChatButtonClickListener {
+                override fun onChatButtonClickListener(position: Int) {
+                    usersRepo.getOrCreateChatChannel(reservePresentations[position].passengerId) {
+                        val intent = Intent(requireActivity(), ChatActivity::class.java)
+                        intent.putExtra("channelId", it)
+                        requireActivity().startActivity(intent)
+                    }
                 }
             })
 
