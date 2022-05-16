@@ -46,13 +46,13 @@ class MyActiveRidesFragmentFragment : Fragment(R.layout.fragment_my_active_rides
         myRides = ArrayList()
         myRidesIds = ArrayList()
 
-        adapter = RVmyActiveRidesAdapter(
-            myRides,
-            object : RVmyActiveRidesAdapter.OptionsMenuClickListener {
-                override fun onOptionsMenuClicked(position: Int) {
-                    menu(position)
-                }
-            })
+//        adapter = RVmyActiveRidesAdapter(
+//            myRides,
+//            object : RVmyActiveRidesAdapter.OptionsMenuClickListener {
+//                override fun onOptionsMenuClicked(position: Int) {
+//                    menu(position)
+//                }
+//            })
 
 
         binding.apply {
@@ -69,7 +69,6 @@ class MyActiveRidesFragmentFragment : Fragment(R.layout.fragment_my_active_rides
                         if (iterator + 1 > size) {
                             updateRecyclerView()
                         }
-
                     }
                 }
             }
@@ -80,6 +79,8 @@ class MyActiveRidesFragmentFragment : Fragment(R.layout.fragment_my_active_rides
         val rvMyActiveRides =
             requireActivity().findViewById<RecyclerView>(R.id.rvMyActivePublications)
 
+        val supportFragmentManager = requireActivity().supportFragmentManager
+
         rvMyActiveRides.layoutManager = LinearLayoutManager(activity)
 
         adapter = RVmyActiveRidesAdapter(
@@ -88,13 +89,19 @@ class MyActiveRidesFragmentFragment : Fragment(R.layout.fragment_my_active_rides
                 override fun onOptionsMenuClicked(position: Int) {
                     menu(position)
                 }
+            },
+            object : RVmyActiveRidesAdapter.SeePassengersClickListener {
+                override fun onSeePassengersClickListener(position: Int) {
+
+                    supportFragmentManager.beginTransaction().add(R.id.frameFragment, PassengersFragment.newInstance(myRidesIds[position])).commit()
+                }
             })
 
         rvMyActiveRides.adapter = adapter
 
         adapter.setOnItemClickListener(object : RVmyActiveRidesAdapter.onItemClickListener {
             override fun onItemClick(position: Int) {
-                var supportFragmentManager = requireActivity().supportFragmentManager
+                val supportFragmentManager = requireActivity().supportFragmentManager
 
                 usersRepo = UsersRepository(requireContext())
                 usersRepo.getCurrentUser {

@@ -281,19 +281,42 @@ class PublicationsRepository(private val context: Context) {
             .addOnSuccessListener {
                 val size = it.size()
                 var iterator = 0
-                println("Entra no onSuccessListener")
-                println("SizeF: $size")
 
                 for (doc in it) {
                     iterator++
-                    println("Entra no for")
                     getPublicationById(doc.id) { ride ->
                         rides.add(ride)
                         if (iterator + 1 > size) {
-                            println("Entra no if")
                             onComplete(rides)
                         }
                     }
+                }
+            }
+    }
+
+    fun getPublicationPassengersById(docId: String, onComplete: (output: MutableList<NewUser>) -> Unit){
+        val db = Firebase.firestore
+        val output: MutableList<NewUser> = ArrayList()
+
+        db.collection("publications")
+            .document(docId)
+            .collection("passengers")
+            .get()
+            .addOnSuccessListener { passengers ->
+                var iterator = 0
+                val size = passengers.size()
+
+                for(passenger in passengers){
+                    iterator++
+                    db.collection("users")
+                        .document(passenger.id)
+                        .get()
+                        .addOnSuccessListener { user ->
+                            output.add(user.toObject(NewUser::class.java)!!)
+                            if(iterator + 1 > size){
+                                onComplete(output)
+                            }
+                        }
                 }
             }
     }

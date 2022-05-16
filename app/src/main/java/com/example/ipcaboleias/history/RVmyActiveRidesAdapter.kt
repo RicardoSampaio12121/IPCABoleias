@@ -19,7 +19,8 @@ import java.util.*
 
 class RVmyActiveRidesAdapter(
     var rides: MutableList<Ride>,
-    var optionsMenuClickListener: OptionsMenuClickListener
+    var optionsMenuClickListener: OptionsMenuClickListener,
+    var seePassengersClickListener: SeePassengersClickListener
 ) :
     RecyclerView.Adapter<RVmyActiveRidesAdapter.ToDoViewHolder>() {
 
@@ -35,6 +36,10 @@ class RVmyActiveRidesAdapter(
 
     interface OptionsMenuClickListener {
         fun onOptionsMenuClicked(position: Int)
+    }
+
+    interface SeePassengersClickListener {
+        fun onSeePassengersClickListener(position: Int)
     }
 
     inner class ToDoViewHolder(
@@ -103,6 +108,10 @@ class RVmyActiveRidesAdapter(
 
             textViewOptions.setOnClickListener {
                 optionsMenuClickListener.onOptionsMenuClicked(position)
+            }
+
+            view8.setOnClickListener {
+                seePassengersClickListener.onSeePassengersClickListener(position)
             }
 
         }
