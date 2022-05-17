@@ -18,9 +18,6 @@ class RVPendingRequestsAdapter(
 ) :
     RecyclerView.Adapter<RVPendingRequestsAdapter.ToDoViewHolder>() {
 
-    private lateinit var pubRepo: PublicationsRepository
-    private lateinit var usersRepo: UsersRepository
-
     inner class ToDoViewHolder(
         val binding: ItemPendingRequestBinding,
     ) : RecyclerView.ViewHolder(binding.root) {

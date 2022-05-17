@@ -1,5 +1,6 @@
 package com.example.ipcaboleias
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ipcaboleias.databinding.FragmentPassengersBinding
 import com.example.ipcaboleias.firebaseRepository.PublicationsRepository
+import com.example.ipcaboleias.firebaseRepository.User
 import com.example.ipcaboleias.firebaseRepository.UsersRepository
 import com.example.ipcaboleias.registration.NewUser
 
@@ -22,9 +24,10 @@ class PassengersFragment : Fragment(R.layout.fragment_passengers) {
     private var _id: String? = null
 
     private lateinit var pubRepo: PublicationsRepository
+    private lateinit var usersRepo: UsersRepository
     private lateinit var adapter: RVPassengersAdapter
 
-    private val passengers: MutableList<NewUser> = ArrayList()
+    private val passengers: MutableList<User> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,17 +38,18 @@ class PassengersFragment : Fragment(R.layout.fragment_passengers) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        startAdapter()
+
         _binding = FragmentPassengersBinding.bind(view)
         pubRepo = PublicationsRepository(requireContext())
         val supportFragmentManager = requireActivity().supportFragmentManager
 
         binding.apply {
             pubRepo.getPublicationPassengersById(_id!!) {
-                for (p in it) {
-                    passengers.add(p)
-                }
+                passengers.add(it)
 
-                startAdapter()
+                adapter.notifyItemInserted(passengers.size - 1)
             }
 
             returnButton.setOnClickListener {
@@ -56,9 +60,19 @@ class PassengersFragment : Fragment(R.layout.fragment_passengers) {
 
     private fun startAdapter() {
         val RVPassengers = requireActivity().findViewById<RecyclerView>(R.id.RVPassengers)
+        usersRepo = UsersRepository(requireContext())
 
         RVPassengers.layoutManager = LinearLayoutManager(activity)
-        adapter = RVPassengersAdapter(passengers)
+        adapter = RVPassengersAdapter(passengers, object: RVPassengersAdapter.ChatButtonClickListener{
+            override fun onChatButtonClickListener(position: Int) {
+                usersRepo.getOrCreateChatChannel(passengers[position].uid) {
+                    val intent = Intent(requireActivity(), ChatActivity::class.java)
+                    intent.putExtra("channelId", it)
+                    requireActivity().startActivity(intent)
+                }
+
+            }
+        })
         RVPassengers.adapter = adapter
     }
 

@@ -294,28 +294,23 @@ class PublicationsRepository(private val context: Context) {
             }
     }
 
-    fun getPublicationPassengersById(docId: String, onComplete: (output: MutableList<NewUser>) -> Unit){
+    fun getPublicationPassengersById(docId: String, onComplete: (output: User) -> Unit){
         val db = Firebase.firestore
-        val output: MutableList<NewUser> = ArrayList()
 
         db.collection("publications")
             .document(docId)
             .collection("passengers")
             .get()
             .addOnSuccessListener { passengers ->
-                var iterator = 0
-                val size = passengers.size()
-
                 for(passenger in passengers){
-                    iterator++
                     db.collection("users")
                         .document(passenger.id)
                         .get()
                         .addOnSuccessListener { user ->
-                            output.add(user.toObject(NewUser::class.java)!!)
-                            if(iterator + 1 > size){
-                                onComplete(output)
-                            }
+                            var u = user.toObject(User::class.java)!!
+                            u.uid = user.id
+
+                            onComplete(u)
                         }
                 }
             }

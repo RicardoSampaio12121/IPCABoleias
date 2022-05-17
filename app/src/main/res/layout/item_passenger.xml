@@ -2,6 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
+    android:layout_marginBottom="5dp"
+    android:padding="10dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -9,6 +12,7 @@
         android:id="@+id/framePerson"
         android:layout_width="75dp"
         android:layout_height="75dp"
+        android:layout_marginBottom="5dp"
         android:src="@drawable/ic_baseline_face"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -31,5 +35,15 @@
         android:text="Docente do IPCA"
         app:layout_constraintStart_toEndOf="@+id/framePerson"
         app:layout_constraintTop_toBottomOf="@+id/txtNamePerson" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/btnChat"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:backgroundTint="@color/white"
+        android:src="@drawable/ic_chat_svgrepo_com"
+        app:layout_constraintBottom_toBottomOf="@+id/framePerson"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/framePerson" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

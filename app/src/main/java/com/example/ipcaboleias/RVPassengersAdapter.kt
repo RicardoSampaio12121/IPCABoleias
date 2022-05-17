@@ -8,10 +8,11 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ipcaboleias.databinding.ItemPassengerBinding
 import com.example.ipcaboleias.registration.NewUser
+import com.google.firebase.firestore.auth.User
 import java.util.*
 import java.util.regex.Pattern
 
-class RVPassengersAdapter(val passengers: MutableList<NewUser>) :
+class RVPassengersAdapter(val passengers: MutableList<com.example.ipcaboleias.firebaseRepository.User>, val chatButtonClickListener: ChatButtonClickListener) :
     RecyclerView.Adapter<RVPassengersAdapter.ToDoViewHolder>() {
 
     inner class ToDoViewHolder(val binding: ItemPassengerBinding) :
@@ -19,6 +20,10 @@ class RVPassengersAdapter(val passengers: MutableList<NewUser>) :
         init {
 
         }
+    }
+
+    interface ChatButtonClickListener {
+        fun onChatButtonClickListener(position: Int)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ToDoViewHolder {
@@ -31,7 +36,7 @@ class RVPassengersAdapter(val passengers: MutableList<NewUser>) :
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: ToDoViewHolder, position: Int) {
         holder.binding.apply {
-            txtNamePerson.text = passengers[position].name
+            txtNamePerson.text = "${passengers[position].name} ${passengers[position].surname}"
 
             if (Pattern.matches("a[0-9]+@alunos.ipca.pt", passengers[position].email)) {
                 tvDocOrStu.text = "Aluno do IPCA"
@@ -44,6 +49,10 @@ class RVPassengersAdapter(val passengers: MutableList<NewUser>) :
             val bitMapPic = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
 
             framePerson.setImageBitmap(bitMapPic)
+
+            btnChat.setOnClickListener {
+                chatButtonClickListener.onChatButtonClickListener(position)
+            }
         }
     }
     override fun getItemCount(): Int {
