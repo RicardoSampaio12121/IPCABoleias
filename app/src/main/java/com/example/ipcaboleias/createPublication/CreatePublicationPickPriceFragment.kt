@@ -65,6 +65,7 @@ class CreatePublicationPickPriceFragment :
 
 
                 createPublicationAsDriver(newPub)
+                Toast.makeText(activity, "Boleia adicionada com sucesso", Toast.LENGTH_LONG).show()
 
                 closeFragments()
             }

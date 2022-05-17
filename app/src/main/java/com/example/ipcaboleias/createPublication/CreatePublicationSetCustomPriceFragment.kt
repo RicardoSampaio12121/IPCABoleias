@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import com.example.ipcaboleias.NewPublicationAsDriver
 import com.example.ipcaboleias.R
@@ -72,6 +73,7 @@ class CreatePublicationSetCustomPriceFragment :
                 newPub.price = model.getPrice()!!
 
                 createPublicationAsDriver(newPub)
+                Toast.makeText(activity, "Boleia adicionada com sucesso", Toast.LENGTH_LONG).show()
 
                 closeFragments()
 
