@@ -1,5 +1,9 @@
 package com.example.ipcaboleias.rides
 
+import com.google.firebase.Timestamp
+import java.sql.Date
+import java.sql.Time
+
 data class RidePresentation (
     val uid : String = "",
     var name : String = "",
@@ -7,8 +11,7 @@ data class RidePresentation (
     var car : String = "",
     var carColor : String = "",
     var profilePicture : String = "",
-    val date: String = "",
-    val time: String = "",
+    var date: Timestamp = Timestamp.now(),
     val startLatitude : Double = 0.0,
     val startLongitude : Double = 0.0,
     val endLatitude : Double = 0.0,

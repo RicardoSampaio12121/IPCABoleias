@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.ipcaboleias.ViewModels.PublicationDetailsViewModel
 import com.example.ipcaboleias.databinding.FragmentMyActiveRidesFragmentBinding
 import com.example.ipcaboleias.firebaseRepository.PublicationsRepository
+import com.example.ipcaboleias.firebaseRepository.RidesWithDocId
 import com.example.ipcaboleias.firebaseRepository.UsersRepository
 import com.example.ipcaboleias.history.RVmyActiveRidesAdapter
 import com.example.ipcaboleias.registration.NewUser
@@ -29,7 +30,7 @@ class MyActiveRidesFragmentFragment : Fragment(R.layout.fragment_my_active_rides
 
     private val model: PublicationDetailsViewModel by activityViewModels()
 
-    private lateinit var myRides: MutableList<Ride>
+    private lateinit var myRides: MutableList<RidesWithDocId>
     private lateinit var myRidesIds: MutableList<String>
 
     private lateinit var pubRepo: PublicationsRepository
@@ -61,12 +62,12 @@ class MyActiveRidesFragmentFragment : Fragment(R.layout.fragment_my_active_rides
                 var iterator = 0
 
                 for (id in it) {
-                    pubRepo.getPublicationById(id) { ride ->
+                    pubRepo.getPublicationByIdWithDocId(id) { ride ->
                         iterator++
                         myRides.add(ride)
-                        myRidesIds.add(id)
 
                         if (iterator + 1 > size) {
+                            myRides.sortBy { it.dateTime }
                             updateRecyclerView()
                         }
                     }
@@ -93,7 +94,10 @@ class MyActiveRidesFragmentFragment : Fragment(R.layout.fragment_my_active_rides
             object : RVmyActiveRidesAdapter.SeePassengersClickListener {
                 override fun onSeePassengersClickListener(position: Int) {
 
-                    supportFragmentManager.beginTransaction().add(R.id.frameFragment, PassengersFragment.newInstance(myRidesIds[position])).commit()
+                    supportFragmentManager.beginTransaction().add(
+                        R.id.frameFragment,
+                        PassengersFragment.newInstance(myRides[position].docId)
+                    ).commit()
                 }
             })
 
@@ -108,14 +112,13 @@ class MyActiveRidesFragmentFragment : Fragment(R.layout.fragment_my_active_rides
                     var ride = newRidePresentationObject(myRides[position], it)
                     model.setRide(ride)
 
-                    if(ride.type == "Passenger"){
+                    if (ride.type == "Passenger") {
                         supportFragmentManager.beginTransaction().add(
                             R.id.frameFragment,
                             RideDetailsPassengerFragment.newInstance(),
                             RIDES_DETAILS_PASSENGER_FRAG_TAG
                         ).commit()
-                    }
-                    else{
+                    } else {
                         supportFragmentManager.beginTransaction().add(
                             R.id.frameFragment,
                             RideDetailsFragment.newInstance(),
@@ -129,7 +132,7 @@ class MyActiveRidesFragmentFragment : Fragment(R.layout.fragment_my_active_rides
         })
     }
 
-    private fun newRidePresentationObject(ride: Ride, user: NewUser): RidePresentation {
+    private fun newRidePresentationObject(ride: RidesWithDocId, user: NewUser): RidePresentation {
         return RidePresentation(
             ride.uid,
             user.name,
@@ -137,8 +140,7 @@ class MyActiveRidesFragmentFragment : Fragment(R.layout.fragment_my_active_rides
             "${user.carBrand} ${user.carModel}",
             user.carColor!!,
             user.profilePicture!!,
-            ride.date,
-            ride.time,
+            ride.dateTime,
             ride.startLatitute,
             ride.startLongitude,
             ride.endLatitute,
@@ -171,15 +173,14 @@ class MyActiveRidesFragmentFragment : Fragment(R.layout.fragment_my_active_rides
 
                             supportFragmentManager.beginTransaction().add(
                                 R.id.frameFragment,
-                                EditPublicationFragment.newInstance(myRidesIds[position]),
+                                EditPublicationFragment.newInstance(myRides[position].docId),
                                 EDIT_PUB_FRAG_TAG
                             ).commit()
                         }
                     }
                     R.id.deactivate -> {
-                        pubRepo.deactivateRide(myRidesIds[position]) {
+                        pubRepo.deactivateRide(myRides[position].docId) {
                             adapter.removeItem(position)
-                            myRidesIds.removeAt(position)
                         }
                     }
                 }

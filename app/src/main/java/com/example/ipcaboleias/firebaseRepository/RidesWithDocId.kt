@@ -1,12 +1,9 @@
-package com.example.ipcaboleias.rides
+package com.example.ipcaboleias.firebaseRepository
 
 import com.google.firebase.Timestamp
-import java.sql.ClientInfoStatus
-import java.sql.Date
-import java.sql.Time
-import java.time.DateTimeException
 
-data class Ride (
+data class RidesWithDocId(
+    var docId: String = "",
     var uid: String = "",
     var startLatitute: Double = 0.0,
     var startLongitude: Double = 0.0,
@@ -22,4 +19,3 @@ data class Ride (
     var price: Float = 0.0f,
     var status: Boolean = false
 )
-

@@ -12,7 +12,9 @@ import com.example.ipcaboleias.databinding.ItemMyRideBinding
 import com.example.ipcaboleias.rides.Ride
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -35,12 +37,14 @@ class RVmyRidesAdapter(var rides: MutableList<Ride>) : RecyclerView.Adapter<RVmy
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: ToDoViewHolder, position: Int) {
         holder.binding.apply {
-            val data = LocalDate.parse(
-                rides[position].date,
-                DateTimeFormatter.ofPattern("dd-MM-yyyy")
-            )
+            val timestamp = rides[position].dateTime
+            val milliseconds = timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000
+            val localDateTime =
+                LocalDateTime.ofInstant(Instant.ofEpochMilli(milliseconds), ZoneId.systemDefault())
 
-            val d = Date.from(data.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant())
+            val localDate = localDateTime.toLocalDate()
+
+            val d = Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant())
             val local = Locale("pt", "BR")
             val format: DateFormat = SimpleDateFormat("dd 'de' MMMM 'de' yyyy", local)
 

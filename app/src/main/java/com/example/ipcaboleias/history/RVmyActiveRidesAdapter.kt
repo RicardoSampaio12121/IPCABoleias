@@ -9,16 +9,19 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ipcaboleias.databinding.ItemMyActiveRideBinding
+import com.example.ipcaboleias.firebaseRepository.RidesWithDocId
 import com.example.ipcaboleias.rides.Ride
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
 
 class RVmyActiveRidesAdapter(
-    var rides: MutableList<Ride>,
+    var rides: MutableList<RidesWithDocId>,
     var optionsMenuClickListener: OptionsMenuClickListener,
     var seePassengersClickListener: SeePassengersClickListener
 ) :
@@ -30,7 +33,7 @@ class RVmyActiveRidesAdapter(
         fun onItemClick(position: Int)
     }
 
-    fun setOnItemClickListener(listener: onItemClickListener){
+    fun setOnItemClickListener(listener: onItemClickListener) {
         mListener = listener
     }
 
@@ -70,23 +73,30 @@ class RVmyActiveRidesAdapter(
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: ToDoViewHolder, position: Int) {
         holder.binding.apply {
-            val data = LocalDate.parse(
-                rides[position].date,
-                DateTimeFormatter.ofPattern("dd-MM-yyyy")
-            )
 
-            val d = Date.from(data.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant())
+            val timestamp = rides[position].dateTime
+            val milliseconds = timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000
+            val localDateTime =
+                LocalDateTime.ofInstant(Instant.ofEpochMilli(milliseconds), ZoneId.systemDefault())
+
+            val localDate = localDateTime.toLocalDate()
+            val localTime = localDateTime.toLocalTime()
+
+            val d = Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant())
             val local = Locale("pt", "BR")
             val formato: DateFormat = SimpleDateFormat("dd 'de' MMMM 'de' yyyy", local)
 
-            txtDate.text = formato.format(d)
+            txtDate.text = "${formato.format(d)} às ${localTime.hour}:${localTime.minute} h"
 
-            val location = getLocation(txtDate.context, rides[position].startLatitute, rides[position].startLongitude)
+            val location = getLocation(
+                txtDate.context,
+                rides[position].startLatitute,
+                rides[position].startLongitude
+            )
 
-            if(location == null){
+            if (location == null) {
                 txtFrom.text = "null"
-            }
-            else{
+            } else {
                 txtFrom.text = location.getAddressLine(0)
             }
 
@@ -123,7 +133,7 @@ class RVmyActiveRidesAdapter(
 
         addresses = geocoder.getFromLocation(latitude, longitude, 1)
 
-        if(addresses.size == 0){
+        if (addresses.size == 0) {
             return null
         }
 

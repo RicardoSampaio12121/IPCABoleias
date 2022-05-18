@@ -1,16 +1,21 @@
 package com.example.ipcaboleias
 
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import com.example.ipcaboleias.ViewModels.PublicationDetailsViewModel
 import com.example.ipcaboleias.databinding.FragmentEditDateTimeBinding
 import com.example.ipcaboleias.dateTimePickers.DatePickerFragment
 import com.example.ipcaboleias.dateTimePickers.TimePickerFragment
 import com.example.ipcaboleias.firebaseRepository.PublicationsRepository
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
 
 private const val Id = "id"
 
@@ -32,16 +37,22 @@ class EditDateTimeFragment : Fragment(R.layout.fragment_edit_date_time) {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         _binding = FragmentEditDateTimeBinding.bind(view)
 
         val supportFragmentManager = requireActivity().supportFragmentManager
 
         binding.apply {
-
             val ride = model.getRide()
-            txtDate.text = ride.date
-            tvTime.text = ride.time
+
+            val timestamp = ride.date
+            val milliseconds = timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000
+            val localDateTime =
+                LocalDateTime.ofInstant(Instant.ofEpochMilli(milliseconds), ZoneId.systemDefault())
+
+            txtDate.text = "${localDateTime.dayOfMonth}/${localDateTime.month}/${localDateTime.year}"
+            tvTime.text = "${localDateTime.hour}:${localDateTime.minute}"
 
             returnButton.setOnClickListener {
                 supportFragmentManager.beginTransaction().remove(this@EditDateTimeFragment).commit()

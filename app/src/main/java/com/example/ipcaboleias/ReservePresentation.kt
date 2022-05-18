@@ -1,5 +1,7 @@
 package com.example.ipcaboleias
 
+import com.google.firebase.Timestamp
+
 data class ReservePresentation(
     var docId: String = "",
     var passengerId: String = "",
@@ -9,7 +11,6 @@ data class ReservePresentation(
     var startLong: Double = 0.0,
     var endLat: Double = 0.0,
     var endLong: Double = 0.0,
-    var date: String = "",
-    var time: String = "",
+    var date: Timestamp = Timestamp.now(),
     var profilePicture: String = ""
 )

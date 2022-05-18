@@ -1,5 +1,9 @@
 package com.example.ipcaboleias
 
+import com.google.firebase.Timestamp
+import java.sql.Date
+import java.sql.Time
+
 data class ScheduledRidePresentation(
     var driverId: String = "",
     var name: String = "",
@@ -8,7 +12,6 @@ data class ScheduledRidePresentation(
     var startLong: Double = 0.0,
     var endLat: Double = 0.0,
     var endLong: Double = 0.0,
-    var date: String = "",
-    var time: String = "",
+    var date: Timestamp = Timestamp.now(),
     var profilePicture: String = ""
 )

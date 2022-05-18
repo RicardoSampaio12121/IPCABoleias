@@ -1,17 +1,22 @@
 package com.example.ipcaboleias.createPublication
 
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import com.example.ipcaboleias.dateTimePickers.DatePickerFragment
 import com.example.ipcaboleias.R
 import com.example.ipcaboleias.ViewModels.NewPubViewModel
 import com.example.ipcaboleias.databinding.FragmentCreatePublicationPickDateBinding
+import java.sql.Date
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 
 class CreatePublicationPickDateFragment : Fragment(R.layout.fragment_create_publication_pick_date) {
-    private var _binding : FragmentCreatePublicationPickDateBinding? = null
+    private var _binding: FragmentCreatePublicationPickDateBinding? = null
     private val binding get() = _binding!!
 
     private val CREATE_PUB_PICK_DATE_FRAG_TAG = "createPubPickDateFragTag"
@@ -19,6 +24,7 @@ class CreatePublicationPickDateFragment : Fragment(R.layout.fragment_create_publ
 
     private val model: NewPubViewModel by activityViewModels()
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         _binding = FragmentCreatePublicationPickDateBinding.bind(view)
 
@@ -44,19 +50,26 @@ class CreatePublicationPickDateFragment : Fragment(R.layout.fragment_create_publ
             btnNext.setOnClickListener {
                 val supportFragmentManager = requireActivity().supportFragmentManager
 
+                val date = LocalDate.parse(
+                    tvDate.text.toString(),
+                    DateTimeFormatter.ofPattern("dd-MM-yyyy")
+                )
 
-                model.setDate(tvDate.text.toString())
+                model.setDate(date)
 
-                val fragToHide = supportFragmentManager.findFragmentByTag(CREATE_PUB_PICK_DATE_FRAG_TAG)
-                val fragToCall = supportFragmentManager.findFragmentByTag(CREATE_PUB_PICK_TIME_FRAG_TAG)
+                val fragToHide =
+                    supportFragmentManager.findFragmentByTag(CREATE_PUB_PICK_DATE_FRAG_TAG)
+                val fragToCall =
+                    supportFragmentManager.findFragmentByTag(CREATE_PUB_PICK_TIME_FRAG_TAG)
 
-                if(fragToCall != null){
+                if (fragToCall != null) {
                     supportFragmentManager.beginTransaction().show(fragToCall).commit()
-                }
-                else{
+                } else {
                     supportFragmentManager.beginTransaction().add(
                         R.id.frameLayoutFilter,
-                        CreatePublicationPickTimeFragment.newInstance(), CREATE_PUB_PICK_TIME_FRAG_TAG).commit()
+                        CreatePublicationPickTimeFragment.newInstance(),
+                        CREATE_PUB_PICK_TIME_FRAG_TAG
+                    ).commit()
                 }
 
                 supportFragmentManager.beginTransaction().hide(fragToHide!!).commit()

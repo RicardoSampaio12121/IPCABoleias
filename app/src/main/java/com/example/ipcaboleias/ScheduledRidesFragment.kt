@@ -65,8 +65,7 @@ class ScheduledRidesFragment : Fragment(R.layout.fragment_scheduled_rides) {
             ride.startLongitude,
             ride.endLatitute,
             ride.endLongitude,
-            ride.date,
-            ride.time,
+            ride.dateTime,
             user.profilePicture!!
         )
     }

@@ -1,6 +1,12 @@
 package com.example.ipcaboleias
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
+import java.sql.Time
+import java.time.LocalDate
+import java.time.LocalTime
+import java.util.*
 
 class NewPublicationAsPassenger {
     var uid : String = ""
@@ -8,8 +14,10 @@ class NewPublicationAsPassenger {
     var startLongitude : Double = 0.0
     var endLatitute : Double = 0.0
     var endLongitude : Double = 0.0
-    var date : String = ""
-    var time : String = ""
+    @RequiresApi(Build.VERSION_CODES.O)
+    var date : LocalDate = LocalDate.of(2000, 7, 24)
+    @RequiresApi(Build.VERSION_CODES.O)
+    var time : LocalTime = LocalTime.of(7,30)
     var type : String = ""
     var acceptDoc : Boolean = false
     var acceptAlunos : Boolean = false
@@ -22,8 +30,10 @@ class NewPublicationAsDriver {
     var startLongitude : Double = 0.0
     var endLatitute : Double = 0.0
     var endLongitude : Double = 0.0
-    var date : String = ""
-    var time : String = ""
+    @RequiresApi(Build.VERSION_CODES.O)
+    var date : LocalDate = LocalDate.of(2000, 7, 24)
+    @RequiresApi(Build.VERSION_CODES.O)
+    var time : LocalTime = LocalTime.of(7,30)
     var type : String = ""
     var places : Int = 1
     var description : String = ""

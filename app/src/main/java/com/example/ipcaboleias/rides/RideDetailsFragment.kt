@@ -28,7 +28,9 @@ import com.google.android.gms.location.GeofenceStatusCodes
 import java.io.Serializable
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -85,12 +87,14 @@ class RideDetailsFragment : Fragment(R.layout.fragment_ride_details) {
                 }
             }
 
-            val data = LocalDate.parse(
-                ride.date,
-                DateTimeFormatter.ofPattern("dd-MM-yyyy")
-            )
+            val timestamp = ride.date
+            val milliseconds = timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000
+            val localDateTime =
+                LocalDateTime.ofInstant(Instant.ofEpochMilli(milliseconds), ZoneId.systemDefault())
 
-            val d = Date.from(data.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant())
+            val localDate = localDateTime.toLocalDate()
+
+            val d = Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant())
             val local = Locale("pt", "BR")
             val formato: DateFormat = SimpleDateFormat("dd 'de' MMMM 'de' yyyy", local)
 
@@ -142,7 +146,9 @@ class RideDetailsFragment : Fragment(R.layout.fragment_ride_details) {
 
             buttonReserve.setOnClickListener {
                 pubRepo = PublicationsRepository(requireContext())
-                pubRepo.reserveRide(ride.date, ride.time, ride.uid) {
+
+
+                pubRepo.reserveRide(ride.date, ride.uid) {
                     if (it) {
                         Toast.makeText(
                             requireContext(),

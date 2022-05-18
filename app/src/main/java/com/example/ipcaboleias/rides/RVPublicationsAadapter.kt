@@ -13,7 +13,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.ipcaboleias.databinding.ItemPublicationV2Binding
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -108,12 +110,15 @@ class RVPublicationsAadapter(var publications: MutableList<RidePresentation>) :
             } else {
                 textFrom.text = location.getAddressLine(0)
             }
-            val data = LocalDate.parse(
-                publications[position].date,
-                DateTimeFormatter.ofPattern("dd-MM-yyyy")
-            )
 
-            val d = Date.from(data.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant())
+            val timestamp = publications[position].date
+            val milliseconds = timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000
+            val localDateTime =
+                LocalDateTime.ofInstant(Instant.ofEpochMilli(milliseconds), ZoneId.systemDefault())
+
+            val localDate = localDateTime.toLocalDate()
+
+            val d = Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant())
             val local = Locale("pt", "BR")
             val formato: DateFormat = SimpleDateFormat("dd 'de' MMMM 'de' yyyy", local)
 

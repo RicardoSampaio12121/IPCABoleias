@@ -2,6 +2,10 @@ package com.example.ipcaboleias.ViewModels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import java.sql.Date
+import java.sql.Time
+import java.time.LocalDate
+import java.time.LocalTime
 
 class NewPubViewModel : ViewModel() {
     val name = MutableLiveData<String>()
@@ -9,8 +13,8 @@ class NewPubViewModel : ViewModel() {
     val startLongitude = MutableLiveData<Double>()
     val endLatitute = MutableLiveData<Double>()
     val endLongitude = MutableLiveData<Double>()
-    val date = MutableLiveData<String>()
-    val time = MutableLiveData<String>()
+    val date = MutableLiveData<LocalDate>()
+    val time = MutableLiveData<LocalTime>()
     val type = MutableLiveData<PubType>()
     val description = MutableLiveData<String>()
     val nPassengers = MutableLiveData<Int?>()
@@ -54,17 +58,17 @@ class NewPubViewModel : ViewModel() {
         return endLongitude.value!!.toDouble()
     }
 
-    fun setDate(newDate: String){
+    fun setDate(newDate: LocalDate){
         date.value = newDate
     }
-    fun getDate() : String{
-        return date.value.toString()
+    fun getDate() : LocalDate{
+        return date.value!!
     }
 
-    fun getTime() : String{
-        return time.value.toString()
+    fun getTime() : LocalTime{
+        return time.value!!
     }
-    fun setTime(newTime: String){
+    fun setTime(newTime: LocalTime){
         time.value = newTime
     }
 

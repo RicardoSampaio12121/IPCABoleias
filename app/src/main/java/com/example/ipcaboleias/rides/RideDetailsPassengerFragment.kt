@@ -19,7 +19,9 @@ import com.example.ipcaboleias.databinding.FragmentRideDetailsPassengerBinding
 import com.example.ipcaboleias.firebaseRepository.UsersRepository
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -76,12 +78,15 @@ class RideDetailsPassengerFragment : Fragment(R.layout.fragment_ride_details_pas
                 }
             }
 
-            val data = LocalDate.parse(
-                ride.date,
-                DateTimeFormatter.ofPattern("dd-MM-yyyy")
-            )
+            val timestamp = ride.date
+            val milliseconds = timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000
+            val localDateTime =
+                LocalDateTime.ofInstant(Instant.ofEpochMilli(milliseconds), ZoneId.systemDefault())
 
-            val d = Date.from(data.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant())
+            val localDate = localDateTime.toLocalDate()
+
+
+            val d = Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant())
             val local = Locale("pt", "BR")
             val formato: DateFormat = SimpleDateFormat("dd 'de' MMMM 'de' yyyy", local)
 

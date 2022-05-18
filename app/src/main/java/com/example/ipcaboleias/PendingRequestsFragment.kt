@@ -74,8 +74,7 @@ class PendingRequestsFragment : Fragment(R.layout.fragment_pending_requests) {
             ride.startLongitude,
             ride.endLatitute,
             ride.endLongitude,
-            ride.date,
-            ride.time,
+            ride.dateTime,
             user.profilePicture!!
         )
     }

@@ -1,27 +1,36 @@
 package com.example.ipcaboleias.firebaseRepository
 
 import android.content.Context
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.example.ipcaboleias.NewPublicationAsDriver
 import com.example.ipcaboleias.NewPublicationAsPassenger
-import com.example.ipcaboleias.firebaseRepository.Callbacks.GetPublicationsCallback
 import com.example.ipcaboleias.firebaseRepository.Callbacks.NewPublicationCallback
-import com.example.ipcaboleias.registration.NewUser
 import com.example.ipcaboleias.rides.Ride
-import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.type.DateTime
+import java.sql.Date
+import java.sql.Time
+import java.sql.Time.valueOf
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZoneOffset
 
 
 class PublicationsRepository(private val context: Context) {
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun createPublicationAsDriver(
         publication: NewPublicationAsDriver,
         myCallback: NewPublicationCallback
     ) {
         val database = Firebase.firestore
+
+        val toInsert = PublicationAsDriverToPublicationDriverFirestore(publication)
 
         var uid = FirebaseAuth.getInstance().currentUser!!.uid
 
@@ -31,7 +40,7 @@ class PublicationsRepository(private val context: Context) {
             .collection("publications")
             .document()
 
-        newPub.set(publication)
+        newPub.set(toInsert)
 
         //Adicionar entrada de publicação no utilizador que a criou
         database.collection("users")
@@ -42,6 +51,7 @@ class PublicationsRepository(private val context: Context) {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun createPublicationAsPassenger(
         publication: NewPublicationAsPassenger,
         onComplete: (checker: Boolean) -> Unit
@@ -49,10 +59,13 @@ class PublicationsRepository(private val context: Context) {
         val database = Firebase.firestore
         val uid = FirebaseAuth.getInstance().currentUser!!.uid
 
+        val toInsert = PublicationAsPassengerToPublicationPassengerFirestore(publication)
+
+
         val newPub = database.collection("publications")
             .document()
 
-        newPub.set(publication)
+        newPub.set(toInsert)
 
         database.collection("users")
             .document(uid)
@@ -62,6 +75,54 @@ class PublicationsRepository(private val context: Context) {
 
         onComplete(true)
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun PublicationAsDriverToPublicationDriverFirestore(pub: NewPublicationAsDriver): NewPublicationDriverFirestore {
+
+        val dateTime = LocalDateTime.of(pub.date, pub.time)
+        val seconds = dateTime.atZone(ZoneId.systemDefault()).toEpochSecond()
+        val nanos = dateTime.nano
+
+        return NewPublicationDriverFirestore(
+            pub.uid,
+            pub.startLatitute,
+            pub.startLongitude,
+            pub.endLatitute,
+            pub.endLongitude,
+            Timestamp(seconds, nanos),
+            pub.type,
+            pub.places,
+            pub.description,
+            pub.uniqueDrive,
+            pub.acceptDoc,
+            pub.acceptAlunos,
+            pub.price,
+            pub.status
+        )
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun PublicationAsPassengerToPublicationPassengerFirestore(pub: NewPublicationAsPassenger): NewPublicationPassengerFirestore {
+
+        val dateTime = LocalDateTime.of(pub.date, pub.time)
+        val seconds = dateTime.atZone(ZoneId.systemDefault()).toEpochSecond()
+        val nanos = dateTime.nano
+
+        return NewPublicationPassengerFirestore(
+            pub.uid,
+            pub.startLatitute,
+            pub.startLongitude,
+            pub.endLatitute,
+            pub.endLongitude,
+            Timestamp(seconds, nanos),
+            pub.type,
+            pub.acceptDoc,
+            pub.acceptAlunos,
+            pub.status
+        )
+    }
+
+
 
 
 //    suspend fun getPublications(myCallback: GetPublicationsCallback) {
@@ -92,6 +153,19 @@ class PublicationsRepository(private val context: Context) {
                     list.add(document.toObject(Ride::class.java))
                 }
                 onComplete(list)
+            }
+    }
+
+    fun getPublicationByIdWithDocId(id: String, onComplete: (ride: RidesWithDocId) -> Unit){
+        val db = Firebase.firestore
+
+        db.collection("publications")
+            .document(id)
+            .get()
+            .addOnSuccessListener {
+                val r = it.toObject(RidesWithDocId::class.java)
+                r!!.docId = it.id
+                onComplete(r)
             }
     }
 
@@ -170,8 +244,7 @@ class PublicationsRepository(private val context: Context) {
     }
 
     fun reserveRide(
-        date: String,
-        time: String,
+        dateTime: Timestamp,
         uid: String,
         onComplete: (checker: Boolean) -> Unit
     ) {
@@ -184,8 +257,7 @@ class PublicationsRepository(private val context: Context) {
 
             var doc = db.collection("publications")
                 .whereEqualTo("uid", uid)
-                .whereEqualTo("date", date)
-                .whereEqualTo("time", time)
+                .whereEqualTo("dateTime", dateTime)
                 .get()
                 .addOnSuccessListener {
                     for (doc in it) {
@@ -294,7 +366,7 @@ class PublicationsRepository(private val context: Context) {
             }
     }
 
-    fun getPublicationPassengersById(docId: String, onComplete: (output: User) -> Unit){
+    fun getPublicationPassengersById(docId: String, onComplete: (output: User) -> Unit) {
         val db = Firebase.firestore
 
         db.collection("publications")
@@ -302,7 +374,7 @@ class PublicationsRepository(private val context: Context) {
             .collection("passengers")
             .get()
             .addOnSuccessListener { passengers ->
-                for(passenger in passengers){
+                for (passenger in passengers) {
                     db.collection("users")
                         .document(passenger.id)
                         .get()
