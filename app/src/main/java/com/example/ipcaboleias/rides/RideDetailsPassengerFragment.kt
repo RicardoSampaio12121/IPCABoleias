@@ -84,13 +84,11 @@ class RideDetailsPassengerFragment : Fragment(R.layout.fragment_ride_details_pas
                 LocalDateTime.ofInstant(Instant.ofEpochMilli(milliseconds), ZoneId.systemDefault())
 
             val localDate = localDateTime.toLocalDate()
+            val localTime = localDateTime.toLocalTime()
 
+            txtRideInfoTitle.text =
+                "${localDate.dayOfMonth} de ${localDate.month} de ${localDate.year} às ${localTime.hour}:${localTime.minute} h"
 
-            val d = Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant())
-            val local = Locale("pt", "BR")
-            val formato: DateFormat = SimpleDateFormat("dd 'de' MMMM 'de' yyyy", local)
-
-            txtRideInfoTitle.text = formato.format(d)
 
             if (ride.acceptAlunos && ride.acceptDoc) tvDispCh.text = "Todos"
             else if (ride.acceptAlunos && !ride.acceptDoc) tvDispCh.text = "Alunos"
@@ -116,6 +114,7 @@ class RideDetailsPassengerFragment : Fragment(R.layout.fragment_ride_details_pas
                 }
 
             }
+
 
         }
 

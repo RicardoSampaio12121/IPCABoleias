@@ -93,12 +93,11 @@ class RideDetailsFragment : Fragment(R.layout.fragment_ride_details) {
                 LocalDateTime.ofInstant(Instant.ofEpochMilli(milliseconds), ZoneId.systemDefault())
 
             val localDate = localDateTime.toLocalDate()
+            val localTime = localDateTime.toLocalTime()
 
-            val d = Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant())
-            val local = Locale("pt", "BR")
-            val formato: DateFormat = SimpleDateFormat("dd 'de' MMMM 'de' yyyy", local)
+            txtRideInfoTitle.text =
+                "${localDate.dayOfMonth} de ${localDate.month} de ${localDate.year} às ${localTime.hour}:${localTime.minute} h"
 
-            txtRideInfoTitle.text = formato.format(d)
 
 
             tvPrice.text = String.format("%.2f€", ride.price)

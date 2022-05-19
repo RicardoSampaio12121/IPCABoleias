@@ -130,10 +130,10 @@ class UsersRepository(private val context: Context) {
             }
     }
 
-    fun getCurrentUserActivePublicationsIds(onComplete: (publications: List<String>) -> Unit) {
+    fun getCurrentUserActivePublicationsIds(onComplete: (publications: List<UserPublications>) -> Unit) {
         val db = Firebase.firestore
         val uid = FirebaseAuth.getInstance().currentUser!!.uid
-        val publications: MutableList<String> = ArrayList()
+        val publications: MutableList<UserPublications> = ArrayList()
 
         db.collection("users")
             .document(uid)
@@ -142,8 +142,39 @@ class UsersRepository(private val context: Context) {
             .addOnSuccessListener {
                 for (doc in it) {
                     if (doc["status"] == true) {
-                        publications.add(doc.id)
+                        publications.add(
+                            UserPublications(
+                                doc.id,
+                                doc["status"].toString().toBoolean(),
+                                doc["type"].toString()
+                            )
+                        )
                     }
+                }
+                onComplete(publications)
+            }
+    }
+
+    fun getCurrentUserActivePublicationsAsDriverIds(onComplete: (publications: List<UserPublications>) -> Unit) {
+        val db = Firebase.firestore
+        val uid = FirebaseAuth.getInstance().currentUser!!.uid
+        val publications: MutableList<UserPublications> = ArrayList()
+
+        db.collection("users")
+            .document(uid)
+            .collection("publications")
+            .whereEqualTo("status", true)
+            .whereEqualTo("type", "Driver")
+            .get()
+            .addOnSuccessListener {
+                for (doc in it) {
+                    publications.add(
+                        UserPublications(
+                            doc.id,
+                            doc["status"].toString().toBoolean(),
+                            doc["type"].toString()
+                        )
+                    )
                 }
                 onComplete(publications)
             }

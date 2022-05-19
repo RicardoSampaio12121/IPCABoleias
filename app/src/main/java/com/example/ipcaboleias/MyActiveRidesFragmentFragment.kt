@@ -57,12 +57,12 @@ class MyActiveRidesFragmentFragment : Fragment(R.layout.fragment_my_active_rides
 
 
         binding.apply {
-            usersRepo.getCurrentUserActivePublicationsIds {
+            usersRepo.getCurrentUserActivePublicationsAsDriverIds {
                 val size = it.size
                 var iterator = 0
 
                 for (id in it) {
-                    pubRepo.getPublicationByIdWithDocId(id) { ride ->
+                    pubRepo.getPublicationByIdWithDocId(id.docId) { ride ->
                         iterator++
                         myRides.add(ride)
 

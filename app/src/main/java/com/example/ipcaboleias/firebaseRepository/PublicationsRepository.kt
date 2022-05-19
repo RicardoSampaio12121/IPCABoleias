@@ -47,7 +47,7 @@ class PublicationsRepository(private val context: Context) {
             .document(uid)
             .collection("publications")
             .document(newPub.id)
-            .set(mapOf("status" to true))
+            .set(mapOf("status" to true, "type" to "Driver"))
 
     }
 
@@ -71,7 +71,7 @@ class PublicationsRepository(private val context: Context) {
             .document(uid)
             .collection("publications")
             .document(newPub.id)
-            .set(mapOf("status" to true))
+            .set(mapOf("status" to true, "type" to "Passenger"))
 
         onComplete(true)
     }
@@ -97,7 +97,8 @@ class PublicationsRepository(private val context: Context) {
             pub.acceptDoc,
             pub.acceptAlunos,
             pub.price,
-            pub.status
+            pub.status,
+            false
         )
     }
 
@@ -118,11 +119,10 @@ class PublicationsRepository(private val context: Context) {
             pub.type,
             pub.acceptDoc,
             pub.acceptAlunos,
-            pub.status
+            pub.status,
+            false
         )
     }
-
-
 
 
 //    suspend fun getPublications(myCallback: GetPublicationsCallback) {
@@ -147,6 +147,7 @@ class PublicationsRepository(private val context: Context) {
 
         db.collection("publications")
             .whereEqualTo("status", true)
+            .whereEqualTo("full", false)
             .get()
             .addOnSuccessListener {
                 for (document in it) {
@@ -156,7 +157,7 @@ class PublicationsRepository(private val context: Context) {
             }
     }
 
-    fun getPublicationByIdWithDocId(id: String, onComplete: (ride: RidesWithDocId) -> Unit){
+    fun getPublicationByIdWithDocId(id: String, onComplete: (ride: RidesWithDocId) -> Unit) {
         val db = Firebase.firestore
 
         db.collection("publications")
@@ -207,15 +208,14 @@ class PublicationsRepository(private val context: Context) {
 
     fun editDateTime(
         id: String,
-        date: String,
-        time: String,
+        date: Timestamp,
         onComplete: (checker: Boolean) -> Unit
     ) {
         val db = Firebase.firestore
 
         db.collection("publications")
             .document(id)
-            .update(mapOf("date" to date, "time" to time))
+            .update(mapOf("dateTime" to date))
             .addOnSuccessListener {
                 onComplete(true)
             }
@@ -334,9 +334,15 @@ class PublicationsRepository(private val context: Context) {
             .addOnSuccessListener {
                 var newPlaces = it["places"].toString().toInt() - 1
 
-                db.collection("publications")
-                    .document(docId)
-                    .update(mapOf("places" to newPlaces))
+                if (newPlaces == 0) {
+                    db.collection("publications")
+                        .document(docId)
+                        .update(mapOf("places" to newPlaces, "full" to true))
+                } else {
+                    db.collection("publications")
+                        .document(docId)
+                        .update(mapOf("places" to newPlaces))
+                }
             }
     }
 

@@ -20,6 +20,7 @@ data class NewPublicationDriverFirestore(
     var acceptDoc: Boolean,
     var acceptAlunos: Boolean,
     var price: Float,
-    var status: Boolean
+    var status: Boolean,
+    var full: Boolean
 )
 

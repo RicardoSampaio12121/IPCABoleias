@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import com.example.ipcaboleias.ViewModels.PublicationDetailsViewModel
@@ -13,9 +14,9 @@ import com.example.ipcaboleias.databinding.FragmentEditDateTimeBinding
 import com.example.ipcaboleias.dateTimePickers.DatePickerFragment
 import com.example.ipcaboleias.dateTimePickers.TimePickerFragment
 import com.example.ipcaboleias.firebaseRepository.PublicationsRepository
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
+import com.google.firebase.Timestamp
+import java.time.*
+import java.time.format.DateTimeFormatter
 
 private const val Id = "id"
 
@@ -51,7 +52,8 @@ class EditDateTimeFragment : Fragment(R.layout.fragment_edit_date_time) {
             val localDateTime =
                 LocalDateTime.ofInstant(Instant.ofEpochMilli(milliseconds), ZoneId.systemDefault())
 
-            txtDate.text = "${localDateTime.dayOfMonth}/${localDateTime.month}/${localDateTime.year}"
+            txtDate.text =
+                "${localDateTime.dayOfMonth}/${localDateTime.month}/${localDateTime.year}"
             tvTime.text = "${localDateTime.hour}:${localDateTime.minute}"
 
             returnButton.setOnClickListener {
@@ -91,8 +93,28 @@ class EditDateTimeFragment : Fragment(R.layout.fragment_edit_date_time) {
             btnSaveChanges.setOnClickListener {
                 pubRepo = PublicationsRepository(requireContext())
 
-                pubRepo.editDateTime(_id!!, txtDate.text.toString(), tvTime.text.toString()) {
+                val dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+                val timeFormatter = DateTimeFormatter.ofPattern("H:mm")
+                val date: LocalDate = LocalDate.parse(txtDate.text.toString(), dateFormatter)
+                val time: LocalTime = LocalTime.parse(tvTime.text.toString(), timeFormatter)
+                val dateTime: LocalDateTime = LocalDateTime.of(date, time)
+
+                val seconds = dateTime.atZone(ZoneId.systemDefault()).toEpochSecond()
+                val nanos = dateTime.nano
+
+                val timestamp = Timestamp(seconds, nanos)
+
+                ride.date = timestamp
+                model.setRide(ride)
+
+                pubRepo.editDateTime(_id!!, timestamp) {
                     if (it) {
+                        Toast.makeText(
+                            requireContext(),
+                            "Data editada com sucesso.",
+                            Toast.LENGTH_LONG
+                        ).show()
+
                         supportFragmentManager.beginTransaction().remove(this@EditDateTimeFragment)
                             .commit()
                     }

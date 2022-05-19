@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import com.example.ipcaboleias.ViewModels.PublicationDetailsViewModel
 import com.example.ipcaboleias.databinding.FragmentEditPlacesBinding
@@ -66,6 +67,12 @@ class EditPlacesFragment : Fragment(R.layout.fragment_edit_places) {
                 model.setRide(ride)
 
                 pubRepo.editPlaces(_id!!, ride.places) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Número de lugares editado com sucesso.",
+                        Toast.LENGTH_LONG
+                    ).show()
+
                     supportFragmentManager.beginTransaction().remove(this@EditPlacesFragment)
                         .commit()
                 }

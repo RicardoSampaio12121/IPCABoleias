@@ -16,5 +16,6 @@ data class NewPublicationPassengerFirestore(
     var type: String,
     var acceptDoc: Boolean,
     var acceptAlunos: Boolean,
-    var status: Boolean
+    var status: Boolean,
+    var full: Boolean
 )

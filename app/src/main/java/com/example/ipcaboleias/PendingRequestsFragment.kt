@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ipcaboleias.databinding.FragmentPendingRequestsBinding
@@ -102,6 +103,14 @@ class PendingRequestsFragment : Fragment(R.layout.fragment_pending_requests) {
                         reservePresentations[position].docId,
                         reservePresentations[position].passengerId
                     )
+
+                    adapter.removeItem(position)
+
+                    Toast.makeText(
+                        requireContext(),
+                        "Passageiro adicionado com sucesso",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }, object : RVPendingRequestsAdapter.ChatButtonClickListener {
                 override fun onChatButtonClickListener(position: Int) {

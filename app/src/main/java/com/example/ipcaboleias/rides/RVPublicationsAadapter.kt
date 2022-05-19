@@ -72,17 +72,14 @@ class RVPublicationsAadapter(var publications: MutableList<RidePresentation>) :
             txtName.text = publications[position].name
             textView2.text = publications[position].car
 
-            if (publications[position].price == 0.0f) {
+            if (publications[position].type == "Passenger") {
                 textMoney.text = ""
-            } else {
-                textMoney.text = String.format("%.2f€", publications[position].price)
-            }
-
-            if (publications[position].places == 0) {
                 textView4.text = ""
             } else {
+                textMoney.text = String.format("%.2f€", publications[position].price)
                 textView4.text = "${publications[position].places} lugares"
             }
+
 
             when (publications[position].endLatitude) {
                 41.536587 -> {
@@ -117,12 +114,10 @@ class RVPublicationsAadapter(var publications: MutableList<RidePresentation>) :
                 LocalDateTime.ofInstant(Instant.ofEpochMilli(milliseconds), ZoneId.systemDefault())
 
             val localDate = localDateTime.toLocalDate()
+            val localTime = localDateTime.toLocalTime()
 
-            val d = Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant())
-            val local = Locale("pt", "BR")
-            val formato: DateFormat = SimpleDateFormat("dd 'de' MMMM 'de' yyyy", local)
-
-            date.text = formato.format(d)
+            date.text =
+                "${localDate.dayOfMonth} de ${localDate.month} de ${localDate.year} às ${localTime.hour}:${localTime.minute} h"
 
             val byteArray: ByteArray =
                 Base64.getDecoder().decode(publications[position].profilePicture)
@@ -139,10 +134,9 @@ class RVPublicationsAadapter(var publications: MutableList<RidePresentation>) :
 
         addresses = geocoder.getFromLocation(latitude, longitude, 1)
 
-        if(addresses.size == 0){
+        if (addresses.size == 0) {
             return null
         }
-
         return addresses[0]
     }
 

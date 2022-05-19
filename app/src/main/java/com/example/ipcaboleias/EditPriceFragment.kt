@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import com.example.ipcaboleias.ViewModels.PublicationDetailsViewModel
 import com.example.ipcaboleias.databinding.FragmentEditPriceBinding
@@ -68,6 +69,12 @@ class EditPriceFragment : Fragment(R.layout.fragment_edit_price) {
                 pubRepo = PublicationsRepository(requireContext())
 
                 pubRepo.editPrice(_id!!, ride.price!!) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Preço editado com sucesso.",
+                        Toast.LENGTH_LONG
+                    ).show()
+
                     supportFragmentManager.beginTransaction().remove(this@EditPriceFragment)
                         .commit()
                 }
