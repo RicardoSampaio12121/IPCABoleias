@@ -4,8 +4,6 @@ import android.content.Context
 import android.widget.Toast
 import com.example.ipcaboleias.Reserve
 import com.example.ipcaboleias.chat.ChatChannel
-import com.example.ipcaboleias.firebaseRepository.Callbacks.ChatChannelIdCallBack
-import com.example.ipcaboleias.firebaseRepository.Callbacks.UserCallback
 import com.example.ipcaboleias.firebaseRepository.Callbacks.userLoginCallback
 import com.example.ipcaboleias.registration.NewUser
 import com.google.firebase.auth.FirebaseAuth
@@ -114,6 +112,21 @@ class UsersRepository(private val context: Context) {
             .get()
             .addOnSuccessListener {
                 onComplete(it.toObject(NewUser::class.java)!!)
+            }
+    }
+
+    fun getUserFromChatChannel(chatChannel: String, onComplete: (user: NewUser) -> Unit) {
+        val db = Firebase.firestore
+
+        db.collection("chatChannels")
+            .document(chatChannel)
+            .get()
+            .addOnSuccessListener {
+                val users = it["usersIds"] as List<*>
+
+                getUser(users[0].toString()) { returnUser ->
+                  onComplete(returnUser)
+                }
             }
     }
 

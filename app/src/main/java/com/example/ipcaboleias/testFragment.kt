@@ -10,12 +10,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ipcaboleias.chat.Channel
 import com.example.ipcaboleias.chat.RVChatChannelsAdapter
+import com.example.ipcaboleias.databinding.FragmentTestBinding
 import com.example.ipcaboleias.firebaseRepository.Callbacks.ChatChannelsIdsCallBack
 import com.example.ipcaboleias.firebaseRepository.ChatRepository
 import com.google.firebase.firestore.ListenerRegistration
 
 
-class testFragment : Fragment() {
+class testFragment : Fragment(R.layout.fragment_test) {
+
+    private var _binding: FragmentTestBinding? = null
+    private val binding get() = _binding!!
 
     private lateinit var chatChannelsListenerRegistration: ListenerRegistration
     private lateinit var adapter: RVChatChannelsAdapter
@@ -40,41 +44,11 @@ class testFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        _binding = FragmentTestBinding.bind(view)
 
-//        adapter.setOnItemClickListener(object : RVChatChannelsAdapter.onItemClickListener {
-//            override fun onItemClick(position: Int) {
-//                val intent = Intent(requireActivity(), ChatActivity::class.java)
-//                intent.putExtra("channelId", "EhqYQ8OCeGLd9p3aguZI")
-//                requireActivity().startActivity(intent)
-//            }
-//        })
+        binding.apply {
 
-
-//        chatRepo.GetChatChannels(requireContext(), object : ChatChannelsIdsCallBack {
-//            override fun onCallback(channels: MutableList<String>) {
-//                var list: MutableList<Channel> = ArrayList()
-//
-//                for (channel in channels) {
-//                    list.add(Channel(channel))
-//                }
-//
-//                val recyclerViewChannels =
-//                    requireActivity().findViewById<RecyclerView>(R.id.recyclerViewChannels)
-//
-//                recyclerViewChannels.layoutManager = LinearLayoutManager(requireContext())
-//                adapter = RVChatChannelsAdapter(list)
-//                recyclerViewChannels.adapter = adapter
-//
-//                adapter.setOnItemClickListener(object : RVChatChannelsAdapter.onItemClickListener {
-//                    override fun onItemClick(position: Int) {
-//                        val intent = Intent(requireActivity(), ChatActivity::class.java)
-//                        intent.putExtra("channelId", list[position].channelId)
-//                        requireActivity().startActivity(intent)
-//                    }
-//                })
-//
-//            }
-//        })
+        }
 
     }
 
