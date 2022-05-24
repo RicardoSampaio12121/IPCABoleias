@@ -26,7 +26,7 @@ class ChatActivity : AppCompatActivity() {
 
     private lateinit var channelId: String
     private lateinit var adapter: RVChatMessagesAdapter
-    private val chatRepo = ChatRepository()
+    private val chatRepo = ChatRepository(this)
     private val usersRepo = UsersRepository(this)
     private lateinit var messagesListenerRegistration: ListenerRegistration
 

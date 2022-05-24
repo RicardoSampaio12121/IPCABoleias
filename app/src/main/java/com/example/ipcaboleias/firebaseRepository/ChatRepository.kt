@@ -11,12 +11,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.nio.channels.Channels
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ChatRepository {
+class ChatRepository(private val context: Context) {
 
     fun SendMessage(message: TextMessage, channelId: String) {
         val db = Firebase.firestore
@@ -61,35 +62,34 @@ class ChatRepository {
 
     fun addChatChannelsListener(
         context: Context,
-        onListen: (MutableList<Channel>) -> Unit
+        onListen: (Channel) -> Unit
     ): ListenerRegistration {
         val db = Firebase.firestore
+        val usersRepo = UsersRepository(context)
 
         val userUid = FirebaseAuth.getInstance().currentUser!!.uid
 
         return db.collection("users")
             .document(userUid)
             .collection("engagedChatChannels")
-            .addSnapshotListener(){ querySnapshot, firebaseFirestoreException ->
-                if(firebaseFirestoreException != null){
+            .addSnapshotListener() { querySnapshot, firebaseFirestoreException ->
+                if (firebaseFirestoreException != null) {
                     Log.e("FIRESTORE", "ChatChannelsListener error.", firebaseFirestoreException)
                     return@addSnapshotListener
                 }
 
                 val channels = mutableListOf<Channel>()
-                querySnapshot!!.documents.forEach{
-                    channels.add(
-                        Channel(it["channelId"].toString())
-                    )
+                querySnapshot!!.documents.forEach {
+
+                    onListen(Channel(it["channelId"].toString()))
                     return@forEach
                 }
-                onListen(channels)
             }
     }
 
-    fun GetChatChannels(context: Context, myCallback: ChatChannelsIdsCallBack){
+    fun GetChatChannels(context: Context, myCallback: ChatChannelsIdsCallBack) {
         val db = Firebase.firestore
-        var channelsList : MutableList<String> = ArrayList()
+        var channelsList: MutableList<String> = ArrayList()
         val uid = FirebaseAuth.getInstance().currentUser!!.uid
 
         db.collection("users")
@@ -97,8 +97,8 @@ class ChatRepository {
             .collection("engagedChatChannels")
             .get()
             .addOnCompleteListener {
-                if(it.isSuccessful){
-                    for(document in it.result){
+                if (it.isSuccessful) {
+                    for (document in it.result) {
                         channelsList.add(document["channelId"].toString())
                     }
                     myCallback.onCallback(channelsList)

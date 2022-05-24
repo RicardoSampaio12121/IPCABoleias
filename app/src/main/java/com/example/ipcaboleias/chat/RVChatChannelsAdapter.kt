@@ -1,12 +1,18 @@
 package com.example.ipcaboleias.chat
 
+import android.graphics.BitmapFactory
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ipcaboleias.Utils.Utils
 import com.example.ipcaboleias.databinding.ItemChatChannelBinding
+import com.example.ipcaboleias.firebaseRepository.ChatChannelPresentation
 import com.example.ipcaboleias.rides.RVPublicationsAadapter
+import java.util.*
 
-class RVChatChannelsAdapter(var channels: MutableList<Channel>) :
+class RVChatChannelsAdapter(var channels: MutableList<ChatChannelPresentation>) :
     RecyclerView.Adapter<RVChatChannelsAdapter.ToDoViewHolder>() {
 
     private lateinit var mListener: onItemClickListener
@@ -38,9 +44,20 @@ class RVChatChannelsAdapter(var channels: MutableList<Channel>) :
         return ToDoViewHolder(binding, mListener)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: RVChatChannelsAdapter.ToDoViewHolder, position: Int) {
+        val utils = Utils()
+
         holder.binding.apply {
-            userId.text = channels[position].channelId
+            tvName.text = "${channels[position].name} ${channels[position].surname}"
+
+            if (utils.isStudent(channels[position].email)) {
+                tvRole.text = "Estudante do IPCA"
+            } else {
+                tvRole.text = "Docente do IPCA"
+            }
+
+            profilePic.setImageBitmap(utils.stringToBitMapPicture(channels[position].profilePicture))
         }
     }
 

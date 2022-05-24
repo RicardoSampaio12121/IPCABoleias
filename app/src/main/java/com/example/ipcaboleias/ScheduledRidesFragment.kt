@@ -29,25 +29,16 @@ class ScheduledRidesFragment : Fragment(R.layout.fragment_scheduled_rides) {
         pubRepo = PublicationsRepository(requireContext())
         usersRepo = UsersRepository(requireContext())
 
+        startAdapter()
+
         binding.apply {
             //Buscar as minhas boleias agendadas
 
-            pubRepo.getCurrentUserActiveRidesAsPassenger { rides ->
-                val size = rides.size
-                var iterator = 0
-                println("Entra no pubRepo")
-                println("Size: ${rides.size}")
-                for (ride in rides) {
-                    iterator++
-                    println("Entra no for")
-                    usersRepo.getUser(ride.uid) { user ->
-                        scheduledRidesPresentations.add(newScheduledRidePresentations(ride, user))
-
-                        if (iterator + 1 > size) {
-                            println("Entra no if")
-                            startAdapter()
-                        }
-                    }
+            pubRepo.getCurrentUserActiveRidesAsPassenger { ride ->
+                println("UID: " + ride.uid)
+                usersRepo.getUser(ride.uid) { user ->
+                    scheduledRidesPresentations.add((newScheduledRidePresentations(ride, user)))
+                    adapter.notifyItemInserted(scheduledRidesPresentations.size - 1)
                 }
             }
         }

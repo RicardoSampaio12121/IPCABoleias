@@ -14,6 +14,7 @@ class FilterResults : Fragment(R.layout.fragment_filter_results) {
 
     private var _binding: FragmentFilterResultsBinding? = null
     private val binding get() = _binding!!
+
     var FILTER_FRAG_TAG = "filterFragTag"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,15 +42,16 @@ class FilterResults : Fragment(R.layout.fragment_filter_results) {
                 val supportFragmentManager = requireActivity().supportFragmentManager
                 val fragment = supportFragmentManager.findFragmentByTag(FILTER_FRAG_TAG)
 
-                supportFragmentManager.beginTransaction().setCustomAnimations(
-                    R.anim.slide_in,
-                    R.anim.slide_out
-                ).hide(fragment!!).commit()
+//                supportFragmentManager.beginTransaction().setCustomAnimations(
+//                    R.anim.slide_in,
+//                    R.anim.slide_out
+//                ).hide(fragment!!).commit()
+
+                supportFragmentManager.beginTransaction().hide(this@FilterResults).commit()
             }
 
 
             viewCalendar.setOnClickListener{
-
                 val datePickerFragment = DatePickerFragment()
                 val supportFragmentManager = requireActivity().supportFragmentManager
 
@@ -63,6 +65,10 @@ class FilterResults : Fragment(R.layout.fragment_filter_results) {
                 }
 
                 datePickerFragment.show(supportFragmentManager, "DatePickerFragment")
+            }
+
+            SubmitButton.setOnClickListener {
+
             }
         }
 

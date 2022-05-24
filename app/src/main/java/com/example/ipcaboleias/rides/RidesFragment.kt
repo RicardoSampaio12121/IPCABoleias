@@ -30,6 +30,7 @@ class RidesFragment : Fragment(R.layout.fragment_rides) {
     private var _binding: FragmentRidesBinding? = null
     private val binding get() = _binding!!
     private lateinit var publications: MutableList<RidePresentation>
+    private lateinit var filteredPublications: MutableList<RidePresentation>
 
     private lateinit var adapter: RVPublicationsAadapter
     private val model: PublicationDetailsViewModel by activityViewModels()
@@ -72,8 +73,8 @@ class RidesFragment : Fragment(R.layout.fragment_rides) {
                             )
                         )
                         adapter.notifyItemInserted(publications.size - 1)
-
-                        updateRecyclerView()
+                        filteredPublications = publications
+                        updateRecyclerView(publications)
                     }
                 }
             }
@@ -103,20 +104,20 @@ class RidesFragment : Fragment(R.layout.fragment_rides) {
         )
     }
 
-    private fun updateRecyclerView() {
+    private fun updateRecyclerView(toInsert: MutableList<RidePresentation>) {
         val rvPublications = requireActivity().findViewById<RecyclerView>(R.id.rvPublications)
 
         rvPublications.layoutManager = LinearLayoutManager(activity)
-        adapter = RVPublicationsAadapter(publications)
+        adapter = RVPublicationsAadapter(toInsert)
         rvPublications.adapter = adapter
 
         adapter.setOnItemClickListener(object : RVPublicationsAadapter.onItemClickListener {
             override fun onItemClick(position: Int) {
-                model.setRide(publications[position])
+                model.setRide(toInsert[position])
 
                 val transaction = activity?.supportFragmentManager?.beginTransaction()
 
-                if (publications[position].type == "Passenger") {
+                if (toInsert[position].type == "Passenger") {
                     transaction?.add(
                         R.id.frameFragment,
                         RideDetailsPassengerFragment.newInstance(),

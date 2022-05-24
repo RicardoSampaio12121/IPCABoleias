@@ -18,7 +18,7 @@
                 <group android:checkableBehavior="single">
                     <item
                         android:id="@+id/miPedidosAtivos"
-                        android:title="Os meus pedidos ativos"
+                        android:title="As minhas boleias ativas"
                         android:icon="@drawable/ic_folder_svgrepo_com"
                         />
                     <item
@@ -30,6 +30,9 @@
                         android:title="Boleias agendadas"
                         android:icon="@drawable/ic_calendar_svgrepo_com"
                         />
+                    <item
+                        android:id="@+id/miPropostaBoleia"
+                        android:title="Propostas de boleias"/>
                     <item
                         android:id="@+id/miHistorico"
                         android:title="Historico de boleias"

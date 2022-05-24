@@ -346,27 +346,18 @@ class PublicationsRepository(private val context: Context) {
             }
     }
 
-    fun getCurrentUserActiveRidesAsPassenger(onComplete: (output: MutableList<Ride>) -> Unit) {
+    fun getCurrentUserActiveRidesAsPassenger(onComplete: (output: Ride) -> Unit) {
         val db = Firebase.firestore
         val uid = FirebaseAuth.getInstance().currentUser!!.uid
-
-        val rides: MutableList<Ride> = ArrayList()
 
         db.collection("users")
             .document(uid)
             .collection("scheduledRides")
             .get()
             .addOnSuccessListener {
-                val size = it.size()
-                var iterator = 0
-
-                for (doc in it) {
-                    iterator++
-                    getPublicationById(doc.id) { ride ->
-                        rides.add(ride)
-                        if (iterator + 1 > size) {
-                            onComplete(rides)
-                        }
+                it.documents.forEach { document ->
+                    getPublicationById(document.id){ ride ->
+                        onComplete(ride)
                     }
                 }
             }

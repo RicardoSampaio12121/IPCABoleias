@@ -45,18 +45,16 @@ class RVChatMessagesAdapter(var messages : MutableList<TextMessage>) : RecyclerV
                 params.gravity = Gravity.END
 
                 messageRoot.gravity = Gravity.START
-                messageRoot.setBackgroundColor(2)
-
+                //messageRoot.setBackgroundColor(R.color.purple_200)
             }
             else{
                 val params = FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                 params.gravity = Gravity.START
 
                 messageRoot.layoutParams = params
-
-
-
             }
+
+            textViewMessageTime.text = messages[position].time.toString()
         }
     }
 }

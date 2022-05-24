@@ -4,6 +4,7 @@ import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import com.example.ipcaboleias.dateTimePickers.DatePickerFragment
@@ -54,6 +55,16 @@ class CreatePublicationPickDateFragment : Fragment(R.layout.fragment_create_publ
                     tvDate.text.toString(),
                     DateTimeFormatter.ofPattern("dd-MM-yyyy")
                 )
+
+                if (date < LocalDate.now()) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Data tem de ser posterior à data atual.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    return@setOnClickListener
+                }
 
                 model.setDate(date)
 

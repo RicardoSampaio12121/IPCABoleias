@@ -3,11 +3,15 @@ package com.example.ipcaboleias
 import android.content.Context
 import android.location.Address
 import android.location.Geocoder
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ipcaboleias.Utils.Utils
 import com.example.ipcaboleias.databinding.ItemPendingRequestBinding
 import com.example.ipcaboleias.databinding.ItemScheduledRidesBinding
+import com.google.type.LatLng
 import java.util.*
 
 class RVScheduledRidesAdapter(val scheduledRidesPresentations: MutableList<ScheduledRidePresentation>) :
@@ -27,9 +31,11 @@ class RVScheduledRidesAdapter(val scheduledRidesPresentations: MutableList<Sched
         return ToDoViewHolder(binding)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: ToDoViewHolder, position: Int) {
         holder.binding.apply {
             val ride = scheduledRidesPresentations[position]
+            val utils = Utils()
 
             tvName.text = ride.name
 
@@ -46,11 +52,9 @@ class RVScheduledRidesAdapter(val scheduledRidesPresentations: MutableList<Sched
                 ride.startLong
             ).getAddressLine(0)
 
-            tvTo.text = getLocation(
-                tvDate.context,
-                ride.endLat,
-                ride.endLong
-            ).getAddressLine(0)
+            tvTo.text = utils.getIpcaCampus(ride.endLat)
+
+            circleImageView.setImageBitmap(utils.stringToBitMapPicture(ride.profilePicture))
         }
     }
 
