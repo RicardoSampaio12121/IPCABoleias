@@ -15,10 +15,12 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.ipcaboleias.firebaseRepository.UsersRepository
+import com.example.ipcaboleias.history.MyActiveRidesFragmentFragment
+import com.example.ipcaboleias.history.MyRidesFragment
+import com.example.ipcaboleias.history.ScheduledRidesFragment
 import com.example.ipcaboleias.rides.FilterResults
 import com.example.ipcaboleias.rides.RidesFragment
 import com.google.android.material.navigation.NavigationView
-import com.google.firebase.database.FirebaseDatabase
 import de.hdodenhof.circleimageview.CircleImageView
 import java.util.*
 

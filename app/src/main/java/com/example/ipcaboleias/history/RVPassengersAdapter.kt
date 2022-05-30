@@ -1,4 +1,4 @@
-package com.example.ipcaboleias
+package com.example.ipcaboleias.history
 
 import android.graphics.BitmapFactory
 import android.os.Build
@@ -7,8 +7,6 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ipcaboleias.databinding.ItemPassengerBinding
-import com.example.ipcaboleias.registration.NewUser
-import com.google.firebase.firestore.auth.User
 import java.util.*
 import java.util.regex.Pattern
 

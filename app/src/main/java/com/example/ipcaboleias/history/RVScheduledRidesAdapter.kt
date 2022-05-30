@@ -1,4 +1,4 @@
-package com.example.ipcaboleias
+package com.example.ipcaboleias.history
 
 import android.content.Context
 import android.location.Address
@@ -9,9 +9,7 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ipcaboleias.Utils.Utils
-import com.example.ipcaboleias.databinding.ItemPendingRequestBinding
 import com.example.ipcaboleias.databinding.ItemScheduledRidesBinding
-import com.google.type.LatLng
 import java.util.*
 
 class RVScheduledRidesAdapter(val scheduledRidesPresentations: MutableList<ScheduledRidePresentation>) :

@@ -1,4 +1,4 @@
-package com.example.ipcaboleias
+package com.example.ipcaboleias.history
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,21 +7,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import com.example.ipcaboleias.R
 import com.example.ipcaboleias.ViewModels.PublicationDetailsViewModel
-import com.example.ipcaboleias.databinding.FragmentEditPlacesBinding
+import com.example.ipcaboleias.databinding.FragmentEditPriceBinding
 import com.example.ipcaboleias.firebaseRepository.PublicationsRepository
 
 private const val Id = "id"
 
-class EditPlacesFragment : Fragment(R.layout.fragment_edit_places) {
-    private var _binding: FragmentEditPlacesBinding? = null
+class EditPriceFragment : Fragment(R.layout.fragment_edit_price) {
+    private var _binding: FragmentEditPriceBinding? = null
     private val binding get() = _binding!!
-
-    private var _id: String? = null
 
     private val model: PublicationDetailsViewModel by activityViewModels()
 
     private lateinit var pubRepo: PublicationsRepository
+
+    private var _id: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,48 +33,50 @@ class EditPlacesFragment : Fragment(R.layout.fragment_edit_places) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentEditPlacesBinding.bind(view)
+        _binding = FragmentEditPriceBinding.bind(view)
 
         val supportFragmentManager = requireActivity().supportFragmentManager
 
+
         binding.apply {
+
             var ride = model.getRide()
 
-            //TODO: BUG: Quando entro pela segunda vez, depois de ter guardado, aparece o número errado
+            val maxPrice = ride.price!! + 3
+            val minPrice = ride.price!! - 3
 
-            tvNumber.text = ride.places.toString()
+            tvNumber.text = String.format("%.2f", ride.price)
 
             returnButton.setOnClickListener {
-                supportFragmentManager.beginTransaction().remove(this@EditPlacesFragment).commit()
+                supportFragmentManager.beginTransaction().remove(this@EditPriceFragment).commit()
             }
 
             btnLess.setOnClickListener {
-                val places = tvNumber.text.toString().toInt()
-
-                if (places > 1)
-                    tvNumber.text = (places - 1).toString()
+                if (ride.price!! - 1 >= minPrice) {
+                    ride.price = ride.price!! - 1
+                    tvNumber.text = String.format("%.2f", ride.price)
+                }
             }
 
             btnMore.setOnClickListener {
-                val places = tvNumber.text.toString().toInt()
-
-                if (places < 4)
-                    tvNumber.text = (places + 1).toString()
+                if (ride.price!! + 1 <= maxPrice) {
+                    ride.price = ride.price!! + 1
+                    tvNumber.text = String.format("%.2f", ride.price)
+                }
             }
 
             btnSaveChanges.setOnClickListener {
-                pubRepo = PublicationsRepository(requireContext())
-                ride.places = tvNumber.text.toString().toInt()
                 model.setRide(ride)
+                pubRepo = PublicationsRepository(requireContext())
 
-                pubRepo.editPlaces(_id!!, ride.places) {
+                pubRepo.editPrice(_id!!, ride.price!!) {
                     Toast.makeText(
                         requireContext(),
-                        "Número de lugares editado com sucesso.",
+                        "Preço editado com sucesso.",
                         Toast.LENGTH_LONG
                     ).show()
 
-                    supportFragmentManager.beginTransaction().remove(this@EditPlacesFragment)
+                    supportFragmentManager.beginTransaction().remove(this@EditPriceFragment)
                         .commit()
                 }
 
@@ -82,10 +85,12 @@ class EditPlacesFragment : Fragment(R.layout.fragment_edit_places) {
 
     }
 
+
     companion object {
+
         @JvmStatic
         fun newInstance(id: String) =
-            EditPlacesFragment().apply {
+            EditPriceFragment().apply {
                 arguments = Bundle().apply {
                     putString(Id, id)
                 }

@@ -2,11 +2,13 @@ package com.example.ipcaboleias.createPublication
 
 import android.content.Intent
 import android.location.Location
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import com.example.ipcaboleias.NewPublicationAsDriver
 import com.example.ipcaboleias.R
@@ -33,6 +35,7 @@ class CreatePublicationPickPriceFragment :
 
     private val model: NewPubViewModel by activityViewModels()
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         _binding = FragmentCreatePublicationPickPriceBinding.bind(view)
 
@@ -62,6 +65,7 @@ class CreatePublicationPickPriceFragment :
                 newPub.acceptDoc = model.getAcceptDoc()
                 newPub.acceptAlunos = model.getAcceptAlunos()
                 newPub.price = model.getPrice()!!
+                newPub.stops = model.stops.value!!
 
 
                 createPublicationAsDriver(newPub)
@@ -111,8 +115,8 @@ class CreatePublicationPickPriceFragment :
         //return String.format("%.1f", (distanceInKm * 0.30f)).toFloat()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun createPublicationAsDriver(pub : NewPublicationAsDriver) {
-
         val repo = PublicationsRepository(requireContext())
         repo.createPublicationAsDriver(pub, object: NewPublicationCallback {
             override fun onCallback(success: Boolean) {

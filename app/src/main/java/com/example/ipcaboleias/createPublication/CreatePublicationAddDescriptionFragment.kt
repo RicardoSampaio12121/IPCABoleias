@@ -1,15 +1,12 @@
-package com.example.ipcaboleias
+package com.example.ipcaboleias.createPublication
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import com.example.ipcaboleias.R
 import com.example.ipcaboleias.ViewModels.NewPubViewModel
-import com.example.ipcaboleias.createPublication.CreatePublicationPickPriceFragment
 import com.example.ipcaboleias.databinding.FragmentCreatePublicationAddDescriptionBinding
-import com.example.ipcaboleias.databinding.FragmentCreatePublicationPickDateBinding
 
 
 class CreatePublicationAddDescriptionFragment : Fragment(R.layout.fragment_create_publication_add_description) {
@@ -49,7 +46,9 @@ class CreatePublicationAddDescriptionFragment : Fragment(R.layout.fragment_creat
                     supportFragmentManager.beginTransaction().show(fragToCall).commit()
                 }
                 else{
-                    supportFragmentManager.beginTransaction().add(R.id.frameLayoutFilter, CreatePublicationSetDefinitionsFragment.newInstance(), CREATE_PUB_SET_DEFINITIONS_FRAG_TAG).commit()
+                    supportFragmentManager.beginTransaction().add(
+                        R.id.frameLayoutFilter,
+                        CreatePublicationSetDefinitionsFragment.newInstance(), CREATE_PUB_SET_DEFINITIONS_FRAG_TAG).commit()
 
                 }
             }

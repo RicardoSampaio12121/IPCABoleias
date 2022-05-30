@@ -3,17 +3,10 @@ package com.example.ipcaboleias.createPublication
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import com.example.ipcaboleias.CreatePublicationAddDescriptionFragment
-import com.example.ipcaboleias.NewPublicationAsPassenger
 import com.example.ipcaboleias.R
 import com.example.ipcaboleias.ViewModels.NewPubViewModel
 import com.example.ipcaboleias.databinding.FragmentCreatePublicationPickPlacesBinding
-import com.example.ipcaboleias.firebaseRepository.Callbacks.NewPublicationCallback
-import com.example.ipcaboleias.firebaseRepository.PublicationsRepository
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 
 
 class CreatePublicationPickPlacesFragment :

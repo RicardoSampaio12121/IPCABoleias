@@ -1,4 +1,4 @@
-package com.example.ipcaboleias
+package com.example.ipcaboleias.history
 
 import android.content.Context
 import android.graphics.BitmapFactory
@@ -9,9 +9,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ipcaboleias.ReservePresentation
 import com.example.ipcaboleias.databinding.ItemPendingRequestBinding
-import com.example.ipcaboleias.firebaseRepository.PublicationsRepository
-import com.example.ipcaboleias.firebaseRepository.UsersRepository
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.time.Instant

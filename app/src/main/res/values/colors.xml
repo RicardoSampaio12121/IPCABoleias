@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="IpcaColor">#0F4F33</color>
     <color name="fieldColor">#f6f6f6</color>
+    <color name="blue">#0000FF</color>
 </resources>

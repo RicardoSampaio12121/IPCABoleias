@@ -2,6 +2,7 @@ package com.example.ipcaboleias.ViewModels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.ipcaboleias.createPublication.NewStop
 import java.sql.Date
 import java.sql.Time
 import java.time.LocalDate
@@ -22,6 +23,8 @@ class NewPubViewModel : ViewModel() {
     val acceptDoc = MutableLiveData<Boolean>()
     val acceptAlunos = MutableLiveData<Boolean>()
     val price = MutableLiveData<Float>()
+
+    val stops = MutableLiveData<MutableList<NewStop>>()
 
     fun setName(newName : String){
         name.value = newName

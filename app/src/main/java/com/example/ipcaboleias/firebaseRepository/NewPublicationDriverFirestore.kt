@@ -2,6 +2,7 @@ package com.example.ipcaboleias.firebaseRepository
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.example.ipcaboleias.createPublication.NewStop
 import com.google.firebase.Timestamp
 import java.time.LocalDate
 import java.time.LocalTime
@@ -21,6 +22,7 @@ data class NewPublicationDriverFirestore(
     var acceptAlunos: Boolean,
     var price: Float,
     var status: Boolean,
-    var full: Boolean
+    var full: Boolean,
+    var stops: MutableList<NewStop>
 )
 

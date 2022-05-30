@@ -1,5 +1,6 @@
 package com.example.ipcaboleias.createPublication
 
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -7,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import com.example.ipcaboleias.NewPublicationAsDriver
 import com.example.ipcaboleias.R
@@ -31,6 +33,7 @@ class CreatePublicationSetCustomPriceFragment :
 
     private val model: NewPubViewModel by activityViewModels()
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         _binding = FragmentCreatePublicationSetCustomPriceBinding.bind(view)
 
@@ -71,6 +74,7 @@ class CreatePublicationSetCustomPriceFragment :
                 newPub.acceptDoc = model.getAcceptDoc()
                 newPub.acceptAlunos = model.getAcceptAlunos()
                 newPub.price = model.getPrice()!!
+                newPub.stops = model.stops.value!!
 
                 createPublicationAsDriver(newPub)
                 Toast.makeText(activity, "Boleia adicionada com sucesso", Toast.LENGTH_LONG).show()
@@ -83,6 +87,7 @@ class CreatePublicationSetCustomPriceFragment :
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun createPublicationAsDriver(pub: NewPublicationAsDriver) {
 
         val repo = PublicationsRepository(requireContext())

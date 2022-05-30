@@ -1,4 +1,4 @@
-package com.example.ipcaboleias
+package com.example.ipcaboleias.history
 
 import android.os.Build
 import android.os.Bundle
@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
+import com.example.ipcaboleias.R
 import com.example.ipcaboleias.ViewModels.PublicationDetailsViewModel
 import com.example.ipcaboleias.databinding.FragmentEditDateTimeBinding
 import com.example.ipcaboleias.dateTimePickers.DatePickerFragment

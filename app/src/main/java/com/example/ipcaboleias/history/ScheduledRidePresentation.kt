@@ -1,4 +1,4 @@
-package com.example.ipcaboleias
+package com.example.ipcaboleias.history
 
 import com.google.firebase.Timestamp
 import java.sql.Date

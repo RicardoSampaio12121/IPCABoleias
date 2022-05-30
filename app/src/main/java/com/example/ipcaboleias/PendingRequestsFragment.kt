@@ -3,16 +3,14 @@ package com.example.ipcaboleias
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ipcaboleias.databinding.FragmentPendingRequestsBinding
-import com.example.ipcaboleias.firebaseRepository.ChatRepository
 import com.example.ipcaboleias.firebaseRepository.PublicationsRepository
 import com.example.ipcaboleias.firebaseRepository.UsersRepository
+import com.example.ipcaboleias.history.RVPendingRequestsAdapter
 import com.example.ipcaboleias.registration.NewUser
 import com.example.ipcaboleias.rides.Ride
 

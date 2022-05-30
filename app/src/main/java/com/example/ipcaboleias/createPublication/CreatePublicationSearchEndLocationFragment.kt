@@ -34,6 +34,7 @@ class CreatePublicationSearchEndLocationFragment :
 
     private val CREATE_PUB_SEARCH2_FRAG_TAG = "createPubSearch2FragTag"
     private val CREATE_PUB_PICK_DATE_FRAG_TAG = "createPubPickDateFragTag"
+    private val CREATE_PUB_ADD_STOP_FRAG_TAG = "createPubAddStopFragTag"
 
     private var latitude: Double = 0.0
     private var longitude: Double = 0.0
@@ -93,15 +94,15 @@ class CreatePublicationSearchEndLocationFragment :
                 val fragToHide =
                     supportFragmentManager.findFragmentByTag(CREATE_PUB_SEARCH2_FRAG_TAG)
                 val fragToCall =
-                    supportFragmentManager.findFragmentByTag(CREATE_PUB_PICK_DATE_FRAG_TAG)
+                    supportFragmentManager.findFragmentByTag(CREATE_PUB_ADD_STOP_FRAG_TAG)
 
                 if (fragToCall != null) {
                     supportFragmentManager.beginTransaction().show(fragToCall).commit()
                 } else {
                     supportFragmentManager.beginTransaction().add(
                         R.id.frameLayoutFilter,
-                        CreatePublicationPickDateFragment.newInstance(),
-                        CREATE_PUB_PICK_DATE_FRAG_TAG
+                        CreatePublicationAddStopsFragment.newInstance(),
+                        CREATE_PUB_ADD_STOP_FRAG_TAG
                     ).commit()
                 }
 

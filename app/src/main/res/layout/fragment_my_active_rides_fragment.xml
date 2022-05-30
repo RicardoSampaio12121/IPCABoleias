@@ -6,7 +6,7 @@
     android:background="#dcf0ee"
     android:clickable="true"
     android:focusable="true"
-    tools:context=".MyActiveRidesFragmentFragment">
+    tools:context=".history.MyActiveRidesFragmentFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvMyActivePublications"

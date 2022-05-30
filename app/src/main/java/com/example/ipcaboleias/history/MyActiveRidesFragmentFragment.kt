@@ -1,4 +1,4 @@
-package com.example.ipcaboleias
+package com.example.ipcaboleias.history
 
 import android.os.Bundle
 import android.view.*
@@ -8,14 +8,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ipcaboleias.history.PassengersFragment
+import com.example.ipcaboleias.R
 import com.example.ipcaboleias.ViewModels.PublicationDetailsViewModel
 import com.example.ipcaboleias.databinding.FragmentMyActiveRidesFragmentBinding
 import com.example.ipcaboleias.firebaseRepository.PublicationsRepository
 import com.example.ipcaboleias.firebaseRepository.RidesWithDocId
 import com.example.ipcaboleias.firebaseRepository.UsersRepository
-import com.example.ipcaboleias.history.RVmyActiveRidesAdapter
 import com.example.ipcaboleias.registration.NewUser
-import com.example.ipcaboleias.rides.Ride
 import com.example.ipcaboleias.rides.RideDetailsFragment
 import com.example.ipcaboleias.rides.RideDetailsPassengerFragment
 import com.example.ipcaboleias.rides.RidePresentation

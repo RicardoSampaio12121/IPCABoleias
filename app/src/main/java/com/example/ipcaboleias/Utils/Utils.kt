@@ -1,7 +1,10 @@
 package com.example.ipcaboleias.Utils
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.location.Address
+import android.location.Geocoder
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.ipcaboleias.registration.NewUser
@@ -63,5 +66,17 @@ class Utils {
             ride.uniqueDrive,
             ride.price
         )
+    }
+
+    fun getLocation(context: Context, latitude: Double, longitude: Double): Address? {
+        val addresses: MutableList<Address>
+        val geocoder = Geocoder(context, Locale.ENGLISH)
+
+        addresses = geocoder.getFromLocation(latitude, longitude, 1)
+
+        if (addresses.size == 0) {
+            return null
+        }
+        return addresses[0]
     }
 }

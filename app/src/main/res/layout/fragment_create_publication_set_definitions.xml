@@ -7,7 +7,7 @@
     android:focusable="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CreatePublicationSetDefinitionsFragment">
+    tools:context=".createPublication.CreatePublicationSetDefinitionsFragment">
 
     <TextView
         android:id="@+id/textView18"

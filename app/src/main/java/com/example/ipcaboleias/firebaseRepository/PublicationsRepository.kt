@@ -102,7 +102,8 @@ class PublicationsRepository(private val context: Context) {
             pub.acceptAlunos,
             pub.price,
             pub.status,
-            false
+            false,
+            pub.stops
         )
     }
 

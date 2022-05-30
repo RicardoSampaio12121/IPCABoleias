@@ -1,14 +1,11 @@
-package com.example.ipcaboleias
+package com.example.ipcaboleias.createPublication
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import com.example.ipcaboleias.R
 import com.example.ipcaboleias.ViewModels.NewPubViewModel
-import com.example.ipcaboleias.createPublication.CreatePublicationPickPriceFragment
-import com.example.ipcaboleias.databinding.FragmentCreatePublicationAddDescriptionBinding
 import com.example.ipcaboleias.databinding.FragmentCreatePublicationSetDefinitionsBinding
 
 class CreatePublicationSetDefinitionsFragment : Fragment(R.layout.fragment_create_publication_set_definitions) {

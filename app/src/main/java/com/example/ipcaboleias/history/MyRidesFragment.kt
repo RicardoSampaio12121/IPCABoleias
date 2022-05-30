@@ -1,17 +1,14 @@
-package com.example.ipcaboleias
+package com.example.ipcaboleias.history
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ipcaboleias.R
 import com.example.ipcaboleias.databinding.FragmentMyRidesBinding
 import com.example.ipcaboleias.firebaseRepository.PublicationsRepository
 import com.example.ipcaboleias.firebaseRepository.UsersRepository
-import com.example.ipcaboleias.history.RVmyActiveRidesAdapter
-import com.example.ipcaboleias.history.RVmyRidesAdapter
 import com.example.ipcaboleias.rides.Ride
 
 
