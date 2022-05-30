@@ -4,6 +4,9 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.example.ipcaboleias.registration.NewUser
+import com.example.ipcaboleias.rides.Ride
+import com.example.ipcaboleias.rides.RidePresentation
 import com.google.type.LatLng
 import java.util.*
 import java.util.regex.Pattern
@@ -21,7 +24,7 @@ class Utils {
         return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
     }
 
-    fun getIpcaCampus(endLat: Double): String{
+    fun getIpcaCampus(endLat: Double): String {
         when (endLat) {
             41.536587 -> {
                 return "IPCA Barcelos"
@@ -37,5 +40,28 @@ class Utils {
             }
         }
         return ""
+    }
+
+    fun newRidePresentationObject(ride: Ride, user: NewUser): RidePresentation {
+        return RidePresentation(
+            ride.uid,
+            user.name,
+            user.email,
+            "${user.carBrand} ${user.carModel}",
+            user.carColor!!,
+            user.profilePicture!!,
+            ride.dateTime,
+            ride.startLatitute,
+            ride.startLongitude,
+            ride.endLatitute,
+            ride.endLongitude,
+            ride.type,
+            ride.places,
+            ride.description,
+            ride.acceptAlunos,
+            ride.acceptDoc,
+            ride.uniqueDrive,
+            ride.price
+        )
     }
 }

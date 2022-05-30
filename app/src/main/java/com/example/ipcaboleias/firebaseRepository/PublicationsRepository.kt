@@ -6,8 +6,12 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.ipcaboleias.NewPublicationAsDriver
 import com.example.ipcaboleias.NewPublicationAsPassenger
+import com.example.ipcaboleias.Utils.Utils
+import com.example.ipcaboleias.ViewModels.FilterResultsViewModel
 import com.example.ipcaboleias.firebaseRepository.Callbacks.NewPublicationCallback
+import com.example.ipcaboleias.registration.NewUser
 import com.example.ipcaboleias.rides.Ride
+import com.example.ipcaboleias.rides.RidePresentation
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
@@ -356,7 +360,7 @@ class PublicationsRepository(private val context: Context) {
             .get()
             .addOnSuccessListener {
                 it.documents.forEach { document ->
-                    getPublicationById(document.id){ ride ->
+                    getPublicationById(document.id) { ride ->
                         onComplete(ride)
                     }
                 }
@@ -383,5 +387,78 @@ class PublicationsRepository(private val context: Context) {
                         }
                 }
             }
+    }
+
+    fun getFilteredPublications(
+        filter: FilterResultsViewModel,
+        onComplete: (output: RidePresentation) -> Unit
+    ) {
+        val db = Firebase.firestore
+        var type: String = "ALL"
+        var utils = Utils()
+
+
+        if (filter.seeDriversRides.value!! && !filter.seePassengersRides.value!!) type = "Driver"
+        if (!filter.seeDriversRides.value!! && filter.seePassengersRides.value!!) type = "Passenger"
+
+
+        println("Type: $type")
+
+        if (type != "ALL") {
+            db.collection("publications")
+                .whereEqualTo("status", true)
+                .whereEqualTo("full", false)
+                .whereEqualTo("type", type)
+                .whereEqualTo("acceptDoc", filter.acceptProfessors.value)
+                .whereEqualTo("acceptAlunos", filter.acceptStudents.value)
+                .orderBy("dateTime")
+                .get()
+                .addOnSuccessListener { pubs ->
+
+                    println("Size do resultado: ${pubs.size()}")
+
+                    pubs.forEach { pub ->
+                        val gotPub = pub.toObject(Ride::class.java)
+                        db.collection("users")
+                            .document(pub["uid"].toString())
+                            .get()
+                            .addOnSuccessListener { fUser ->
+                                val user = fUser.toObject(NewUser::class.java)
+                                onComplete(utils.newRidePresentationObject(gotPub, user!!))
+                            }
+                    }
+
+                }
+                .addOnFailureListener {
+                    println(it.localizedMessage)
+                }
+        } else {
+            db.collection("publications")
+                .whereEqualTo("status", true)
+                .whereEqualTo("full", false)
+                .whereEqualTo("acceptDoc", filter.acceptProfessors.value)
+                .whereEqualTo("acceptAlunos", filter.acceptStudents.value)
+                .orderBy("dateTime")
+                .get()
+                .addOnSuccessListener { pubs ->
+                    pubs.forEach { pub ->
+                        val gotPub = pub.toObject(Ride::class.java)
+                        db.collection("users")
+                            .document(pub["uid"].toString())
+                            .get()
+                            .addOnSuccessListener { fUser ->
+                                val user = fUser.toObject(NewUser::class.java)
+                                onComplete(utils.newRidePresentationObject(gotPub, user!!))
+                            }
+                    }
+
+                }.addOnFailureListener{
+                    println(it.localizedMessage)
+
+                }
+
+        }
+
+
     }
 }

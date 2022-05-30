@@ -79,6 +79,7 @@ class FilterResults : Fragment(R.layout.fragment_filter_results) {
                 filterModel.acceptProfessors.value = docenteSwithc.isChecked
                 filterModel.acceptStudents.value = estudanteSwitch.isChecked
 
+
                 filterModel.buttonClicked.value = !filterModel.buttonClicked.value!!
 
                 requireActivity().supportFragmentManager.beginTransaction().hide(this@FilterResults)

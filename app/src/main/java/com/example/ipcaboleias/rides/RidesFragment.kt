@@ -28,6 +28,8 @@ class RidesFragment : Fragment(R.layout.fragment_rides) {
     private lateinit var publications: MutableList<RidePresentation>
     var filteredPublications: MutableList<RidePresentation> = ArrayList()
 
+    private lateinit var pubRepo: PublicationsRepository
+
     private lateinit var adapter: RVPublicationsAadapter
     private val model: PublicationDetailsViewModel by activityViewModels()
     private val filterModel: FilterResultsViewModel by activityViewModels()
@@ -36,7 +38,7 @@ class RidesFragment : Fragment(R.layout.fragment_rides) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         _binding = FragmentRidesBinding.bind(view)
-        val pubRepo = PublicationsRepository(requireContext())
+        pubRepo = PublicationsRepository(requireContext())
         val usersRepo = UsersRepository(requireContext())
 
         publications = ArrayList()
@@ -81,6 +83,7 @@ class RidesFragment : Fragment(R.layout.fragment_rides) {
     }
 
     private fun startFilterModel() {
+        println("Entra no startFilterModel")
         filterModel.buttonClicked.value = false
         filterModel.acceptProfessors.value = false
         filterModel.acceptStudents.value = false
@@ -90,90 +93,13 @@ class RidesFragment : Fragment(R.layout.fragment_rides) {
 
     private fun filterListeners() {
         var list: MutableList<RidePresentation> = ArrayList()
-        list.clear()
 
         filterModel.buttonClicked.observe(viewLifecycleOwner, Observer {
             list.clear()
-            if (filterModel.seeDriversRides.value!! && !filterModel.seePassengersRides.value!!) { // Ver condutores
-                if (filterModel.acceptStudents.value!! && !filterModel.acceptProfessors.value!!) { // Aceita alunos
-                    for(pub in publications){
-                        if(pub.type == "Driver" && pub.acceptAlunos && !pub.acceptDoc) list.add(pub)
-                    }
+            cleanRecyclerViewData()
 
-                    updateRecyclerViewData(list)
-                    return@Observer
-                }
-
-                if (!filterModel.acceptStudents.value!! && filterModel.acceptProfessors.value!!) { // Aceita professores
-                    for(pub in publications){
-                        if(pub.type == "Driver" && !pub.acceptAlunos && pub.acceptDoc) list.add(pub)
-                    }
-
-                    updateRecyclerViewData(list)
-                    return@Observer
-                }
-
-                if(filterModel.acceptStudents.value!! && filterModel.acceptProfessors.value!!){ // Aceita ambos
-                    for(pub in publications){
-                        if(pub.type == "Driver" && pub.acceptAlunos && pub.acceptDoc) list.add(pub)
-                    }
-
-                    updateRecyclerViewData(list)
-                    return@Observer
-                }
-
-
-            } else if (!filterModel.seeDriversRides.value!! && filterModel.seePassengersRides.value!!) { // Ver passageiros
-                if (filterModel.acceptStudents.value!! && !filterModel.acceptProfessors.value!!) { // Aceita alunos
-                    for(pub in publications){
-                        if(pub.type == "Passenger" && pub.acceptAlunos && !pub.acceptDoc) list.add(pub)
-                    }
-
-                    updateRecyclerViewData(list)
-                    return@Observer
-                }
-                if (!filterModel.acceptStudents.value!! && filterModel.acceptProfessors.value!!) { // Aceita professores
-                    for(pub in publications){
-                        if(pub.type == "Passenger" && !pub.acceptAlunos && pub.acceptDoc) list.add(pub)
-                    }
-
-                    updateRecyclerViewData(list)
-                    return@Observer
-                }
-                if(filterModel.acceptStudents.value!! && filterModel.acceptProfessors.value!!) { // Aceita ambos
-                    for(pub in publications){
-                        if(pub.type == "Passenger" && pub.acceptAlunos && pub.acceptDoc) list.add(pub)
-                    }
-
-                    updateRecyclerViewData(list)
-                    return@Observer
-                }
-
-            } else { // Ver ambos
-                if (filterModel.acceptStudents.value!! && !filterModel.acceptProfessors.value!!) { // Aceita alunos
-                    for(pub in publications){
-                        if(pub.acceptAlunos && !pub.acceptDoc) list.add(pub)
-                    }
-
-                    updateRecyclerViewData(list)
-                    return@Observer
-                }
-                if (!filterModel.acceptStudents.value!! && filterModel.acceptProfessors.value!!) { // Aceita professores
-                    for(pub in publications){
-                        if(!pub.acceptAlunos && pub.acceptDoc) list.add(pub)
-                    }
-
-                    updateRecyclerViewData(list)
-                    return@Observer
-                }
-                if(filterModel.acceptStudents.value!! && filterModel.acceptProfessors.value!!) { // Aceita ambos
-                    for(pub in publications){
-                        if(pub.acceptAlunos && pub.acceptDoc) list.add(pub)
-                    }
-
-                    updateRecyclerViewData(list)
-                    return@Observer
-                }
+            pubRepo.getFilteredPublications(filterModel){
+                addRecyclerViewItem(it)
             }
         })
     }
@@ -199,6 +125,19 @@ class RidesFragment : Fragment(R.layout.fragment_rides) {
             ride.uniqueDrive,
             ride.price
         )
+    }
+
+    fun cleanRecyclerViewData(){
+        println("Entra no cleanRecyclerViewData")
+        filteredPublications.clear()
+        adapter.notifyDataSetChanged()
+    }
+
+    fun addRecyclerViewItem(item: RidePresentation){
+        println("Adicionar item")
+        filteredPublications.add(item)
+        adapter.notifyItemInserted(filteredPublications.size - 1)
+        println("Adicionar item 2")
     }
 
     fun updateRecyclerViewData(data: MutableList<RidePresentation>) {
