@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AutoCompleteTextView
+import androidx.fragment.app.activityViewModels
 import com.example.ipcaboleias.R
+import com.example.ipcaboleias.ViewModels.FilterResultsViewModel
 import com.example.ipcaboleias.databinding.FragmentFilterResultsBinding
 import com.example.ipcaboleias.dateTimePickers.DatePickerFragment
 
@@ -15,7 +17,10 @@ class FilterResults : Fragment(R.layout.fragment_filter_results) {
     private var _binding: FragmentFilterResultsBinding? = null
     private val binding get() = _binding!!
 
+    private val filterModel: FilterResultsViewModel by activityViewModels()
+
     var FILTER_FRAG_TAG = "filterFragTag"
+    private val RIDES_FRAG_TAG = "ridesFragTag"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +42,7 @@ class FilterResults : Fragment(R.layout.fragment_filter_results) {
 
         binding.apply {
 
-            frameReturnButton.setOnClickListener{
+            frameReturnButton.setOnClickListener {
 
                 val supportFragmentManager = requireActivity().supportFragmentManager
                 val fragment = supportFragmentManager.findFragmentByTag(FILTER_FRAG_TAG)
@@ -51,34 +56,40 @@ class FilterResults : Fragment(R.layout.fragment_filter_results) {
             }
 
 
-            viewCalendar.setOnClickListener{
+            viewCalendar.setOnClickListener {
                 val datePickerFragment = DatePickerFragment()
                 val supportFragmentManager = requireActivity().supportFragmentManager
 
-                supportFragmentManager.setFragmentResultListener("REQUEST_KEY",
+                supportFragmentManager.setFragmentResultListener(
+                    "REQUEST_KEY",
                     viewLifecycleOwner
-                ){
-                    resultKey, bundle -> if (resultKey == "REQUEST_KEY"){
+                ) { resultKey, bundle ->
+                    if (resultKey == "REQUEST_KEY") {
                         val date = bundle.getString("SELECTED_DATE")
                         tvDate.text = date
-                }
+                    }
                 }
 
                 datePickerFragment.show(supportFragmentManager, "DatePickerFragment")
             }
 
             SubmitButton.setOnClickListener {
+                filterModel.seeDriversRides.value = CondutoresSwitch.isChecked
+                filterModel.seePassengersRides.value = PassageirosSwitch.isChecked
+                filterModel.acceptProfessors.value = docenteSwithc.isChecked
+                filterModel.acceptStudents.value = estudanteSwitch.isChecked
 
+                filterModel.buttonClicked.value = !filterModel.buttonClicked.value!!
+
+                requireActivity().supportFragmentManager.beginTransaction().hide(this@FilterResults)
+                    .commit()
             }
         }
 
-        val FromAutoTextView = requireView().findViewById<AutoCompleteTextView>(R.id.FromAutoCompleteTV)
-
-
+        val FromAutoTextView =
+            requireView().findViewById<AutoCompleteTextView>(R.id.FromAutoCompleteTV)
         //val cities = resources.getStringArray(R.array.Cities)
-
         //val adapter = ArrayAdapter<String>(requireActivity(), android.R.layout.simple_list_item_1, cities)
-
         //FromAutoTextView.setAdapter(adapter)
     }
 
@@ -90,5 +101,6 @@ class FilterResults : Fragment(R.layout.fragment_filter_results) {
 
                 }
             }
+
     }
 }

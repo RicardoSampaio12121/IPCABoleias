@@ -1,27 +1,23 @@
 package com.example.ipcaboleias.rides
 
+import android.R.attr.data
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ipcaboleias.R
+import com.example.ipcaboleias.ViewModels.FilterResultsViewModel
 import com.example.ipcaboleias.ViewModels.PublicationDetailsViewModel
 import com.example.ipcaboleias.createPublication.CreatePublicationSearchStartLocationFragment
 import com.example.ipcaboleias.databinding.FragmentRidesBinding
-import com.example.ipcaboleias.firebaseRepository.Callbacks.GetPublicationsCallback
-import com.example.ipcaboleias.firebaseRepository.Callbacks.TesteCallback
-import com.example.ipcaboleias.firebaseRepository.Callbacks.UserCallback
 import com.example.ipcaboleias.firebaseRepository.PublicationsRepository
 import com.example.ipcaboleias.firebaseRepository.UsersRepository
 import com.example.ipcaboleias.registration.NewUser
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
+
 
 class RidesFragment : Fragment(R.layout.fragment_rides) {
 
@@ -30,14 +26,13 @@ class RidesFragment : Fragment(R.layout.fragment_rides) {
     private var _binding: FragmentRidesBinding? = null
     private val binding get() = _binding!!
     private lateinit var publications: MutableList<RidePresentation>
-    private lateinit var filteredPublications: MutableList<RidePresentation>
+    var filteredPublications: MutableList<RidePresentation> = ArrayList()
 
     private lateinit var adapter: RVPublicationsAadapter
     private val model: PublicationDetailsViewModel by activityViewModels()
+    private val filterModel: FilterResultsViewModel by activityViewModels()
 
-    val CREATE_PUB1_FRAG_TAG = "createPub1FragTag"
     val FILTER_FRAG_TAG = "filterFragTag"
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         _binding = FragmentRidesBinding.bind(view)
@@ -47,7 +42,10 @@ class RidesFragment : Fragment(R.layout.fragment_rides) {
         publications = ArrayList()
         adapter = RVPublicationsAadapter(publications)
 
+
         binding.apply {
+            startFilterModel()
+            filterListeners()
 
             // Evento click do botão para criar uma nova publicação
             btnAdd.setOnClickListener {
@@ -61,9 +59,9 @@ class RidesFragment : Fragment(R.layout.fragment_rides) {
 
             //Carregar recycler view com as publicações
 
-            pubRepo.getPublications { it ->
-                val size = it.size
+            //updateRecyclerView()
 
+            pubRepo.getPublications { it ->
                 for (ride in it) {
                     usersRepo.getUser(ride.uid) { user ->
                         publications.add(
@@ -72,13 +70,112 @@ class RidesFragment : Fragment(R.layout.fragment_rides) {
                                 user
                             )
                         )
-                        adapter.notifyItemInserted(publications.size - 1)
-                        filteredPublications = publications
-                        updateRecyclerView(publications)
+                        filteredPublications.clear()
+                        filteredPublications.addAll(publications)
+                        //adapter.notifyItemInserted(publications.size - 1)
+                        updateRecyclerView()
                     }
                 }
             }
         }
+    }
+
+    private fun startFilterModel() {
+        filterModel.buttonClicked.value = false
+        filterModel.acceptProfessors.value = false
+        filterModel.acceptStudents.value = false
+        filterModel.seeDriversRides.value = false
+        filterModel.seePassengersRides.value = false
+    }
+
+    private fun filterListeners() {
+        var list: MutableList<RidePresentation> = ArrayList()
+        list.clear()
+
+        filterModel.buttonClicked.observe(viewLifecycleOwner, Observer {
+            list.clear()
+            if (filterModel.seeDriversRides.value!! && !filterModel.seePassengersRides.value!!) { // Ver condutores
+                if (filterModel.acceptStudents.value!! && !filterModel.acceptProfessors.value!!) { // Aceita alunos
+                    for(pub in publications){
+                        if(pub.type == "Driver" && pub.acceptAlunos && !pub.acceptDoc) list.add(pub)
+                    }
+
+                    updateRecyclerViewData(list)
+                    return@Observer
+                }
+
+                if (!filterModel.acceptStudents.value!! && filterModel.acceptProfessors.value!!) { // Aceita professores
+                    for(pub in publications){
+                        if(pub.type == "Driver" && !pub.acceptAlunos && pub.acceptDoc) list.add(pub)
+                    }
+
+                    updateRecyclerViewData(list)
+                    return@Observer
+                }
+
+                if(filterModel.acceptStudents.value!! && filterModel.acceptProfessors.value!!){ // Aceita ambos
+                    for(pub in publications){
+                        if(pub.type == "Driver" && pub.acceptAlunos && pub.acceptDoc) list.add(pub)
+                    }
+
+                    updateRecyclerViewData(list)
+                    return@Observer
+                }
+
+
+            } else if (!filterModel.seeDriversRides.value!! && filterModel.seePassengersRides.value!!) { // Ver passageiros
+                if (filterModel.acceptStudents.value!! && !filterModel.acceptProfessors.value!!) { // Aceita alunos
+                    for(pub in publications){
+                        if(pub.type == "Passenger" && pub.acceptAlunos && !pub.acceptDoc) list.add(pub)
+                    }
+
+                    updateRecyclerViewData(list)
+                    return@Observer
+                }
+                if (!filterModel.acceptStudents.value!! && filterModel.acceptProfessors.value!!) { // Aceita professores
+                    for(pub in publications){
+                        if(pub.type == "Passenger" && !pub.acceptAlunos && pub.acceptDoc) list.add(pub)
+                    }
+
+                    updateRecyclerViewData(list)
+                    return@Observer
+                }
+                if(filterModel.acceptStudents.value!! && filterModel.acceptProfessors.value!!) { // Aceita ambos
+                    for(pub in publications){
+                        if(pub.type == "Passenger" && pub.acceptAlunos && pub.acceptDoc) list.add(pub)
+                    }
+
+                    updateRecyclerViewData(list)
+                    return@Observer
+                }
+
+            } else { // Ver ambos
+                if (filterModel.acceptStudents.value!! && !filterModel.acceptProfessors.value!!) { // Aceita alunos
+                    for(pub in publications){
+                        if(pub.acceptAlunos && !pub.acceptDoc) list.add(pub)
+                    }
+
+                    updateRecyclerViewData(list)
+                    return@Observer
+                }
+                if (!filterModel.acceptStudents.value!! && filterModel.acceptProfessors.value!!) { // Aceita professores
+                    for(pub in publications){
+                        if(!pub.acceptAlunos && pub.acceptDoc) list.add(pub)
+                    }
+
+                    updateRecyclerViewData(list)
+                    return@Observer
+                }
+                if(filterModel.acceptStudents.value!! && filterModel.acceptProfessors.value!!) { // Aceita ambos
+                    for(pub in publications){
+                        if(pub.acceptAlunos && pub.acceptDoc) list.add(pub)
+                    }
+
+                    updateRecyclerViewData(list)
+                    return@Observer
+                }
+            }
+        })
     }
 
     private fun newRidePresentationObject(ride: Ride, user: NewUser): RidePresentation {
@@ -104,20 +201,30 @@ class RidesFragment : Fragment(R.layout.fragment_rides) {
         )
     }
 
-    private fun updateRecyclerView(toInsert: MutableList<RidePresentation>) {
+    fun updateRecyclerViewData(data: MutableList<RidePresentation>) {
+
+        println("Entra no updata data")
+        println("Array length: ${data.size}")
+
+        filteredPublications.clear()
+        filteredPublications.addAll(data)
+        adapter.notifyDataSetChanged()
+    }
+
+    fun updateRecyclerView() {
         val rvPublications = requireActivity().findViewById<RecyclerView>(R.id.rvPublications)
 
         rvPublications.layoutManager = LinearLayoutManager(activity)
-        adapter = RVPublicationsAadapter(toInsert)
+        adapter = RVPublicationsAadapter(filteredPublications)
         rvPublications.adapter = adapter
 
         adapter.setOnItemClickListener(object : RVPublicationsAadapter.onItemClickListener {
             override fun onItemClick(position: Int) {
-                model.setRide(toInsert[position])
+                model.setRide(filteredPublications[position])
 
                 val transaction = activity?.supportFragmentManager?.beginTransaction()
 
-                if (toInsert[position].type == "Passenger") {
+                if (filteredPublications[position].type == "Passenger") {
                     transaction?.add(
                         R.id.frameFragment,
                         RideDetailsPassengerFragment.newInstance(),
