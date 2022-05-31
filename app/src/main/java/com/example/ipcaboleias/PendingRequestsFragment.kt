@@ -31,16 +31,17 @@ class PendingRequestsFragment : Fragment(R.layout.fragment_pending_requests) {
         pubRepo = PublicationsRepository(requireContext())
 
         binding.apply {
-            usersRepo.getReservesToBeApproved {
+            usersRepo.getReservesToBeApproved { reserve ->
                 var iterator = 0
 
-                for (doc in it) {
+                for (doc in reserve) {
                     println(doc.id)
                     iterator++
-                    pubRepo.getPublicationById(doc.id) { ride ->
+                    pubRepo.getPublicationById(doc.pubId) { ride ->
                         usersRepo.getUser(doc.uid) { user ->
                             reservePresentations.add(
                                 newReservePresentation(
+                                    doc,
                                     user,
                                     ride,
                                     doc.id,
@@ -48,7 +49,7 @@ class PendingRequestsFragment : Fragment(R.layout.fragment_pending_requests) {
                                 )
                             )
 
-                            if (iterator + 1 > it.size) {
+                            if (iterator + 1 > reserve.size) {
                                 startRecyclerView()
                             }
                         }
@@ -59,6 +60,7 @@ class PendingRequestsFragment : Fragment(R.layout.fragment_pending_requests) {
     }
 
     private fun newReservePresentation(
+        reserve: Reserve,
         user: NewUser,
         ride: Ride,
         docId: String,
@@ -69,8 +71,8 @@ class PendingRequestsFragment : Fragment(R.layout.fragment_pending_requests) {
             passengerId,
             "${user.name} ${user.surname}",
             ride.acceptDoc,
-            ride.startLatitute,
-            ride.startLongitude,
+            reserve.startLatitude,
+            reserve.startLongitude,
             ride.endLatitute,
             ride.endLongitude,
             ride.dateTime,

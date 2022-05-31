@@ -17,14 +17,19 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.ipcaboleias.ChatActivity
 import com.example.ipcaboleias.R
 import com.example.ipcaboleias.ViewModels.NewPubViewModel
 import com.example.ipcaboleias.ViewModels.PublicationDetailsViewModel
+import com.example.ipcaboleias.ViewModels.SelectStartLocationViewModel
+import com.example.ipcaboleias.createPublication.NewStop
 import com.example.ipcaboleias.databinding.FragmentRideDetailsBinding
 import com.example.ipcaboleias.firebaseRepository.PublicationsRepository
 import com.example.ipcaboleias.firebaseRepository.UsersRepository
 import com.google.android.gms.location.GeofenceStatusCodes
+import com.google.type.LatLng
 import java.io.Serializable
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -38,6 +43,8 @@ import java.util.regex.Pattern
 
 class RideDetailsFragment : Fragment(R.layout.fragment_ride_details) {
 
+    private val SELECT_START_LOCATION_FRAG_TAG = "selectStartLocationFragTag"
+
     private var _binding: FragmentRideDetailsBinding? = null
     private val binding get() = _binding!!
 
@@ -45,17 +52,24 @@ class RideDetailsFragment : Fragment(R.layout.fragment_ride_details) {
     private lateinit var pubRepo: PublicationsRepository
 
     private val model: PublicationDetailsViewModel by activityViewModels()
+    private val selectMode: SelectStartLocationViewModel by activityViewModels()
+
     private lateinit var ride: RidePresentation
+
+    private lateinit var adapter: RVPossibleStopsAdapter
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ride = model.getRide()
+        startSelectModel()
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         _binding = FragmentRideDetailsBinding.bind(view)
+
+        startRVAdapter()
 
         var btnMenu = activity?.requireViewById<ImageButton>(R.id.imageMenu)
         var btnReturn = activity?.requireViewById<ImageButton>(R.id.imageReturn)
@@ -140,25 +154,82 @@ class RideDetailsFragment : Fragment(R.layout.fragment_ride_details) {
                     intent.putExtra("channelId", channelId)
                     requireActivity().startActivity(intent)
                 }
-
             }
 
             buttonReserve.setOnClickListener {
-                pubRepo = PublicationsRepository(requireContext())
+                ride.stops.add(NewStop(ride.startLatitude, ride.startLongitude))
 
+                if (ride.stops.size > 1) {
+                    println("Entra no if")
+                    requireActivity().supportFragmentManager.beginTransaction().add(
+                        R.id.frameFragment,
+                        SelectStartLocationFragment.newInstance(),
+                        SELECT_START_LOCATION_FRAG_TAG
+                    ).commit()
 
-                pubRepo.reserveRide(ride.date, ride.uid) {
-                    if (it) {
-                        Toast.makeText(
-                            requireContext(),
-                            "Reserva enviada para revisão.",
-                            Toast.LENGTH_LONG
-                        ).show()
+                    selectLocationListener()
+                } else {
+                    pubRepo = PublicationsRepository(requireContext())
+                    pubRepo.reserveRide(
+                        ride.date,
+                        ride.uid,
+                        com.google.android.gms.maps.model.LatLng(
+                            ride.startLatitude,
+                            ride.startLongitude
+                        )
+                    ) {
+                        if (it) {
+                            Toast.makeText(
+                                requireContext(),
+                                "Reserva enviada para revisão.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
                     }
                 }
             }
         }
+    }
 
+    fun startSelectModel() {
+        selectMode.clickedButton.value = false
+    }
+
+    fun selectLocationListener() {
+        selectMode.clickedButton.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            if(selectMode.startLatitude.value == null) return@Observer
+
+            pubRepo = PublicationsRepository(requireContext())
+            pubRepo.reserveRide(
+                ride.date,
+                ride.uid,
+                com.google.android.gms.maps.model.LatLng(
+                    selectMode.startLatitude.value!!,
+                    selectMode.startLongitude.value!!
+                )
+            ) {
+                if (it) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Reserva enviada para revisão.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        })
+    }
+
+    fun startRVAdapter() {
+        val rvStops = requireActivity().findViewById<RecyclerView>(R.id.rvPossibleStops)
+
+        var l = com.google.android.gms.maps.model.LatLng(ride.startLatitude, ride.startLongitude)
+
+        rvStops.layoutManager = LinearLayoutManager(activity)
+        adapter = RVPossibleStopsAdapter(
+            ride.stops,
+            com.google.android.gms.maps.model.LatLng(ride.startLatitude, ride.startLongitude)
+        )
+        rvStops.adapter = adapter
     }
 
     fun getLocation(latitude: Double, longitude: Double): Address? {

@@ -268,7 +268,10 @@ class UsersRepository(private val context: Context) {
                     output.add(
                         Reserve(
                             doc.id,
+                            doc["pubId"].toString(),
                             doc["approved"].toString().toBoolean(),
+                            doc["startLatitude"].toString().toDouble(),
+                            doc["startLongitude"].toString().toDouble(),
                             doc["uid"].toString()
                         )
                     )

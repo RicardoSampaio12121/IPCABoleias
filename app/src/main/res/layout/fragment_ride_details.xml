@@ -21,8 +21,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
-
         <TextView
             android:id="@+id/txtRideInfoTitle"
             android:layout_width="match_parent"
@@ -80,6 +78,35 @@
             app:layout_constraintStart_toEndOf="@+id/appCompatImageView4"
             app:layout_constraintTop_toBottomOf="@+id/tvFrom" />
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/possibleStops"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"
+            android:background="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/viewRideInfo"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/textView29"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Possiveis pontos de paragem"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvPossibleStops"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView29" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <View
             android:id="@+id/viewPrice"
             android:layout_width="match_parent"
@@ -87,7 +114,7 @@
             android:layout_marginVertical="10dp"
             android:background="@color/white"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/viewRideInfo" />
+            app:layout_constraintTop_toBottomOf="@id/possibleStops" />
 
         <TextView
             android:id="@+id/priceTitle"

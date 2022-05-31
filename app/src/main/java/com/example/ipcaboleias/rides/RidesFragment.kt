@@ -83,7 +83,6 @@ class RidesFragment : Fragment(R.layout.fragment_rides) {
     }
 
     private fun startFilterModel() {
-        println("Entra no startFilterModel")
         filterModel.buttonClicked.value = false
         filterModel.acceptProfessors.value = false
         filterModel.acceptStudents.value = false
@@ -123,7 +122,8 @@ class RidesFragment : Fragment(R.layout.fragment_rides) {
             ride.acceptAlunos,
             ride.acceptDoc,
             ride.uniqueDrive,
-            ride.price
+            ride.price,
+            ride.stops
         )
     }
 

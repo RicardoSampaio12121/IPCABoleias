@@ -1,5 +1,6 @@
 package com.example.ipcaboleias.rides
 
+import com.example.ipcaboleias.createPublication.NewStop
 import com.google.firebase.Timestamp
 import java.sql.Date
 import java.sql.Time
@@ -22,5 +23,6 @@ data class RidePresentation (
     val acceptAlunos : Boolean = false,
     val acceptDoc : Boolean = false,
     val uniqueRide : Boolean = true,
-    var price : Float? = 0.0f
+    var price : Float? = 0.0f,
+    var stops: MutableList<NewStop> = ArrayList()
 )

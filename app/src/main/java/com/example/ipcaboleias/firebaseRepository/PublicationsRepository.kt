@@ -12,6 +12,7 @@ import com.example.ipcaboleias.firebaseRepository.Callbacks.NewPublicationCallba
 import com.example.ipcaboleias.registration.NewUser
 import com.example.ipcaboleias.rides.Ride
 import com.example.ipcaboleias.rides.RidePresentation
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
@@ -23,6 +24,7 @@ import java.sql.Time.valueOf
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
+import kotlin.Exception
 
 
 class PublicationsRepository(private val context: Context) {
@@ -162,6 +164,7 @@ class PublicationsRepository(private val context: Context) {
             }
     }
 
+
     fun getPublicationByIdWithDocId(id: String, onComplete: (ride: RidesWithDocId) -> Unit) {
         val db = Firebase.firestore
 
@@ -184,6 +187,7 @@ class PublicationsRepository(private val context: Context) {
             .addOnSuccessListener {
                 onComplete(it.toObject(Ride::class.java)!!)
             }
+
     }
 
 //    fun getPublicationsByIds(ids: List<String>, onComplete: (rides: List<Ride>) -> Unit){
@@ -251,6 +255,7 @@ class PublicationsRepository(private val context: Context) {
     fun reserveRide(
         dateTime: Timestamp,
         uid: String,
+        location: LatLng,
         onComplete: (checker: Boolean) -> Unit
     ) {
         val db = Firebase.firestore
@@ -259,7 +264,6 @@ class PublicationsRepository(private val context: Context) {
         if (currentUser == uid)
             onComplete(false)
         else {
-
             var doc = db.collection("publications")
                 .whereEqualTo("uid", uid)
                 .whereEqualTo("dateTime", dateTime)
@@ -269,14 +273,30 @@ class PublicationsRepository(private val context: Context) {
                         db.collection("users")
                             .document(uid)
                             .collection("reserves")
-                            .document(doc.id)
-                            .set(mapOf("uid" to currentUser, "approved" to false))
+                            .document()
+                            .set(
+                                mapOf(
+                                    "uid" to currentUser,
+                                    "pubId" to doc.id,
+                                    "approved" to false,
+                                    "startLatitude" to location.latitude,
+                                    "startLongitude" to location.longitude
+                                )
+                            )
 
                         db.collection("users")
                             .document(currentUser)
                             .collection("requests")
-                            .document(doc.id)
-                            .set(mapOf("uid" to currentUser, "approved" to false))
+                            .document()
+                            .set(
+                                mapOf(
+                                    "uid" to currentUser,
+                                    "pubId" to doc.id,
+                                    "approved" to false,
+                                    "startLatitude" to location.latitude,
+                                    "startLongitude" to location.longitude
+                                )
+                            )
 
                         onComplete(true)
                     }
@@ -453,7 +473,7 @@ class PublicationsRepository(private val context: Context) {
                             }
                     }
 
-                }.addOnFailureListener{
+                }.addOnFailureListener {
                     println(it.localizedMessage)
 
                 }

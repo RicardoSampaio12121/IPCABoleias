@@ -3,6 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/ricar/Documents/IPCABoleias/app/src/main/res/layout/fragment_create_publication_pick_price.xml" value="0.1762917933130699" />
+        <entry key="..\:/Users/ricar/Documents/IPCABoleias/app/src/main/res/layout/fragment_create_publication_pick_stop.xml" value="0.10648148148148148" />
+        <entry key="..\:/Users/ricar/Documents/IPCABoleias/app/src/main/res/layout/fragment_create_publication_set_custom_price.xml" value="0.10648148148148148" />
+        <entry key="..\:/Users/ricar/Documents/IPCABoleias/app/src/main/res/layout/fragment_edit_date_time.xml" value="0.25769927536231885" />
+        <entry key="..\:/Users/ricar/Documents/IPCABoleias/app/src/main/res/layout/fragment_ride_details.xml" value="0.28940217391304346" />
+        <entry key="..\:/Users/ricar/Documents/IPCABoleias/app/src/main/res/layout/fragment_select_start_location.xml" value="0.35688405797101447" />
+        <entry key="..\:/Users/ricar/Documents/IPCABoleias/app/src/main/res/layout/item_possible_stop.xml" value="0.358695652173913" />
         <entry key="..\:/Users/ricar/Documents/dev/IPCABoleias/app/src/main/res/drawable/background_ride_item.xml" value="0.1995" />
         <entry key="..\:/Users/ricar/Documents/dev/IPCABoleias/app/src/main/res/drawable/circle.xml" value="0.184" />
         <entry key="..\:/Users/ricar/Documents/dev/IPCABoleias/app/src/main/res/drawable/corners_rounded.xml" value="0.3095" />
