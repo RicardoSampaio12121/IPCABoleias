@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 class FilterResultsViewModel: ViewModel() {
     val buttonClicked = MutableLiveData<Boolean>()
 
+    val toLatitude = MutableLiveData<Double>()
+
     val seeDriversRides = MutableLiveData<Boolean>()
     val seePassengersRides = MutableLiveData<Boolean>()
 

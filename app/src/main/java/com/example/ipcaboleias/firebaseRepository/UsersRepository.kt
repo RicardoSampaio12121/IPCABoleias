@@ -287,13 +287,28 @@ class UsersRepository(private val context: Context) {
         db.collection("users")
             .document(currentUser)
             .collection("reserves")
-            .document(docId)
-            .delete()
+            .whereEqualTo("pubId", docId)
+            .whereEqualTo("uid", passengerId)
+            .get()
+            .addOnSuccessListener { doc ->
+                db.collection("users")
+                    .document(currentUser)
+                    .collection("reserves")
+                    .document(doc.documents[0].id)
+                    .delete()
+            }
 
         db.collection("users")
             .document(passengerId)
             .collection("requests")
-            .document(docId)
-            .delete()
+            .whereEqualTo("pubId", docId)
+            .get()
+            .addOnSuccessListener { doc ->
+                db.collection("users")
+                    .document(passengerId)
+                    .collection("requests")
+                    .document(doc.documents[0].id)
+                    .delete()
+            }
     }
 }

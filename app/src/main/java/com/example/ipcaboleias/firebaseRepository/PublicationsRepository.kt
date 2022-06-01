@@ -334,14 +334,14 @@ class PublicationsRepository(private val context: Context) {
             }
     }
 
-    fun addPassenger(docId: String, passengerId: String) {
+    fun addPassenger(docId: String, passengerId: String, location: LatLng) {
         val db = Firebase.firestore
 
         db.collection("publications")
             .document(docId)
             .collection("passengers")
             .document(passengerId)
-            .set(mapOf("uid" to passengerId))
+            .set(mapOf("uid" to passengerId, "startLatitude" to location.latitude, "startLongitude" to location.longitude))
 
         db.collection("users")
             .document(passengerId)
@@ -422,7 +422,6 @@ class PublicationsRepository(private val context: Context) {
         if (filter.seeDriversRides.value!! && !filter.seePassengersRides.value!!) type = "Driver"
         if (!filter.seeDriversRides.value!! && filter.seePassengersRides.value!!) type = "Passenger"
 
-
         println("Type: $type")
 
         if (type != "ALL") {
@@ -432,6 +431,7 @@ class PublicationsRepository(private val context: Context) {
                 .whereEqualTo("type", type)
                 .whereEqualTo("acceptDoc", filter.acceptProfessors.value)
                 .whereEqualTo("acceptAlunos", filter.acceptStudents.value)
+                .whereEqualTo("endLatitute", filter.toLatitude.value)
                 .orderBy("dateTime")
                 .get()
                 .addOnSuccessListener { pubs ->
@@ -459,6 +459,7 @@ class PublicationsRepository(private val context: Context) {
                 .whereEqualTo("full", false)
                 .whereEqualTo("acceptDoc", filter.acceptProfessors.value)
                 .whereEqualTo("acceptAlunos", filter.acceptStudents.value)
+                .whereEqualTo("endLatitute", filter.toLatitude.value)
                 .orderBy("dateTime")
                 .get()
                 .addOnSuccessListener { pubs ->

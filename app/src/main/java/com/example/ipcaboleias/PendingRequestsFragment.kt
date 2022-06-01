@@ -13,6 +13,7 @@ import com.example.ipcaboleias.firebaseRepository.UsersRepository
 import com.example.ipcaboleias.history.RVPendingRequestsAdapter
 import com.example.ipcaboleias.registration.NewUser
 import com.example.ipcaboleias.rides.Ride
+import com.google.android.gms.maps.model.LatLng
 
 class PendingRequestsFragment : Fragment(R.layout.fragment_pending_requests) {
     private var _binding: FragmentPendingRequestsBinding? = null
@@ -35,7 +36,6 @@ class PendingRequestsFragment : Fragment(R.layout.fragment_pending_requests) {
                 var iterator = 0
 
                 for (doc in reserve) {
-                    println(doc.id)
                     iterator++
                     pubRepo.getPublicationById(doc.pubId) { ride ->
                         usersRepo.getUser(doc.uid) { user ->
@@ -44,7 +44,6 @@ class PendingRequestsFragment : Fragment(R.layout.fragment_pending_requests) {
                                     doc,
                                     user,
                                     ride,
-                                    doc.id,
                                     doc.uid
                                 )
                             )
@@ -63,11 +62,10 @@ class PendingRequestsFragment : Fragment(R.layout.fragment_pending_requests) {
         reserve: Reserve,
         user: NewUser,
         ride: Ride,
-        docId: String,
         passengerId: String
     ): ReservePresentation {
         return ReservePresentation(
-            docId,
+            reserve.pubId,
             passengerId,
             "${user.name} ${user.surname}",
             ride.acceptDoc,
@@ -94,7 +92,11 @@ class PendingRequestsFragment : Fragment(R.layout.fragment_pending_requests) {
 
                     pubRepo.addPassenger(
                         reservePresentations[position].docId,
-                        reservePresentations[position].passengerId
+                        reservePresentations[position].passengerId,
+                        LatLng(
+                            reservePresentations[position].startLat,
+                            reservePresentations[position].startLong
+                        )
                     )
 
                     pubRepo.removeSeat(reservePresentations[position].docId)

@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import androidx.fragment.app.activityViewModels
 import com.example.ipcaboleias.R
@@ -41,6 +42,14 @@ class FilterResults : Fragment(R.layout.fragment_filter_results) {
         _binding = FragmentFilterResultsBinding.bind(view)
 
         binding.apply {
+            ArrayAdapter.createFromResource(
+                requireContext(),
+                R.array.IPCAPolos,
+                android.R.layout.simple_spinner_item
+            ).also { adapter ->
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                spinnerSearchLocation.adapter = adapter
+            }
 
             frameReturnButton.setOnClickListener {
 
@@ -74,11 +83,27 @@ class FilterResults : Fragment(R.layout.fragment_filter_results) {
             }
 
             SubmitButton.setOnClickListener {
+                val location = spinnerSearchLocation.selectedItem.toString()
+
+                when (location) {
+                    "Polo de Barcelos" -> {
+                        filterModel.toLatitude.value = 41.536587
+                    }
+                    "Polo de Braga" -> {
+                        filterModel.toLatitude.value = 41.542142
+                    }
+                    "Polo de Guimarães" -> {
+                        filterModel.toLatitude.value = 41.507823
+                    }
+                    "Polo de Famalicão" -> {
+                        filterModel.toLatitude.value = 41.440063
+                    }
+                }
+
                 filterModel.seeDriversRides.value = CondutoresSwitch.isChecked
                 filterModel.seePassengersRides.value = PassageirosSwitch.isChecked
                 filterModel.acceptProfessors.value = docenteSwithc.isChecked
                 filterModel.acceptStudents.value = estudanteSwitch.isChecked
-
 
                 filterModel.buttonClicked.value = !filterModel.buttonClicked.value!!
 

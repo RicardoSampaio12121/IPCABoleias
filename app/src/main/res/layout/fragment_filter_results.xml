@@ -139,12 +139,12 @@
                 android:orientation="vertical"
                 android:weightSum="1">
 
-                <AutoCompleteTextView
-                    android:id="@+id/ToAutoCompleteTV"
+                <Spinner
+                    android:id="@+id/spinnerSearchLocation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Para"
-                    android:textSize="16sp"
+                    android:layout_marginHorizontal="10dp"
+                    android:spinnerMode="dropdown"
                     app:layout_constraintStart_toStartOf="@id/llvTo2"
                     app:layout_constraintTop_toTopOf="@id/llvTo2" />
 

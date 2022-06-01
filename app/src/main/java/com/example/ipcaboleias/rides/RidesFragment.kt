@@ -128,23 +128,16 @@ class RidesFragment : Fragment(R.layout.fragment_rides) {
     }
 
     fun cleanRecyclerViewData(){
-        println("Entra no cleanRecyclerViewData")
         filteredPublications.clear()
         adapter.notifyDataSetChanged()
     }
 
     fun addRecyclerViewItem(item: RidePresentation){
-        println("Adicionar item")
         filteredPublications.add(item)
         adapter.notifyItemInserted(filteredPublications.size - 1)
-        println("Adicionar item 2")
     }
 
     fun updateRecyclerViewData(data: MutableList<RidePresentation>) {
-
-        println("Entra no updata data")
-        println("Array length: ${data.size}")
-
         filteredPublications.clear()
         filteredPublications.addAll(data)
         adapter.notifyDataSetChanged()

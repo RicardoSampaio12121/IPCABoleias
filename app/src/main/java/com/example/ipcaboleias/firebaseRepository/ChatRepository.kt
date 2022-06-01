@@ -39,7 +39,7 @@ class ChatRepository(private val context: Context) {
             .document(channelId)
             .collection("messages")
             .orderBy("time")
-            .addSnapshotListener() { querySnapshot, firebaseFirestoreException ->
+            .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                 if (firebaseFirestoreException != null) {
                     Log.e("FIRESTORE", "ChatMessagesListener error.", firebaseFirestoreException)
                     return@addSnapshotListener
@@ -72,7 +72,7 @@ class ChatRepository(private val context: Context) {
         return db.collection("users")
             .document(userUid)
             .collection("engagedChatChannels")
-            .addSnapshotListener() { querySnapshot, firebaseFirestoreException ->
+            .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                 if (firebaseFirestoreException != null) {
                     Log.e("FIRESTORE", "ChatChannelsListener error.", firebaseFirestoreException)
                     return@addSnapshotListener
