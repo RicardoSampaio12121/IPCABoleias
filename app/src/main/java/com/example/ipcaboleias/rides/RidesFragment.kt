@@ -14,6 +14,7 @@ import com.example.ipcaboleias.ViewModels.PublicationDetailsViewModel
 import com.example.ipcaboleias.createPublication.CreatePublicationSearchStartLocationFragment
 import com.example.ipcaboleias.databinding.FragmentRidesBinding
 import com.example.ipcaboleias.firebaseRepository.PublicationsRepository
+import com.example.ipcaboleias.firebaseRepository.User
 import com.example.ipcaboleias.firebaseRepository.UsersRepository
 import com.example.ipcaboleias.registration.NewUser
 import kotlinx.coroutines.*
@@ -103,7 +104,7 @@ class RidesFragment : Fragment(R.layout.fragment_rides) {
         })
     }
 
-    private fun newRidePresentationObject(ride: Ride, user: NewUser): RidePresentation {
+    private fun newRidePresentationObject(ride: Ride, user: User): RidePresentation {
         return RidePresentation(
             ride.uid,
             user.name,

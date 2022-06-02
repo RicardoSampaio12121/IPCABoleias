@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.ipcaboleias.chat.RVChatMessagesAdapter
 import com.example.ipcaboleias.chat.TextMessage
 import com.example.ipcaboleias.firebaseRepository.ChatRepository
+import com.example.ipcaboleias.firebaseRepository.User
 import com.example.ipcaboleias.firebaseRepository.UsersRepository
 import com.example.ipcaboleias.registration.NewUser
 import com.google.firebase.auth.FirebaseAuth
@@ -29,6 +30,9 @@ class ChatActivity : AppCompatActivity() {
     private val chatRepo = ChatRepository(this)
     private val usersRepo = UsersRepository(this)
     private lateinit var messagesListenerRegistration: ListenerRegistration
+    var me = User()
+    var otherUser = User()
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,7 +42,20 @@ class ChatActivity : AppCompatActivity() {
         channelId = intent.getStringExtra("channelId")!!
 
         usersRepo.getUserFromChatChannel(channelId) {
+
+            println("OTHER USER: ${it.uid}")
+            println("OTHER USER: ${it.name}")
+
+
+            otherUser = it
+
+
             fillFields(it)
+        }
+
+
+        usersRepo.getCurrentUser {
+            me = it
         }
 
         // Carregar mensagens
@@ -56,7 +73,9 @@ class ChatActivity : AppCompatActivity() {
             val message = TextMessage(
                 etMessage.text.toString(),
                 Calendar.getInstance().time,
-                FirebaseAuth.getInstance().currentUser!!.uid
+                FirebaseAuth.getInstance().currentUser!!.uid,
+                "${me.name} ${me.surname}",
+                otherUser.uid
             )
 
             etMessage.setText("")
@@ -69,7 +88,7 @@ class ChatActivity : AppCompatActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun fillFields(user: NewUser) {
+    private fun fillFields(user: User) {
         val profilePic = this.findViewById<CircleImageView>(R.id.profilePic)
         val tvName = this.findViewById<TextView>(R.id.personName)
 

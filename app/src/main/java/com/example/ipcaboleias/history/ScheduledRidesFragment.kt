@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.ipcaboleias.R
 import com.example.ipcaboleias.databinding.FragmentScheduledRidesBinding
 import com.example.ipcaboleias.firebaseRepository.PublicationsRepository
+import com.example.ipcaboleias.firebaseRepository.User
 import com.example.ipcaboleias.firebaseRepository.UsersRepository
 import com.example.ipcaboleias.registration.NewUser
 import com.example.ipcaboleias.rides.Ride
@@ -45,7 +46,7 @@ class ScheduledRidesFragment : Fragment(R.layout.fragment_scheduled_rides) {
 
     private fun newScheduledRidePresentations(
         ride: Ride,
-        user: NewUser
+        user: User
     ): ScheduledRidePresentation {
         return ScheduledRidePresentation(
             ride.uid,

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ipcaboleias.databinding.FragmentPendingRequestsBinding
 import com.example.ipcaboleias.firebaseRepository.PublicationsRepository
+import com.example.ipcaboleias.firebaseRepository.User
 import com.example.ipcaboleias.firebaseRepository.UsersRepository
 import com.example.ipcaboleias.history.RVPendingRequestsAdapter
 import com.example.ipcaboleias.registration.NewUser
@@ -60,7 +61,7 @@ class PendingRequestsFragment : Fragment(R.layout.fragment_pending_requests) {
 
     private fun newReservePresentation(
         reserve: Reserve,
-        user: NewUser,
+        user: User,
         ride: Ride,
         passengerId: String
     ): ReservePresentation {

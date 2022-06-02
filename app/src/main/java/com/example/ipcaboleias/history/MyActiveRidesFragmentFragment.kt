@@ -14,6 +14,7 @@ import com.example.ipcaboleias.ViewModels.PublicationDetailsViewModel
 import com.example.ipcaboleias.databinding.FragmentMyActiveRidesFragmentBinding
 import com.example.ipcaboleias.firebaseRepository.PublicationsRepository
 import com.example.ipcaboleias.firebaseRepository.RidesWithDocId
+import com.example.ipcaboleias.firebaseRepository.User
 import com.example.ipcaboleias.firebaseRepository.UsersRepository
 import com.example.ipcaboleias.registration.NewUser
 import com.example.ipcaboleias.rides.RideDetailsFragment
@@ -132,7 +133,7 @@ class MyActiveRidesFragmentFragment : Fragment(R.layout.fragment_my_active_rides
         })
     }
 
-    private fun newRidePresentationObject(ride: RidesWithDocId, user: NewUser): RidePresentation {
+    private fun newRidePresentationObject(ride: RidesWithDocId, user: User): RidePresentation {
         return RidePresentation(
             ride.uid,
             user.name,

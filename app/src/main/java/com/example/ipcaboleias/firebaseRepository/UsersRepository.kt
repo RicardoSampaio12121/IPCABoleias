@@ -104,18 +104,18 @@ class UsersRepository(private val context: Context) {
         }
     }
 
-    fun getUser(uid: String, onComplete: (user: NewUser) -> Unit) {
+    fun getUser(uid: String, onComplete: (user: User) -> Unit) {
         val db = Firebase.firestore
 
         db.collection("users")
             .document(uid)
             .get()
             .addOnSuccessListener {
-                onComplete(it.toObject(NewUser::class.java)!!)
+                onComplete(it.toObject(User::class.java)!!)
             }
     }
 
-    fun getUserFromChatChannel(chatChannel: String, onComplete: (user: NewUser) -> Unit) {
+    fun getUserFromChatChannel(chatChannel: String, onComplete: (user: User) -> Unit) {
         val db = Firebase.firestore
 
         db.collection("chatChannels")
@@ -125,12 +125,13 @@ class UsersRepository(private val context: Context) {
                 val users = it["usersIds"] as List<*>
 
                 getUser(users[0].toString()) { returnUser ->
-                  onComplete(returnUser)
+                    returnUser.uid = users[0].toString()
+                    onComplete(returnUser)
                 }
             }
     }
 
-    fun getCurrentUser(onComplete: (user: NewUser) -> Unit) {
+    fun getCurrentUser(onComplete: (user: User) -> Unit) {
         val db = Firebase.firestore
 
         val uid = FirebaseAuth.getInstance().currentUser!!.uid
@@ -139,7 +140,7 @@ class UsersRepository(private val context: Context) {
             .document(uid)
             .get()
             .addOnSuccessListener {
-                onComplete(it.toObject(NewUser::class.java)!!)
+                onComplete(it.toObject(User::class.java)!!)
             }
     }
 

@@ -51,7 +51,9 @@ class ChatRepository(private val context: Context) {
                         TextMessage(
                             it["message"].toString(),
                             Calendar.getInstance().time,
-                            it["senderId"].toString()
+                            it["senderId"].toString(),
+                            it["senderName"].toString(),
+                            it["recipientId"].toString()
                         )
                     )
                     return@forEach
