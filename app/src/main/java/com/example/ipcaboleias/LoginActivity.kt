@@ -3,12 +3,15 @@ package com.example.ipcaboleias
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import com.example.ipcaboleias.firebaseRepository.Callbacks.userLoginCallback
 import com.example.ipcaboleias.firebaseRepository.UsersRepository
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.FirebaseMessagingService
 
 class LoginActivity : AppCompatActivity() {
 
@@ -48,6 +51,12 @@ class LoginActivity : AppCompatActivity() {
 
         userRepo.userLogin(email, password, object : userLoginCallback {
             override fun onCallback(uid: String?) {
+//                userRepo.storeTokenIfFirstLogin()
+
+                FirebaseMessaging.getInstance().token.addOnSuccessListener {
+                    userRepo.updateUserToken(it)
+                }
+
                 intent.putExtra("uid", uid)
                 startActivity(intent)
                 finish()

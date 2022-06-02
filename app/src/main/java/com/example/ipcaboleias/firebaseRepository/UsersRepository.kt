@@ -311,4 +311,15 @@ class UsersRepository(private val context: Context) {
                     .delete()
             }
     }
+
+    fun updateUserToken(token: String) {
+        val db = Firebase.firestore
+        val uid = FirebaseAuth.getInstance().currentUser!!.uid
+
+        db.collection("users")
+            .document(uid)
+            .update(mapOf("token" to token))
+    }
+
+
 }
