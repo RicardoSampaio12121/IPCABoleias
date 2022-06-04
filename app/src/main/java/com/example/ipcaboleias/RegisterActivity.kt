@@ -24,9 +24,9 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
-        var REGISTER1_FRAG_TAG = "register1_frag_tag"
-        var REGISTER2_FRAG_TAG = "register2_frag_tag"
-
+        val REGISTER1_FRAG_TAG = "register1_frag_tag"
+        val REGISTER2_FRAG_TAG = "register2_frag_tag"
+        val REGISTER3_FRAG_TAG = "register3_frag_tag"
 
         mAuth = FirebaseAuth.getInstance()
 
@@ -38,8 +38,9 @@ class RegisterActivity : AppCompatActivity() {
         var btnReturn = findViewById<ImageButton>(R.id.btnReturn)
 
         btnReturn.setOnClickListener{
-            var frag1 = supportFragmentManager.findFragmentByTag(REGISTER1_FRAG_TAG)
-            var frag2 = supportFragmentManager.findFragmentByTag(REGISTER2_FRAG_TAG)
+            val frag1 = supportFragmentManager.findFragmentByTag(REGISTER1_FRAG_TAG)
+            val frag2 = supportFragmentManager.findFragmentByTag(REGISTER2_FRAG_TAG)
+            val frag3 = supportFragmentManager.findFragmentByTag(REGISTER3_FRAG_TAG)
 
             if(frag1 != null && frag1.isVisible){
                 finish()
@@ -48,6 +49,16 @@ class RegisterActivity : AppCompatActivity() {
                 supportFragmentManager.beginTransaction().show(frag1!!).commit()
                 supportFragmentManager.beginTransaction().hide(frag2).commit()
             }
+            else if(frag3 != null && frag3.isVisible){
+                if(frag2 != null && frag2.isHidden){
+                    supportFragmentManager.beginTransaction().show(frag2).commit()
+                    supportFragmentManager.beginTransaction().hide(frag3).commit()
+                }
+                else{
+                    supportFragmentManager.beginTransaction().show(frag1!!).commit()
+                    supportFragmentManager.beginTransaction().hide(frag3).commit()
+                }
+            }
         }
 
         var fragmentContainer = findViewById<FragmentContainerView>(R.id.fragmentContainer)
@@ -55,11 +66,5 @@ class RegisterActivity : AppCompatActivity() {
         fragmentContainer.setOnClickListener {
             Toast.makeText(applicationContext, model.getName(), Toast.LENGTH_SHORT).show()
         }
-
-
-
     }
-
-
-
 }

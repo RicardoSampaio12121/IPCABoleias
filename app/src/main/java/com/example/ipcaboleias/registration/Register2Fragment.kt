@@ -6,11 +6,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import com.example.ipcaboleias.R
 import com.example.ipcaboleias.ViewModels.NewUserViewModel
 import com.example.ipcaboleias.databinding.FragmentRegister2Binding
+import java.util.regex.Pattern
 
 
 class Register2Fragment : Fragment(R.layout.fragment_register2) {
@@ -41,14 +43,23 @@ class Register2Fragment : Fragment(R.layout.fragment_register2) {
         _binding = FragmentRegister2Binding.bind(view)
 
         binding.apply {
-            btnRegister.setOnClickListener{
+            btnRegister.setOnClickListener {
 
                 //Finish activity after register is complete
                 activity?.finish()
             }
 
-            btnNext.setOnClickListener{
+            btnNext.setOnClickListener {
                 val supportFragmentManager = requireActivity().supportFragmentManager
+                val regex = "([A-Z|0-9]{2}-){2}[A-Z|0-9]{2}"
+
+                if (!Pattern.matches(regex, etCarPlate.text.toString())) {
+                    Toast.makeText(requireContext(), "Matricula inválida", Toast.LENGTH_SHORT)
+                        .show()
+
+                    return@setOnClickListener
+                }
+
 
                 model.setCarBrand(etBrand.text.toString())
                 model.setCarModel(etModel.text.toString())
@@ -62,11 +73,12 @@ class Register2Fragment : Fragment(R.layout.fragment_register2) {
                 //call next fragment
                 val fragToCall = supportFragmentManager.findFragmentByTag(REGISTER3_FRAG_TAG)
 
-                if(fragToCall == null){
+                if (fragToCall == null) {
                     supportFragmentManager.beginTransaction().add(
                         R.id.fragmentContainer,
-                        register3Fragment.newInstance(), REGISTER3_FRAG_TAG).commit()
-                }else{
+                        register3Fragment.newInstance(), REGISTER3_FRAG_TAG
+                    ).commit()
+                } else {
                     supportFragmentManager.beginTransaction().show(fragToCall).commit()
                 }
             }

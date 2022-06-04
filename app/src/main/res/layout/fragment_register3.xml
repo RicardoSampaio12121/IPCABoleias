@@ -55,23 +55,13 @@
         app:layout_constraintTop_toBottomOf="@+id/picturaView" />
 
     <Button
-        android:id="@+id/btnViewPicture"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:text="Escolher foto da galeria"
-        android:backgroundTint="@color/IpcaColor"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnTakePicture" />
-
-    <Button
         android:id="@+id/btnRegister"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="Terminar registo"
         android:backgroundTint="@color/IpcaColor"
-        app:layout_constraintTop_toBottomOf="@id/btnViewPicture"
+        android:text="Terminar registo"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/btnTakePicture" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

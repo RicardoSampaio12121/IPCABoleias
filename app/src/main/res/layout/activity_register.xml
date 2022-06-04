@@ -20,6 +20,7 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:src="@drawable/ic_return_svgrepo_com"
+        android:background="@color/white"
         app:layout_constraintStart_toStartOf="@id/headerView"
         app:layout_constraintTop_toTopOf="@id/headerView"
         app:layout_constraintBottom_toBottomOf="@id/headerView"/>

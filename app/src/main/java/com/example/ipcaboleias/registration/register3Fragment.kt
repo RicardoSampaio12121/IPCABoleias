@@ -14,6 +14,7 @@ import com.example.ipcaboleias.ViewModels.NewUserViewModel
 import com.example.ipcaboleias.databinding.FragmentRegister3Binding
 import com.example.ipcaboleias.firebaseRepository.UsersRepository
 import com.google.firebase.auth.FirebaseAuth
+import de.hdodenhof.circleimageview.CircleImageView
 import java.io.ByteArrayOutputStream
 import java.util.*
 
@@ -43,9 +44,9 @@ class register3Fragment : Fragment(R.layout.fragment_register3) {
                 picturaView.setImageBitmap(picture)
             }
 
-            btnViewPicture.setOnClickListener{
-                picturaView.setImageBitmap(picture)
-            }
+//            btnViewPicture.setOnClickListener{
+//                picturaView.setImageBitmap(picture)
+//            }
 
             btnRegister.setOnClickListener {
                 register()
@@ -56,8 +57,11 @@ class register3Fragment : Fragment(R.layout.fragment_register3) {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        val picView = requireActivity().findViewById<CircleImageView>(R.id.picturaView)
+
         if(requestCode == 101){
             picture = data?.getParcelableExtra<Bitmap>("data")
+            picView.setImageBitmap(data?.getParcelableExtra<Bitmap>("data"))
             model.setPicture(data!!.getParcelableExtra<Bitmap>("data"))
         }
     }
@@ -72,6 +76,7 @@ class register3Fragment : Fragment(R.layout.fragment_register3) {
         user.carBrand = model.getCarBrand()
         user.carModel = model.getCarModel()
         user.carColor = model.getCarColor()
+        user.carPlate = model.getCarPlate()
         val pictureAsString = BitMapToString(model.getPicture())
         user.profilePicture = pictureAsString
 

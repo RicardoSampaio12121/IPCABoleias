@@ -37,10 +37,16 @@ class Register1FragmentFragment : Fragment(R.layout.fragment_register1_fragment)
 
             //TODO: Remover fragmento do carro se carregar
             cbHasCar.setOnClickListener {
-                var supportFragmentManager = requireActivity().supportFragmentManager
+                val supportFragmentManager = requireActivity().supportFragmentManager
 
                 if (!cbHasCar.isChecked) {
-                    var fragToRemove = supportFragmentManager.findFragmentByTag(REGISTER2_FRAG_TAG)
+
+                    model.carBrand.value = ""
+                    model.carColor.value = ""
+                    model.carModel.value = ""
+                    model.carPlate.value = ""
+
+                    val fragToRemove = supportFragmentManager.findFragmentByTag(REGISTER2_FRAG_TAG)
 
                     if (fragToRemove != null) {
                         supportFragmentManager.beginTransaction().remove(fragToRemove).commit()
