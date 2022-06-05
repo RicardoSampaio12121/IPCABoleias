@@ -2,11 +2,11 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="#dcf0ee"
     android:clickable="true"
-    android:focusable="true"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:focusable="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -84,13 +84,14 @@
             android:layout_height="wrap_content"
             android:layout_marginVertical="10dp"
             android:background="@color/white"
-            app:layout_constraintTop_toBottomOf="@id/viewRideInfo"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/viewRideInfo">
 
             <TextView
                 android:id="@+id/textView29"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
                 android:text="Possiveis pontos de paragem"
                 android:textColor="@color/black"
                 android:textSize="18sp"
@@ -134,8 +135,8 @@
             android:paddingHorizontal="10dp"
             android:text="Número de \nlugares disponiveis"
             android:textSize="17sp"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@id/tvDisponibilidade"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/priceTitle" />
 
         <TextView
@@ -189,39 +190,42 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tvDisponibilidade" />
 
-        <View
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/viewDescription"
             android:layout_width="match_parent"
-            android:layout_height="135dp"
+            android:layout_height="wrap_content"
             android:layout_marginVertical="10dp"
             android:background="@color/white"
-            app:layout_constraintTop_toBottomOf="@id/viewPrice"
-            app:layout_constraintStart_toStartOf="parent"/>
-
-        <TextView
-            android:id="@+id/txtViewDescTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="10dp"
-            android:paddingHorizontal="10dp"
-            android:text="Descrição"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/viewDescription"
-            tools:layout_editor_absoluteY="108dp" />
+            app:layout_constraintTop_toBottomOf="@id/viewPrice">
 
-        <TextView
-            android:id="@+id/txtDesc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="10dp"
-            android:text="Parto ao pé da Sé de Braga e vou pela nacional, não pela auto-estrada. \nPosso fazer paragens até ao eleclerc desde que não me devie muito a rota. \nFaço esta viagem todas as semanas."
-            android:textColor="@color/black"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtViewDescTitle" />
+            <TextView
+                android:id="@+id/txtViewDescTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:paddingHorizontal="10dp"
+                android:text="Descrição"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/viewDescription"
+                tools:layout_editor_absoluteY="108dp" />
 
+            <TextView
+                android:id="@+id/txtDesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="Parto ao pé da Sé de Braga e vou pela nacional, não pela auto-estrada. \nPosso fazer paragens até ao eleclerc desde que não me devie muito a rota. \nFaço esta viagem todas as semanas."
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/viewDescription"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtViewDescTitle" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <View
             android:id="@+id/viewPersonInfo"
@@ -320,7 +324,7 @@
             android:layout_height="100dp"
             android:layout_marginVertical="10dp"
             android:background="@color/white"
-            app:layout_constraintTop_toBottomOf="@id/viewPersonInfo"/>
+            app:layout_constraintTop_toBottomOf="@id/viewPersonInfo" />
 
         <TextView
             android:id="@+id/txtDescCarTitle"
@@ -329,23 +333,23 @@
             android:layout_marginVertical="10dp"
             android:paddingHorizontal="10dp"
             android:text="Descrição do carro"
-            android:textSize="22sp"
             android:textColor="@color/black"
+            android:textSize="22sp"
             android:textStyle="bold"
-            app:layout_constraintTop_toTopOf="@id/viewCarInfo"
-            app:layout_constraintStart_toStartOf="@id/viewCarInfo"/>
+            app:layout_constraintStart_toStartOf="@id/viewCarInfo"
+            app:layout_constraintTop_toTopOf="@id/viewCarInfo" />
 
         <TextView
             android:id="@+id/carBrand"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="10dp"
             android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="10dp"
             android:text="MERCEDES-BENZ C 200: "
-            android:textSize="17sp"
             android:textColor="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/txtDescCarTitle"
-            app:layout_constraintStart_toStartOf="@id/viewCarInfo"/>
+            android:textSize="17sp"
+            app:layout_constraintStart_toStartOf="@id/viewCarInfo"
+            app:layout_constraintTop_toBottomOf="@id/txtDescCarTitle" />
 
         <TextView
             android:id="@+id/tvColor"
@@ -353,21 +357,21 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:text="Branco"
-            app:layout_constraintTop_toBottomOf="@id/carBrand"
-            app:layout_constraintStart_toStartOf="@id/viewCarInfo"/>
+            app:layout_constraintStart_toStartOf="@id/viewCarInfo"
+            app:layout_constraintTop_toBottomOf="@id/carBrand" />
 
         <FrameLayout
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginHorizontal="10dp"
-            app:layout_constraintTop_toTopOf="@id/viewCarInfo"
+            app:layout_constraintBottom_toBottomOf="@id/viewCarInfo"
             app:layout_constraintEnd_toEndOf="@id/viewCarInfo"
-            app:layout_constraintBottom_toBottomOf="@id/viewCarInfo">
+            app:layout_constraintTop_toTopOf="@id/viewCarInfo">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_car_svgrepo_com"/>
+                android:src="@drawable/ic_car_svgrepo_com" />
         </FrameLayout>
 
         <View
@@ -375,23 +379,22 @@
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_marginVertical="10dp"
-            app:layout_constraintTop_toBottomOf="@id/viewCarInfo"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/viewCarInfo" />
 
         <Button
             android:id="@+id/buttonReserve"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
-            android:text="Reservar"
-            android:textSize="22sp"
-            android:textColor="@color/white"
             android:backgroundTint="@color/IpcaColor"
-            app:layout_constraintTop_toTopOf="@id/viewReserve"
+            android:text="Reservar"
+            android:textColor="@color/white"
+            android:textSize="22sp"
             app:layout_constraintBottom_toBottomOf="@id/viewReserve"
+            app:layout_constraintEnd_toEndOf="@id/viewReserve"
             app:layout_constraintStart_toStartOf="@id/viewReserve"
-            app:layout_constraintEnd_toEndOf="@id/viewReserve"/>
-
+            app:layout_constraintTop_toTopOf="@id/viewReserve" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

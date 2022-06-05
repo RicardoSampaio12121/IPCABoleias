@@ -11,12 +11,24 @@ import com.google.type.LatLng
 
 class RVPossibleStopsAdapter(var stops: MutableList<NewStop>, var startPosition: com.google.android.gms.maps.model.LatLng): RecyclerView.Adapter<RVPossibleStopsAdapter.ToDoViewHolder>() {
 
+    private lateinit var mListener: onItemClickListener
+
+    interface onItemClickListener {
+        fun onItemClick(position: Int)
+    }
+
+    fun setOnItemClickListener(listener: onItemClickListener) {
+        mListener = listener
+    }
+
 
     inner class ToDoViewHolder(
         val binding: ItemPossibleStopBinding,
+        listener: onItemClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
         init {
             itemView.setOnClickListener {
+                listener.onItemClick(adapterPosition)
             }
         }
     }
@@ -25,7 +37,7 @@ class RVPossibleStopsAdapter(var stops: MutableList<NewStop>, var startPosition:
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = ItemPossibleStopBinding.inflate(layoutInflater, parent, false)
 
-        return ToDoViewHolder(binding)
+        return ToDoViewHolder(binding, mListener)
     }
 
     override fun onBindViewHolder(holder: ToDoViewHolder, position: Int) {

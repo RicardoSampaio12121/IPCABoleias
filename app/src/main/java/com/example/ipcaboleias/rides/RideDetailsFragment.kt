@@ -77,7 +77,17 @@ class RideDetailsFragment : Fragment(R.layout.fragment_ride_details) {
         btnMenu?.visibility = View.GONE
         btnReturn?.visibility = View.VISIBLE
 
+
+
         binding.apply {
+            if (ride.stops.size == 0) {
+                possibleStops.visibility = View.GONE
+            }
+
+            if (ride.description == "") {
+                viewDescription.visibility = View.GONE
+            }
+
             val location = getLocation(ride.startLatitude, ride.startLongitude)
 
             if (location == null) {
@@ -111,8 +121,6 @@ class RideDetailsFragment : Fragment(R.layout.fragment_ride_details) {
 
             txtRideInfoTitle.text =
                 "${localDate.dayOfMonth} de ${localDate.month} de ${localDate.year} às ${localTime.hour}:${localTime.minute} h"
-
-
 
             tvPrice.text = String.format("%.2f€", ride.price)
             tvPlaces.text = ride.places.toString()
@@ -197,7 +205,7 @@ class RideDetailsFragment : Fragment(R.layout.fragment_ride_details) {
 
     fun selectLocationListener() {
         selectMode.clickedButton.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            if(selectMode.startLatitude.value == null) return@Observer
+            if (selectMode.startLatitude.value == null) return@Observer
 
             pubRepo = PublicationsRepository(requireContext())
             pubRepo.reserveRide(
@@ -230,6 +238,24 @@ class RideDetailsFragment : Fragment(R.layout.fragment_ride_details) {
             com.google.android.gms.maps.model.LatLng(ride.startLatitude, ride.startLongitude)
         )
         rvStops.adapter = adapter
+
+        adapter.setOnItemClickListener(object : RVPossibleStopsAdapter.onItemClickListener {
+            override fun onItemClick(position: Int) {
+                val supportFragmentManager = requireActivity().supportFragmentManager
+
+                supportFragmentManager.beginTransaction().add(
+                    R.id.frameFragment,
+                    PossibleStopMapVisualizerFragment.newInstance(
+                        com.google.android.gms.maps.model.LatLng(
+                            ride.stops[position].latitude,
+                            ride.stops[position].longitude
+                        )
+                    )
+                ).commit()
+            }
+        })
+
+
     }
 
     fun getLocation(latitude: Double, longitude: Double): Address? {
