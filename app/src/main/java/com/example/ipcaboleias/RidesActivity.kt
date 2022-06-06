@@ -36,6 +36,8 @@ class RidesActivity : AppCompatActivity() {
     private val RIDES_DETAILS_FRAG_TAG = "detailsFragTag"
     private val CHAT_CHANNELS_FRAG_TAG = "chatChannelsFragTag"
     private val RIDES_DETAILS_Passenger_FRAG_TAG = "detailsPassengerFragTag"
+    private val POSSIBLE_STOP_MAP_VISUALIZER_FRAG_TAG = "possibleStopMapVisualizerFragTag"
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,58 +93,69 @@ class RidesActivity : AppCompatActivity() {
         }
 
         navView.setNavigationItemSelectedListener {
-            if (it.itemId == R.id.miBoleias) {
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.frameFragment, RidesFragment.newInstance()).commit()
-
-            } else if (it.itemId == R.id.miPedidosAtivos) {
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.frameFragment, MyActiveRidesFragmentFragment.newInstance())
-                    .commit()
-            } else if (it.itemId == R.id.miRequests) {
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.frameFragment, PendingRequestsFragment.newInstance()).commit()
-            } else if (it.itemId == R.id.miBoleiasAgendadas) {
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.frameFragment, ScheduledRidesFragment.newInstance()).commit()
-            } else if (it.itemId == R.id.miHistorico) {
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.frameFragment, MyRidesFragment.newInstance()).commit()
-            } else if (it.itemId == R.id.miChatChannels) {
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.frameFragment, testFragment.newInstance()).commit()
+            when (it.itemId) {
+                R.id.miBoleias -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameFragment, RidesFragment.newInstance()).commit()
+                }
+                R.id.miPedidosAtivos -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameFragment, MyActiveRidesFragmentFragment.newInstance())
+                        .commit()
+                }
+                R.id.miRequests -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameFragment, PendingRequestsFragment.newInstance()).commit()
+                }
+                R.id.miBoleiasAgendadas -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameFragment, ScheduledRidesFragment.newInstance()).commit()
+                }
+                R.id.miHistorico -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameFragment, MyRidesFragment.newInstance()).commit()
+                }
+                R.id.miChatChannels -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameFragment, testFragment.newInstance()).commit()
+                }
             }
             dLayout.closeDrawer(Gravity.LEFT)
             true
         }
 
         returnBtn.setOnClickListener {
-            var fragToRemove = supportFragmentManager.findFragmentByTag(RIDES_DETAILS_FRAG_TAG)
+            val fragDetails = supportFragmentManager.findFragmentByTag(RIDES_DETAILS_FRAG_TAG)
+            val fragDetailsPassenger =
+                supportFragmentManager.findFragmentByTag(RIDES_DETAILS_Passenger_FRAG_TAG)
+            val fragStopVisualizer =
+                supportFragmentManager.findFragmentByTag(POSSIBLE_STOP_MAP_VISUALIZER_FRAG_TAG)
 
-            if (fragToRemove == null) {
-                fragToRemove =
-                    supportFragmentManager.findFragmentByTag(RIDES_DETAILS_Passenger_FRAG_TAG)
+            when {
+                fragStopVisualizer != null -> supportFragmentManager.beginTransaction()
+                    .remove(fragStopVisualizer).commit()
+                fragDetailsPassenger != null -> {
+                    supportFragmentManager.beginTransaction()
+                        .remove(fragDetailsPassenger).commit()
+
+                    returnBtn.visibility = View.GONE
+                    menu.visibility = View.VISIBLE
+                }
+                fragDetails != null -> {
+                    supportFragmentManager.beginTransaction()
+                        .remove(fragDetails).commit()
+
+                    returnBtn.visibility = View.GONE
+                    menu.visibility = View.VISIBLE
+                }
             }
-//            val fragToShow = supportFragmentManager.findFragmentByTag(RIDES_FRAG_TAG)
-//
-//            supportFragmentManager.beginTransaction().remove(fragToRemove!!).commit()
-//            supportFragmentManager.beginTransaction().show(fragToShow!!).commit()
-
-            supportFragmentManager.beginTransaction().remove(fragToRemove!!).commit()
-
-            returnBtn.visibility = View.GONE
-            menu.visibility = View.VISIBLE
         }
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (toggle.onOptionsItemSelected(item)) {
-
-
             return true
         }
-
         return super.onOptionsItemSelected(item)
     }
 }

@@ -18,6 +18,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
 import java.util.*
 import java.util.regex.Pattern
 
@@ -116,8 +117,14 @@ class RVPublicationsAadapter(var publications: MutableList<RidePresentation>) :
             val localDate = localDateTime.toLocalDate()
             val localTime = localDateTime.toLocalTime()
 
+
             date.text =
-                "${localDate.dayOfMonth} de ${localDate.month} de ${localDate.year} às ${localTime.hour}:${localTime.minute} h"
+                "${localDate.dayOfMonth} de ${
+                    localDate.month.getDisplayName(
+                        TextStyle.FULL,
+                        Locale("pt", "PT")
+                    )
+                } de ${localDate.year} às ${localTime.hour}:${localTime.minute} h"
 
             val byteArray: ByteArray =
                 Base64.getDecoder().decode(publications[position].profilePicture)

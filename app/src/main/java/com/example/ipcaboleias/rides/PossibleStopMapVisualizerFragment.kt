@@ -40,17 +40,8 @@ class PossibleStopMapVisualizerFragment : Fragment(R.layout.fragment_possible_st
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         _binding = FragmentPossibleStopMapVisualizerBinding.bind(view)
 
-        val supportFragmentManager = requireActivity().supportFragmentManager
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-
         mapFragment.getMapAsync(this)
-
-        binding.apply {
-            returnButton.setOnClickListener {
-                supportFragmentManager.beginTransaction()
-                    .remove(this@PossibleStopMapVisualizerFragment).commit()
-            }
-        }
     }
 
     companion object {

@@ -38,12 +38,14 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
 import java.util.*
 import java.util.regex.Pattern
 
 class RideDetailsFragment : Fragment(R.layout.fragment_ride_details) {
 
     private val SELECT_START_LOCATION_FRAG_TAG = "selectStartLocationFragTag"
+    private val POSSIBLE_STOP_MAP_VISUALIZER_FRAG_TAG = "possibleStopMapVisualizerFragTag"
 
     private var _binding: FragmentRideDetailsBinding? = null
     private val binding get() = _binding!!
@@ -57,7 +59,6 @@ class RideDetailsFragment : Fragment(R.layout.fragment_ride_details) {
     private lateinit var ride: RidePresentation
 
     private lateinit var adapter: RVPossibleStopsAdapter
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -119,8 +120,11 @@ class RideDetailsFragment : Fragment(R.layout.fragment_ride_details) {
             val localDate = localDateTime.toLocalDate()
             val localTime = localDateTime.toLocalTime()
 
+            val ptLocale: Locale = Locale("pt", "PT")
+            val month = localDate.month.getDisplayName(TextStyle.FULL, ptLocale)
+
             txtRideInfoTitle.text =
-                "${localDate.dayOfMonth} de ${localDate.month} de ${localDate.year} às ${localTime.hour}:${localTime.minute} h"
+                "${localDate.dayOfMonth} de ${month} de ${localDate.year} às ${localTime.hour}:${localTime.minute} h"
 
             tvPrice.text = String.format("%.2f€", ride.price)
             tvPlaces.text = ride.places.toString()
@@ -250,7 +254,7 @@ class RideDetailsFragment : Fragment(R.layout.fragment_ride_details) {
                             ride.stops[position].latitude,
                             ride.stops[position].longitude
                         )
-                    )
+                    ), POSSIBLE_STOP_MAP_VISUALIZER_FRAG_TAG
                 ).commit()
             }
         })

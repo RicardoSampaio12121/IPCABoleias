@@ -122,11 +122,19 @@ class UsersRepository(private val context: Context) {
             .document(chatChannel)
             .get()
             .addOnSuccessListener {
-                val users = it["usersIds"] as List<*>
+                if (it["usersIds"] != null) {
+                    val users = it["usersIds"] as List<*>
 
-                getUser(users[0].toString()) { returnUser ->
-                    returnUser.uid = users[0].toString()
-                    onComplete(returnUser)
+                    val userToGetUid = if (users[0].toString() == FirebaseAuth.getInstance().currentUser!!.uid) {
+                            users[1].toString()
+                        } else {
+                            users[0].toString()
+                        }
+
+                    getUser(userToGetUid) { returnUser ->
+                        returnUser.uid = userToGetUid
+                        onComplete(returnUser)
+                    }
                 }
             }
     }

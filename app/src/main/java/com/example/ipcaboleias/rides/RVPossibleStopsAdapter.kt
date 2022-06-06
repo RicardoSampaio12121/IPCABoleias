@@ -51,7 +51,8 @@ class RVPossibleStopsAdapter(var stops: MutableList<NewStop>, var startPosition:
 
             tvPlace.text = location!!.getAddressLine(0)
             tvCity.text = location.locality
-            tvDistance.text = "A ${(results[0] / 1000)} km da posição inicial"
+            tvDistance.text = String.format("%.2f km", results[0] / 1000)
+
         }
     }
 
