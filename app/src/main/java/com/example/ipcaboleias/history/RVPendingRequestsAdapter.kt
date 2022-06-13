@@ -10,18 +10,21 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ipcaboleias.ReservePresentation
+import com.example.ipcaboleias.Utils.Utils
 import com.example.ipcaboleias.databinding.ItemPendingRequestBinding
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.format.TextStyle
 import java.util.*
 
 class RVPendingRequestsAdapter(
     val reserves: MutableList<ReservePresentation>,
     var acceptButtonClickListener: AcceptButtonClickListener,
-    var chatButtonClickListener: ChatButtonClickListener
+    var chatButtonClickListener: ChatButtonClickListener,
+    var rejectButtonClickListener: RejectButtonClickListener
 ) :
     RecyclerView.Adapter<RVPendingRequestsAdapter.ToDoViewHolder>() {
 
@@ -40,6 +43,10 @@ class RVPendingRequestsAdapter(
         fun onChatButtonClickListener(position: Int)
     }
 
+    interface RejectButtonClickListener {
+        fun onRejectButtonClickListener(position: Int)
+    }
+
     fun removeItem(position: Int) {
         reserves.removeAt(position)
         notifyDataSetChanged()
@@ -54,6 +61,8 @@ class RVPendingRequestsAdapter(
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: ToDoViewHolder, position: Int) {
+        val utils = Utils()
+
         holder.binding.apply {
 
             tvName.text = reserves[position].name
@@ -64,17 +73,13 @@ class RVPendingRequestsAdapter(
                 tvRole.text = "Aluno do IPCA"
             }
 
-            tvFrom.text = getLocation(
+            tvFrom.text = utils.getLocation(
                 tvDate.context,
                 reserves[position].startLat,
                 reserves[position].startLong
-            ).getAddressLine(0)
+            )!!.getAddressLine(0)
 
-            tvTo.text = getLocation(
-                tvDate.context,
-                reserves[position].endLat,
-                reserves[position].endLong
-            ).getAddressLine(0)
+            tvTo.text = utils.getIpcaCampus(reserves[position].endLat)
 
             val byteArray: ByteArray =
                 Base64.getDecoder().decode(reserves[position].profilePicture)
@@ -90,13 +95,11 @@ class RVPendingRequestsAdapter(
             val localDate = localDateTime.toLocalDate()
             val localTime = localDateTime.toLocalTime()
 
-            val d = Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant())
-            val local = Locale("pt", "BR")
-            val formato: DateFormat =
-                SimpleDateFormat("dd 'de' MMMM 'de' yyyy 'às' H ':' mm", local)
+            val ptLocale: Locale = Locale("pt", "PT")
+            val month = localDate.month.getDisplayName(TextStyle.FULL, ptLocale)
 
             tvDate.text =
-                "${localDate.dayOfMonth} de ${localDate.month} de ${localDate.year} às ${localTime.hour}:${localTime.minute}h"
+                "${localDate.dayOfMonth} de ${month} de ${localDate.year} às ${localTime.hour}:${localTime.minute}h"
 
 
             btnAccept.setOnClickListener {
@@ -106,16 +109,11 @@ class RVPendingRequestsAdapter(
             btnChat.setOnClickListener {
                 chatButtonClickListener.onChatButtonClickListener(position)
             }
+
+            btnReject.setOnClickListener {
+                rejectButtonClickListener.onRejectButtonClickListener(position)
+            }
         }
-    }
-
-    fun getLocation(context: Context, latitude: Double, longitude: Double): Address {
-        val addresses: MutableList<Address>
-        val geocoder = Geocoder(context, Locale.ENGLISH)
-
-        addresses = geocoder.getFromLocation(latitude, longitude, 1)
-
-        return addresses[0]
     }
 
     override fun getItemCount(): Int {

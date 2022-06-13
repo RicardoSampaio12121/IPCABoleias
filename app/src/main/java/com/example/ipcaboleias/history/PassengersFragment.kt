@@ -15,8 +15,13 @@ import com.example.ipcaboleias.firebaseRepository.PublicationsRepository
 import com.example.ipcaboleias.firebaseRepository.User
 import com.example.ipcaboleias.firebaseRepository.UsersRepository
 import com.example.ipcaboleias.registration.NewUser
+import com.example.ipcaboleias.rides.PossibleStopMapVisualizerFragment
+import com.google.android.gms.maps.model.LatLng
 
 private const val Id = "id"
+private const val EndLatitude = "endLatitude"
+private const val EndLongitude = "endLongitude"
+
 
 class PassengersFragment : Fragment(R.layout.fragment_passengers) {
 
@@ -24,17 +29,23 @@ class PassengersFragment : Fragment(R.layout.fragment_passengers) {
     private val binding get() = _binding!!
 
     private var _id: String? = null
+    private var _endLatitude: Double? = null
+    private var _endLongitude: Double? = null
+
+    private val POSSIBLE_STOP_MAP_VISUALIZER_FRAG_TAG = "possibleStopMapVisualizerFragTag"
 
     private lateinit var pubRepo: PublicationsRepository
     private lateinit var usersRepo: UsersRepository
     private lateinit var adapter: RVPassengersAdapter
 
-    private val passengers: MutableList<User> = ArrayList()
+    private val passengers: MutableList<PassangerPresentation> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             _id = it.getString(Id)
+            _endLatitude = it.getString(EndLatitude)!!.toDouble()
+            _endLongitude = it.getString(EndLongitude)!!.toDouble()
         }
     }
 
@@ -65,25 +76,44 @@ class PassengersFragment : Fragment(R.layout.fragment_passengers) {
         usersRepo = UsersRepository(requireContext())
 
         RVPassengers.layoutManager = LinearLayoutManager(activity)
-        adapter = RVPassengersAdapter(passengers, object: RVPassengersAdapter.ChatButtonClickListener{
-            override fun onChatButtonClickListener(position: Int) {
-                usersRepo.getOrCreateChatChannel(passengers[position].uid) {
-                    val intent = Intent(requireActivity(), ChatActivity::class.java)
-                    intent.putExtra("channelId", it)
-                    requireActivity().startActivity(intent)
-                }
+        adapter =
+            RVPassengersAdapter(
+                passengers,
+                LatLng(_endLatitude!!, _endLongitude!!),
+                object : RVPassengersAdapter.ChatButtonClickListener {
+                    override fun onChatButtonClickListener(position: Int) {
+                        usersRepo.getOrCreateChatChannel(passengers[position].uid) {
+                            val intent = Intent(requireActivity(), ChatActivity::class.java)
+                            intent.putExtra("channelId", it)
+                            requireActivity().startActivity(intent)
+                        }
 
-            }
-        })
+                    }
+                },
+                object : RVPassengersAdapter.OpenMapClickListener {
+                    override fun onOpenMapClickListener(position: Int) {
+                        requireActivity().supportFragmentManager.beginTransaction().add(
+                            R.id.frameFragment,
+                            PossibleStopMapVisualizerFragment.newInstance(
+                                LatLng(
+                                    passengers[position].startLatitude,
+                                    passengers[position].startLongitude
+                                ),
+                            ), POSSIBLE_STOP_MAP_VISUALIZER_FRAG_TAG
+                        ).commit()
+                    }
+                })
         RVPassengers.adapter = adapter
     }
 
     companion object {
         @JvmStatic
-        fun newInstance(id: String) =
+        fun newInstance(id: String, endLatitude: String, endLongitude: String) =
             PassengersFragment().apply {
                 arguments = Bundle().apply {
                     putString(Id, id)
+                    putString(EndLatitude, endLatitude)
+                    putString(EndLongitude, endLongitude)
                 }
             }
     }

@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.location.Address
 import android.location.Geocoder
+import android.location.Location
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.ipcaboleias.registration.NewUser
@@ -78,5 +79,14 @@ class Utils {
             return null
         }
         return addresses[0]
+    }
+
+    fun calculatePrice(start: com.google.android.gms.maps.model.LatLng, end: com.google.android.gms.maps.model.LatLng): Float{
+        val results = FloatArray(1)
+        Location.distanceBetween(start.latitude, start.longitude, end.latitude, end.longitude, results)
+
+        val distanceInKm: Float = results[0] / 1000
+
+        return distanceInKm * 0.3f
     }
 }

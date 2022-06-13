@@ -49,7 +49,7 @@ class RVSelectStartLocationAdapter(var stops: MutableList<NewStop>, var startPos
 
             tvPlace.text = location!!.getAddressLine(0)
             tvCity.text = location.locality
-            tvDistance.text = "A ${(results[0] / 1000)} km da posição inicial"
+            tvDistance.text = "A ${String.format("%.2f", (results[0] / 1000))} km do local de partida"
         }
     }
 

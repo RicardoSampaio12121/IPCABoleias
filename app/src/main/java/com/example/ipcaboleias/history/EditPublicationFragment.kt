@@ -20,6 +20,7 @@ class EditPublicationFragment : Fragment(R.layout.fragment_edit_publication) {
     private val EDIT_PUB_DATE_TIME_FRAG_TAG = "editPubDateTimeFragTag"
     private val EDIT_PUB_PRICE_FRAG_TAG = "editPubPriceFragTag"
     private val EDIT_PUB_PLACES_FRAG_TAG = "editPubPlacesFragTag"
+    private val EDIT_PUB_DESCRIPTION_FRAG_TAG = "editPubDescriptionFragTag"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +66,11 @@ class EditPublicationFragment : Fragment(R.layout.fragment_edit_publication) {
             }
 
             viewDescription.setOnClickListener {
-
+                supportFragmentManager.beginTransaction().add(
+                    R.id.frameFragment,
+                    EditDescriptionFragment.newInstance(_id!!),
+                    EDIT_PUB_DESCRIPTION_FRAG_TAG
+                ).commit()
             }
         }
     }

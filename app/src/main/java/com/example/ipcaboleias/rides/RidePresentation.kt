@@ -19,7 +19,7 @@ data class RidePresentation (
     val endLongitude : Double = 0.0,
     val type : String = "",
     var places : Int = 0,
-    val description : String = "",
+    var description : String = "",
     val acceptAlunos : Boolean = false,
     val acceptDoc : Boolean = false,
     val uniqueRide : Boolean = true,

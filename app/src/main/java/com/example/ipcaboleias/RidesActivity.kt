@@ -37,6 +37,7 @@ class RidesActivity : AppCompatActivity() {
     private val CHAT_CHANNELS_FRAG_TAG = "chatChannelsFragTag"
     private val RIDES_DETAILS_Passenger_FRAG_TAG = "detailsPassengerFragTag"
     private val POSSIBLE_STOP_MAP_VISUALIZER_FRAG_TAG = "possibleStopMapVisualizerFragTag"
+    private val SELECT_START_LOCATION_FRAG_TAG = "selectStartLocationFragTag"
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -130,10 +131,27 @@ class RidesActivity : AppCompatActivity() {
                 supportFragmentManager.findFragmentByTag(RIDES_DETAILS_Passenger_FRAG_TAG)
             val fragStopVisualizer =
                 supportFragmentManager.findFragmentByTag(POSSIBLE_STOP_MAP_VISUALIZER_FRAG_TAG)
+            val fragSelectStartingPoint =
+                supportFragmentManager.findFragmentByTag(SELECT_START_LOCATION_FRAG_TAG)
+
 
             when {
-                fragStopVisualizer != null -> supportFragmentManager.beginTransaction()
-                    .remove(fragStopVisualizer).commit()
+                fragStopVisualizer != null -> {
+                    println("Entra no primeiro")
+
+                    supportFragmentManager.beginTransaction()
+                        .remove(fragStopVisualizer).commit()
+
+                    if (fragDetailsPassenger == null && fragDetails == null) {
+                        returnBtn.visibility = View.GONE
+                        menu.visibility = View.VISIBLE
+                    }
+
+                }
+                fragSelectStartingPoint != null -> {
+                    supportFragmentManager.beginTransaction().remove(fragSelectStartingPoint)
+                        .commit()
+                }
                 fragDetailsPassenger != null -> {
                     supportFragmentManager.beginTransaction()
                         .remove(fragDetailsPassenger).commit()

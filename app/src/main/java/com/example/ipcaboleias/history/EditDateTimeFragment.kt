@@ -18,6 +18,8 @@ import com.example.ipcaboleias.firebaseRepository.PublicationsRepository
 import com.google.firebase.Timestamp
 import java.time.*
 import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
+import java.util.*
 
 private const val Id = "id"
 
@@ -53,8 +55,11 @@ class EditDateTimeFragment : Fragment(R.layout.fragment_edit_date_time) {
             val localDateTime =
                 LocalDateTime.ofInstant(Instant.ofEpochMilli(milliseconds), ZoneId.systemDefault())
 
+            val ptLocale: Locale = Locale("pt", "PT")
+            val month = localDateTime.month.getDisplayName(TextStyle.FULL, ptLocale)
+
             txtDate.text =
-                "${localDateTime.dayOfMonth}/${localDateTime.month}/${localDateTime.year}"
+                "${localDateTime.dayOfMonth}/${month}/${localDateTime.year}"
             tvTime.text = "${localDateTime.hour}:${localDateTime.minute}"
 
             returnButton.setOnClickListener {

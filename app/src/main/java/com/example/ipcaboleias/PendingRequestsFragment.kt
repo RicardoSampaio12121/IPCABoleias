@@ -35,7 +35,6 @@ class PendingRequestsFragment : Fragment(R.layout.fragment_pending_requests) {
         binding.apply {
             usersRepo.getReservesToBeApproved { reserve ->
                 var iterator = 0
-
                 for (doc in reserve) {
                     iterator++
                     pubRepo.getPublicationById(doc.pubId) { ride ->
@@ -122,6 +121,21 @@ class PendingRequestsFragment : Fragment(R.layout.fragment_pending_requests) {
                         intent.putExtra("channelId", it)
                         requireActivity().startActivity(intent)
                     }
+                }
+            }, object : RVPendingRequestsAdapter.RejectButtonClickListener {
+                override fun onRejectButtonClickListener(position: Int) {
+                    pubRepo.RejectPendingRequest(
+                        reservePresentations[position].docId,
+                        reservePresentations[position].passengerId
+                    )
+
+                    Toast.makeText(
+                        requireContext(),
+                        "Pedido rejeitado com sucesso!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    adapter.removeItem(position)
                 }
             })
 

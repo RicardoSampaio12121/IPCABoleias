@@ -9,12 +9,14 @@ import com.example.ipcaboleias.NewPublicationAsPassenger
 import com.example.ipcaboleias.Utils.Utils
 import com.example.ipcaboleias.ViewModels.FilterResultsViewModel
 import com.example.ipcaboleias.firebaseRepository.Callbacks.NewPublicationCallback
+import com.example.ipcaboleias.history.PassangerPresentation
 import com.example.ipcaboleias.registration.NewUser
 import com.example.ipcaboleias.rides.Ride
 import com.example.ipcaboleias.rides.RidePresentation
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.index.FirestoreIndexValueWriter
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.type.DateTime
@@ -271,11 +273,12 @@ class PublicationsRepository(private val context: Context) {
                 .addOnSuccessListener {
                     for (doc in it) {
                         db.collection("users")
-                            .document(uid)
+                            .document(uid) //dono
                             .collection("reserves")
                             .document()
                             .set(
                                 mapOf(
+                                    "rideOwnerUid" to uid,
                                     "uid" to currentUser,
                                     "pubId" to doc.id,
                                     "approved" to false,
@@ -285,11 +288,12 @@ class PublicationsRepository(private val context: Context) {
                             )
 
                         db.collection("users")
-                            .document(currentUser)
+                            .document(currentUser) //eu
                             .collection("requests")
                             .document()
                             .set(
                                 mapOf(
+                                    "rideOwnerUid" to uid,
                                     "uid" to currentUser,
                                     "pubId" to doc.id,
                                     "approved" to false,
@@ -341,7 +345,13 @@ class PublicationsRepository(private val context: Context) {
             .document(docId)
             .collection("passengers")
             .document(passengerId)
-            .set(mapOf("uid" to passengerId, "startLatitude" to location.latitude, "startLongitude" to location.longitude))
+            .set(
+                mapOf(
+                    "uid" to passengerId,
+                    "startLatitude" to location.latitude,
+                    "startLongitude" to location.longitude
+                )
+            )
 
         db.collection("users")
             .document(passengerId)
@@ -388,7 +398,10 @@ class PublicationsRepository(private val context: Context) {
             }
     }
 
-    fun getPublicationPassengersById(docId: String, onComplete: (output: User) -> Unit) {
+    fun getPublicationPassengersById(
+        docId: String,
+        onComplete: (output: PassangerPresentation) -> Unit
+    ) {
         val db = Firebase.firestore
 
         db.collection("publications")
@@ -404,7 +417,21 @@ class PublicationsRepository(private val context: Context) {
                             var u = user.toObject(User::class.java)!!
                             u.uid = user.id
 
-                            onComplete(u)
+                            onComplete(
+                                PassangerPresentation(
+                                    passenger["uid"].toString(),
+                                    passenger["startLatitude"].toString().toDouble(),
+                                    passenger["startLongitude"].toString().toDouble(),
+                                    user["name"].toString(),
+                                    user["surname"].toString(),
+                                    user["email"].toString(),
+                                    user["carBrand"].toString(),
+                                    user["carModel"].toString(),
+                                    user["carColor"].toString(),
+                                    user["carPlate"].toString(),
+                                    user["profilePicture"].toString()
+                                )
+                            )
                         }
                 }
             }
@@ -482,5 +509,52 @@ class PublicationsRepository(private val context: Context) {
         }
 
 
+    }
+
+    fun editDescription(description: String, id: String, onComplete: (checker: Boolean) -> Unit) {
+        val db = Firebase.firestore
+
+        db.collection("publications")
+            .document(id)
+            .update(mapOf("description" to description))
+            .addOnSuccessListener {
+                onComplete(true)
+            }
+            .addOnFailureListener {
+                onComplete(false)
+            }
+    }
+
+    fun RejectPendingRequest(pubId: String, otherUserId: String) {
+        val db = Firebase.firestore
+
+        val currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+
+        db.collection("users")
+            .document(currentUser)
+            .collection("reserves")
+            .whereEqualTo("pubId", pubId)
+            .whereEqualTo("uid", otherUserId)
+            .get()
+            .addOnSuccessListener { current ->
+                db.collection("users")
+                    .document(currentUser)
+                    .collection("reserves")
+                    .document(current.documents[0].id)
+                    .delete()
+            }
+
+        db.collection("users")
+            .document(otherUserId)
+            .collection("requests")
+            .whereEqualTo("pubId", pubId)
+            .get()
+            .addOnSuccessListener { other ->
+                db.collection("users")
+                    .document(otherUserId)
+                    .collection("requests")
+                    .document(other.documents[0].id)
+                    .delete()
+            }
     }
 }

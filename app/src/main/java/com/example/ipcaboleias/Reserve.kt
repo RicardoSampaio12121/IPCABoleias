@@ -6,5 +6,6 @@ data class Reserve(
     var approved: Boolean = false,
     val startLatitude: Double = 0.0,
     val startLongitude: Double = 0.0,
-    var uid: String = ""
+    var uid: String = "",
+    var ownerUid: String = ""
 )

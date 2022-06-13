@@ -97,7 +97,11 @@ class MyActiveRidesFragmentFragment : Fragment(R.layout.fragment_my_active_rides
 
                     supportFragmentManager.beginTransaction().add(
                         R.id.frameFragment,
-                        PassengersFragment.newInstance(myRides[position].docId)
+                        PassengersFragment.newInstance(
+                            myRides[position].docId,
+                            myRides[position].endLatitute.toString(),
+                            myRides[position].endLongitude.toString()
+                        )
                     ).commit()
                 }
             })

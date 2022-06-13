@@ -172,7 +172,6 @@ class RideDetailsFragment : Fragment(R.layout.fragment_ride_details) {
                 ride.stops.add(NewStop(ride.startLatitude, ride.startLongitude))
 
                 if (ride.stops.size > 1) {
-                    println("Entra no if")
                     requireActivity().supportFragmentManager.beginTransaction().add(
                         R.id.frameFragment,
                         SelectStartLocationFragment.newInstance(),
