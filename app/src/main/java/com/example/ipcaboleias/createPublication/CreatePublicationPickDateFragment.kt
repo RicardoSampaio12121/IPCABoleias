@@ -11,6 +11,7 @@ import com.example.ipcaboleias.dateTimePickers.DatePickerFragment
 import com.example.ipcaboleias.R
 import com.example.ipcaboleias.ViewModels.NewPubViewModel
 import com.example.ipcaboleias.databinding.FragmentCreatePublicationPickDateBinding
+import com.google.type.DateTime
 import java.sql.Date
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -30,8 +31,8 @@ class CreatePublicationPickDateFragment : Fragment(R.layout.fragment_create_publ
         _binding = FragmentCreatePublicationPickDateBinding.bind(view)
 
         binding.apply {
-
-            tvDate.text = LocalDate.now().toString()
+            val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+            tvDate.text = LocalDate.now().format(formatter).toString()
 
             tvDate.setOnClickListener {
                 val datePickerFragment = DatePickerFragment()

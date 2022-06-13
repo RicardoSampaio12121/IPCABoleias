@@ -35,6 +35,10 @@ class CreatePublicationPickTimeFragment : Fragment(R.layout.fragment_create_publ
         _binding = FragmentCreatePublicationPickTimeBinding.bind(view)
 
         binding.apply {
+
+            val formatter = DateTimeFormatter.ofPattern("HH:mm")
+            tvTime.text = LocalTime.now().format(formatter).toString()
+
             tvTime.setOnClickListener {
                 val supportFragmentManager = requireActivity().supportFragmentManager
 
