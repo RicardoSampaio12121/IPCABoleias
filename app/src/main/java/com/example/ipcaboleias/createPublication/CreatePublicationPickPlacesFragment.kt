@@ -24,6 +24,8 @@ class CreatePublicationPickPlacesFragment :
     private val CREATE_PUB_ADD_DESCRIPTION_FRAG_TAG = "createPubAddDescriptionFragTag"
     private val CREATE_PUB_SET_DEFINITIONS_PASSENGER_FRAG_TAG =
         "createPubSetDefinitionsPassengerFragTag"
+    private val CREATE_PUB_ADD_STOP_FRAG_TAG = "createPubAddStopFragTag"
+
 
     private val model: NewPubViewModel by activityViewModels()
 
@@ -69,15 +71,15 @@ class CreatePublicationPickPlacesFragment :
                 val fragToHide =
                     supportFragmentManager.findFragmentByTag(CREATE_PUB_PICK_PLACES_FRAG_TAG)
                 val fragToCall =
-                    supportFragmentManager.findFragmentByTag(CREATE_PUB_ADD_DESCRIPTION_FRAG_TAG)
+                    supportFragmentManager.findFragmentByTag(CREATE_PUB_ADD_STOP_FRAG_TAG)
 
                 if (fragToCall != null) {
                     supportFragmentManager.beginTransaction().show(fragToCall).commit()
                 } else {
                     supportFragmentManager.beginTransaction().add(
                         R.id.frameLayoutFilter,
-                        CreatePublicationAddDescriptionFragment.newInstance(),
-                        CREATE_PUB_ADD_DESCRIPTION_FRAG_TAG
+                        CreatePublicationAddStopsFragment.newInstance(),
+                        CREATE_PUB_ADD_STOP_FRAG_TAG
                     ).commit()
                 }
 

@@ -19,6 +19,7 @@ class CreatePublicationAddStopsFragment : Fragment(R.layout.fragment_create_publ
 
     private val CREATE_PUB_PICK_STOP = "createPubPickStop"
     private val CREATE_PUB_PICK_DATE_FRAG_TAG = "createPubPickDateFragTag"
+    private val CREATE_PUB_ADD_DESCRIPTION_FRAG_TAG = "createPubAddDescriptionFragTag"
 
     private var _binding: FragmentCreatePublicationAddStopsBinding? = null
     private val binding get() = _binding!!
@@ -59,8 +60,8 @@ class CreatePublicationAddStopsFragment : Fragment(R.layout.fragment_create_publ
 
                 requireActivity().supportFragmentManager.beginTransaction().add(
                     R.id.frameFragment,
-                    CreatePublicationPickDateFragment.newInstance(),
-                    CREATE_PUB_PICK_DATE_FRAG_TAG
+                    CreatePublicationAddDescriptionFragment.newInstance(),
+                    CREATE_PUB_ADD_DESCRIPTION_FRAG_TAG
                 ).commit()
 
                 requireActivity().supportFragmentManager.beginTransaction()
