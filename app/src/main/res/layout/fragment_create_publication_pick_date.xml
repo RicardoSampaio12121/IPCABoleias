@@ -11,8 +11,9 @@
 
     <TextView
         android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
         android:layout_marginVertical="30dp"
         android:text="Escolha o dia da viagem?"
         android:textColor="@color/black"
@@ -24,17 +25,21 @@
 
     <TextView
         android:id="@+id/tvDate"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
         android:layout_marginVertical="20dp"
         android:background="@drawable/corners_rounded_stoke"
+        android:gravity="center"
         android:text="00/00/0000"
-        android:textSize="30sp"
+        android:drawablePadding="-10dp"
+        android:textSize="50sp"
         android:textStyle="bold"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+        app:drawableEndCompat="@drawable/ic_baseline_keyboard_arrow_down_24" />
 
     <ImageButton
         android:id="@+id/btnNext"

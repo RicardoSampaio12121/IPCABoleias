@@ -31,6 +31,8 @@ class CreatePublicationPickDateFragment : Fragment(R.layout.fragment_create_publ
 
         binding.apply {
 
+            tvDate.text = LocalDate.now().toString()
+
             tvDate.setOnClickListener {
                 val datePickerFragment = DatePickerFragment()
                 val supportFragmentManager = requireActivity().supportFragmentManager
