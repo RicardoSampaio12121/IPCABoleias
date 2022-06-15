@@ -155,7 +155,6 @@ class MyActiveRidesFragmentFragment : Fragment(R.layout.fragment_my_active_rides
             ride.description,
             ride.acceptAlunos,
             ride.acceptDoc,
-            ride.uniqueDrive,
             ride.price
         )
     }

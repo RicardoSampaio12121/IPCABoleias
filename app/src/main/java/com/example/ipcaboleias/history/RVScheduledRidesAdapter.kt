@@ -10,6 +10,7 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ipcaboleias.Utils.Utils
 import com.example.ipcaboleias.databinding.ItemScheduledRidesBinding
+import com.google.android.gms.maps.model.LatLng
 import java.util.*
 
 class RVScheduledRidesAdapter(val scheduledRidesPresentations: MutableList<ScheduledRidePresentation>) :
@@ -37,17 +38,30 @@ class RVScheduledRidesAdapter(val scheduledRidesPresentations: MutableList<Sched
 
             tvName.text = ride.name
 
-            if(ride.doc){
+            if (ride.doc) {
                 tvRole.text = "Docente do IPCA"
-            }
-            else{
+            } else {
                 tvRole.text = "Aluno do IPCA"
             }
 
+            price.text = String.format(
+                "%.2f€",
+                utils.calculatePrice(
+                    LatLng(
+                        ride.userStartLat,
+                        ride.userStartLong
+                    ),
+                    LatLng(
+                        ride.endLat,
+                        ride.endLong
+                    )
+                )
+            )
+
             tvFrom.text = getLocation(
                 tvDate.context,
-                ride.startLat,
-                ride.startLong
+                ride.userStartLat,
+                ride.userStartLong
             ).getAddressLine(0)
 
             tvTo.text = utils.getIpcaCampus(ride.endLat)

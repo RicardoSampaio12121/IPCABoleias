@@ -22,14 +22,6 @@ class CreatePublicationSetDefinitionsFragment : Fragment(R.layout.fragment_creat
         _binding = FragmentCreatePublicationSetDefinitionsBinding.bind(view)
 
         binding.apply {
-            stVU.setOnClickListener {
-                stVS.isChecked = !stVU.isChecked
-            }
-
-            stVS.setOnClickListener{
-                stVU.isChecked = !stVS.isChecked
-            }
-
             stDoc.setOnClickListener {
                 if(!stDoc.isChecked && !stAlunos.isChecked){
                     stAlunos.isChecked = true
@@ -44,7 +36,6 @@ class CreatePublicationSetDefinitionsFragment : Fragment(R.layout.fragment_creat
 
 
             btnNext.setOnClickListener {
-                model.setUniqueDrive(stVU.isChecked)
                 model.setAcceptDoc(stDoc.isChecked)
                 model.setAcceptAlunos(stAlunos.isChecked)
 

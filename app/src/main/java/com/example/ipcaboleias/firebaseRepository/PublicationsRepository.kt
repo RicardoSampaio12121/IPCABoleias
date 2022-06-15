@@ -101,7 +101,6 @@ class PublicationsRepository(private val context: Context) {
             pub.type,
             pub.places,
             pub.description,
-            pub.uniqueDrive,
             pub.acceptDoc,
             pub.acceptAlunos,
             pub.price,
@@ -381,7 +380,7 @@ class PublicationsRepository(private val context: Context) {
             }
     }
 
-    fun getCurrentUserActiveRidesAsPassenger(onComplete: (output: Ride) -> Unit) {
+    fun getCurrentUserActiveRidesAsPassenger(onComplete: (output: Ride, rideId: String) -> Unit) {
         val db = Firebase.firestore
         val uid = FirebaseAuth.getInstance().currentUser!!.uid
 
@@ -392,7 +391,7 @@ class PublicationsRepository(private val context: Context) {
             .addOnSuccessListener {
                 it.documents.forEach { document ->
                     getPublicationById(document.id) { ride ->
-                        onComplete(ride)
+                        onComplete(ride, document.id)
                     }
                 }
             }
@@ -555,6 +554,35 @@ class PublicationsRepository(private val context: Context) {
                     .collection("requests")
                     .document(other.documents[0].id)
                     .delete()
+            }
+    }
+
+    fun checkIfRideIsFull(docId: String, onComplete: (checker: Boolean) -> Unit) {
+        val db = Firebase.firestore
+
+        db.collection("publications")
+            .document(docId)
+            .get()
+            .addOnSuccessListener {
+                if (it["places"].toString().toInt() == 0) {
+                    onComplete(false)
+                } else {
+                    onComplete(true)
+                }
+            }
+    }
+
+    fun getPassengerFromRideInfo(docId: String, onComplete: (passenger: passengerInfo) -> Unit) {
+        val db = Firebase.firestore
+        val uid = FirebaseAuth.getInstance().currentUser!!.uid
+
+        db.collection("publications")
+            .document(docId)
+            .collection("passengers")
+            .document(uid)
+            .get()
+            .addOnSuccessListener {
+                onComplete(it.toObject(passengerInfo::class.java)!!)
             }
     }
 }

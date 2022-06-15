@@ -50,7 +50,6 @@ class MyRidesFragment : Fragment(R.layout.fragment_my_rides) {
                         if (iterator + 1 > size) {
                             updateRecyclerView()
                         }
-
                     }
                 }
             }

@@ -31,9 +31,6 @@
                         android:icon="@drawable/ic_calendar_svgrepo_com"
                         />
                     <item
-                        android:id="@+id/miPropostaBoleia"
-                        android:title="Propostas de boleias"/>
-                    <item
                         android:id="@+id/miHistorico"
                         android:title="Historico de boleias"
                         android:icon="@drawable/ic_history_svgrepo_com"

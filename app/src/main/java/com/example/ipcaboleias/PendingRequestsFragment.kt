@@ -80,7 +80,6 @@ class PendingRequestsFragment : Fragment(R.layout.fragment_pending_requests) {
 
     private fun startRecyclerView() {
         val rvPendingReserve = requireActivity().findViewById<RecyclerView>(R.id.rvPendingRequests)
-        val supportFragmentManager = requireActivity().supportFragmentManager
 
         rvPendingReserve.layoutManager = LinearLayoutManager(activity)
         adapter = RVPendingRequestsAdapter(
@@ -90,29 +89,41 @@ class PendingRequestsFragment : Fragment(R.layout.fragment_pending_requests) {
                     pubRepo = PublicationsRepository(requireContext())
                     usersRepo = UsersRepository(requireContext())
 
-                    pubRepo.addPassenger(
-                        reservePresentations[position].docId,
-                        reservePresentations[position].passengerId,
-                        LatLng(
-                            reservePresentations[position].startLat,
-                            reservePresentations[position].startLong
-                        )
-                    )
+                    pubRepo.checkIfRideIsFull(reservePresentations[position].docId) {
+                        if (it) {
+                            Toast.makeText(
+                                requireContext(),
+                                "Boleia já está cheia",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        } else {
+                            pubRepo.addPassenger(
+                                reservePresentations[position].docId,
+                                reservePresentations[position].passengerId,
+                                LatLng(
+                                    reservePresentations[position].startLat,
+                                    reservePresentations[position].startLong
+                                )
+                            )
 
-                    pubRepo.removeSeat(reservePresentations[position].docId)
+                            pubRepo.removeSeat(reservePresentations[position].docId)
 
-                    usersRepo.acceptPassenger(
-                        reservePresentations[position].docId,
-                        reservePresentations[position].passengerId
-                    )
+                            usersRepo.acceptPassenger(
+                                reservePresentations[position].docId,
+                                reservePresentations[position].passengerId
+                            )
 
-                    adapter.removeItem(position)
+                            adapter.removeItem(position)
 
-                    Toast.makeText(
-                        requireContext(),
-                        "Passageiro adicionado com sucesso",
-                        Toast.LENGTH_LONG
-                    ).show()
+                            Toast.makeText(
+                                requireContext(),
+                                "Passageiro adicionado com sucesso",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+
+
                 }
             }, object : RVPendingRequestsAdapter.ChatButtonClickListener {
                 override fun onChatButtonClickListener(position: Int) {

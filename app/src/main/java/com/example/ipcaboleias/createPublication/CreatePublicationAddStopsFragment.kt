@@ -59,7 +59,7 @@ class CreatePublicationAddStopsFragment : Fragment(R.layout.fragment_create_publ
                 NPmodel.stops.value = stops
 
                 requireActivity().supportFragmentManager.beginTransaction().add(
-                    R.id.frameFragment,
+                    R.id.frameLayoutFilter,
                     CreatePublicationAddDescriptionFragment.newInstance(),
                     CREATE_PUB_ADD_DESCRIPTION_FRAG_TAG
                 ).commit()

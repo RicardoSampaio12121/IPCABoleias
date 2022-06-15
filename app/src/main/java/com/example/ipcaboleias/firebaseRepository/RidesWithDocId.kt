@@ -13,7 +13,6 @@ data class RidesWithDocId(
     var type: String = "",
     var places: Int = 1,
     var description: String = "",
-    var uniqueDrive: Boolean = false,
     var acceptDoc: Boolean = false,
     var acceptAlunos: Boolean = false,
     var price: Float = 0.0f,

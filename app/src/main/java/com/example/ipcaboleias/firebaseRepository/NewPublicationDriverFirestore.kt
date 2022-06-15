@@ -17,7 +17,6 @@ data class NewPublicationDriverFirestore(
     var type: String,
     var places: Int,
     var description: String,
-    var uniqueDrive: Boolean,
     var acceptDoc: Boolean,
     var acceptAlunos: Boolean,
     var price: Float,

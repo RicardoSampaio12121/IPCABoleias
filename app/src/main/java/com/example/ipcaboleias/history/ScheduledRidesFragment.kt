@@ -6,12 +6,15 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ipcaboleias.R
+import com.example.ipcaboleias.Utils.Utils
 import com.example.ipcaboleias.databinding.FragmentScheduledRidesBinding
 import com.example.ipcaboleias.firebaseRepository.PublicationsRepository
 import com.example.ipcaboleias.firebaseRepository.User
 import com.example.ipcaboleias.firebaseRepository.UsersRepository
+import com.example.ipcaboleias.firebaseRepository.passengerInfo
 import com.example.ipcaboleias.registration.NewUser
 import com.example.ipcaboleias.rides.Ride
+import com.google.android.gms.maps.model.LatLng
 
 class ScheduledRidesFragment : Fragment(R.layout.fragment_scheduled_rides) {
     private var _binding: FragmentScheduledRidesBinding? = null
@@ -29,16 +32,19 @@ class ScheduledRidesFragment : Fragment(R.layout.fragment_scheduled_rides) {
         pubRepo = PublicationsRepository(requireContext())
         usersRepo = UsersRepository(requireContext())
 
+        val utils = Utils()
+
         startAdapter()
 
         binding.apply {
             //Buscar as minhas boleias agendadas
 
-            pubRepo.getCurrentUserActiveRidesAsPassenger { ride ->
-                println("UID: " + ride.uid)
+            pubRepo.getCurrentUserActiveRidesAsPassenger { ride, docId ->
                 usersRepo.getUser(ride.uid) { user ->
-                    scheduledRidesPresentations.add((newScheduledRidePresentations(ride, user)))
-                    adapter.notifyItemInserted(scheduledRidesPresentations.size - 1)
+                    pubRepo.getPassengerFromRideInfo(docId) { passengerInfo ->
+                        scheduledRidesPresentations.add((newScheduledRidePresentations(ride, user, passengerInfo)))
+                        adapter.notifyItemInserted(scheduledRidesPresentations.size - 1)
+                    }
                 }
             }
         }
@@ -46,7 +52,8 @@ class ScheduledRidesFragment : Fragment(R.layout.fragment_scheduled_rides) {
 
     private fun newScheduledRidePresentations(
         ride: Ride,
-        user: User
+        user: User,
+        uRideInfo: passengerInfo
     ): ScheduledRidePresentation {
         return ScheduledRidePresentation(
             ride.uid,
@@ -54,10 +61,13 @@ class ScheduledRidesFragment : Fragment(R.layout.fragment_scheduled_rides) {
             ride.acceptDoc,
             ride.startLatitute,
             ride.startLongitude,
+            uRideInfo.startLatitude,
+            uRideInfo.startLongitude,
             ride.endLatitute,
             ride.endLongitude,
             ride.dateTime,
-            user.profilePicture!!
+            user.profilePicture!!,
+
         )
     }
 

@@ -10,6 +10,8 @@ data class ScheduledRidePresentation(
     var doc: Boolean = false,
     var startLat: Double = 0.0,
     var startLong: Double = 0.0,
+    var userStartLat: Double = 0.0,
+    val userStartLong: Double = 0.0,
     var endLat: Double = 0.0,
     var endLong: Double = 0.0,
     var date: Timestamp = Timestamp.now(),

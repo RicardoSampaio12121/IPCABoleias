@@ -122,7 +122,6 @@ class RidesFragment : Fragment(R.layout.fragment_rides) {
             ride.description,
             ride.acceptAlunos,
             ride.acceptDoc,
-            ride.uniqueDrive,
             ride.price,
             ride.stops
         )

@@ -43,7 +43,7 @@ class Utils {
                 return "IPCA Famalicão"
             }
         }
-        return ""
+        return "ola"
     }
 
     fun newRidePresentationObject(ride: Ride, user: NewUser): RidePresentation {
@@ -64,7 +64,6 @@ class Utils {
             ride.description,
             ride.acceptAlunos,
             ride.acceptDoc,
-            ride.uniqueDrive,
             ride.price
         )
     }

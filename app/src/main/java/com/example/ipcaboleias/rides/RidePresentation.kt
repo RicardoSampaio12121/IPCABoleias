@@ -22,7 +22,6 @@ data class RidePresentation (
     var description : String = "",
     val acceptAlunos : Boolean = false,
     val acceptDoc : Boolean = false,
-    val uniqueRide : Boolean = true,
     var price : Float? = 0.0f,
     var stops: MutableList<NewStop> = ArrayList()
 )

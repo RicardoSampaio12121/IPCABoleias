@@ -61,7 +61,6 @@ class CreatePublicationPickPriceFragment :
                 newPub.type = model.getType().toString()
                 newPub.places = model.getNPassengers()
                 newPub.description = model.getDescription()
-                newPub.uniqueDrive = model.getUniqueDrive()
                 newPub.acceptDoc = model.getAcceptDoc()
                 newPub.acceptAlunos = model.getAcceptAlunos()
                 newPub.price = model.getPrice()!!
@@ -90,7 +89,7 @@ class CreatePublicationPickPriceFragment :
                     supportFragmentManager.beginTransaction().show(fragToCall).commit()
                 }
                 else{
-                    supportFragmentManager.beginTransaction().add(R.id.frameFragment, CreatePublicationSetCustomPriceFragment.newInstance(), CREATE_PUB_SET_CUSTOM_PRICE_FRAG_TAG).commit()
+                    supportFragmentManager.beginTransaction().add(R.id.frameLayoutFilter, CreatePublicationSetCustomPriceFragment.newInstance(), CREATE_PUB_SET_CUSTOM_PRICE_FRAG_TAG).commit()
                 }
 
 
